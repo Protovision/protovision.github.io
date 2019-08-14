@@ -99,14 +99,28 @@ body>main>ul>li>header>div:nth-of-type(2) {
 	}
 }
 @media print {
+	@page {
+		margin: 0.25in;
+	}
 	body {
 		margin: 0;
 		padding: 0;
 		color: #000;
-		background-color: #fff;
+		background-color: transparent;
 	}
 	a {
 		color: #000;
+	}
+	h1,h2 {
+		font-weight: bold !important;
+	}
+	body>main {
+		margin: 0;
+		border: none;
+		padding: 0;
+		box-shadow: none;
+		color: #000;
+		background-color: transparent;
 	}
 	body>main>address>ul {
 		display: flex;
