@@ -5,165 +5,203 @@
 		<meta name="viewport" content="width=device-width,initial-scale=1">
 		<title>Mark Swoope</title>
 		<meta name="author" content="Mark Swoope">
-		<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=News+Cycle&display=swap">
-		<link rel="stylesheet" href="sanitize/sanitize.css">
-		<link rel="stylesheet" href="main.css">
+		<link rel="stylesheet" href="fonts/blinker/blinker.css">
+		<link rel="stylesheet" href="fonts/font-awesome-4.7.0/css/font-awesome.min.css">
+		<link rel="stylesheet" href="styles/sanitize.css">
+		<link rel="stylesheet" href="styles/resume.css">
 	</head>
 	<body>
-		<main>
-			<header>
+		<article class="resume">
+			<header class="resume-header">
 				<h1>Mark Swoope</h1>
 				<address>
 					<ul>
-						<li><a href="mailto:markswoope@outlook.com">markswoope@outlook.com</a></li>
-						<li><a href="https://protovision.github.io">protovision.github.io</a></li>
-						<li><a href="https://github.com/Protovision">github.com/protovision</a></li>
+						<li aria-label="Email">
+							<i class="fa fa-envelope-o" aria-hidden="true"></i>
+							<a href="mailto:markswoope@outlook.com">markswoope@outlook.com</a>
+						</li>
+						<li aria-label="Website">
+							<i class="fa fa-external-link"></i>
+							<a href="https://protovision.github.io/">protovision.github.io</a>
+						</li>
+						<li aria-label="LinkedIn">
+							<i class="fa fa-linkedin"></i>
+							<a href="https://www.linkedin.com/in/mark-swoope">mark-swoope</a>
+						</li>
+						<li aria-label="Github">
+							<i class="fa fa-github"></i>
+							<a href="https://github.com/protovision">protovision</a>
+						</li>
 					</ul>
 				</address>
 			</header>
-			<section>
-				<header>
-					<h2>Education</h2>
-				</header>
-				<table>
-					<tbody>
-						<tr>
-							<td>Bachelor of Science in Computer Science</td>
-							<td>California State University, San Bernardino</td>
-							<td>March 23, 2019</td>
-						</tr>
-					</tbody>
-				</table>
-			</section>
-			<section>
-				<header>
-					<h2>Skills</h2>
-				</header>
-				<ul>
-					<li>10 years of C++ and C</li>
-					<li>3 years of JavaScript, HTML, CSS, and Lua</li>
-					<li>1 year of Python</li>
-				</ul>
-			</section>
-			<section>
-				<header>
-					<h2>Experience</h2>
-				</header>
-				<table>
-					<tbody>
-						<tr>
-							<td><b>Computer Science Tutor</b></td>
-							<td>California State University, San Bernardino</td>
-							<td>January 2019 - March 2019</td>
-						</tr>
-					</tbody>
-				</table>
-				<ul>
-					<li>Tutored students in implementing data structures, in C++, such as: dynamic arrays, linked lists, and binary search trees.</li>
-					<li>Assisted students in completing a semester long assignment that involved creating an assembler and a virtual machine capable of simultaneously executing multiple assembled programs in a single thread.</li>
-					<li>Helped students implement finite state machine programs that represented certain regular expressions.</li>
-				</ul>
-				<table>
-					<tbody>
-						<tr>
-							<td><b>Computer Science Teaching Assistant</b></td>
-							<td>California State University, San Bernardino</td>
-							<td>April 2016 - December 2018</td>
-						</tr>
-					</tbody>
-				</table>
-				<ul>
-					<li>Taught and assisted Dr. Turner with 6 introductory computer science classes for 2 years with each class averaging 50 or more students and each quarter lasting 10 weeks.</li>
-					<li>Wrote lecture notes and gave 1-2 hour lectures up to 3 times per week.</li>
-					<li>Designed and graded assignments and exams.</li>
-					<li>Planned course schedules.</li>
-					<li>Created and maintained 5 course websites where the syllabus, lecture notes, and assignments can be found.</li>
-				</ul>
-				<table>
-					<tbody>
-						<tr>
-							<td><b>Machine Learning Undergraduate Researcher</b></td>
-							<td>University of California, Santa Barbara</td>
-							<td>August 2015 - September 2015</td>
-						</tr>
-					</tbody>
-				</table>
-				<ul>
-					<li>Used Torch and Lua to create an application to automate the training and testing of artificial neural network classifiers.</li>
-					<li>The application was capable of saving the state of the neural network after each training run which operated on any compatible training set and training parameters.</li>
-					<li>A neural network and it's state could be loaded and tested against any compatible test set.</li>
-				</ul>
-				<table>
-					<tbody>
-						<tr>
-							<td><b>Project Manager and Software Engineer</b></td>
-							<td>California State University, San Bernardino</td>
-							<td>April 2015 - June 2015</td>
-						</tr>
-					</tbody>
-				</table>
-				<ul>
-					<li>Individually designed, built, and programmed an Arduino powered device that used infrared sensors to track how many people have entered and exited a building entrance. These were Internet of Things (IoT) devices that synchronized with an online database that I set up with Apache, MySQL, and PHP.</li>
-				</ul>
-				<table>
-					<tbody>
-						<tr>
-							<td><b>Visual Novel Computer Programmer</b></td>
-							<td>California State University, San Bernardino</td>
-							<td>August 2014 - September 2014</td>
-						</tr>
-					</tbody>
-				</table>
-				<ul>
-					<li>Used C and SDL to create a 2D graphical application capable of loading and executing zip files containing Lua scripts, fonts, and images.</li>
-					<li>The application supported the rendering of 2D images, fonts, and audio controlled by Lua scripting logic. Simple fading and position animations were supported.</li>
-				</ul>
-			</section>
-			<section>
-				<header>
-					<h2>Projects</h2>
-				</header>
-				<ul>
-					<li>
-						<b><a href="https://protovision.github.io/numeric-view">protovision.github.io/numeric-view</a></b><br>
-						View and manipulate binary representation of numeric values.
-					</li>
-					<li>
-						<b><a href="https://protovision.github.io/system-of-equations">protovision.github.io/system-of-equations</a></b><br>
-						Solves systems of 2 or 3 equations using Cramer's rule.
-					</li>
-					<li>
-						<b><a href="https://protovision.github.io/ttk-calc">protovision.github.io/ttk-calc</a></b><br>
-						Calculates TTK (Time to Kill) based on several target and weapon stats for video games.
-					</li>
-					<li>
-						<b><a href="https://github.com/protovision/socketstream">github.com/protovision/socketstream</a></b><br>
-						<code>std::iostream</code> derived C++ class for synchronous socket I/O.
-					</li>
-					<li>
-						<b><a href="https://github.com/protovision/moonbase">github.com/protovision/moonbase</a></b><br>
-						SDL2 powered 2D graphical host environment for Lua scripts.
-					</li>
-					<li>
-						<b><a href="https://github.com/protovision/mht">github.com/protovision/mht</a></b><br>
-						Traversable hashtable implementation in C.
-					</li>
-					<li>
-						<b><a href="https://github.com/protovision/webserver">github.com/protovision/webserver</a></b><br>
-						Simple unix web server in C for self-educational purposes.
-					</li>
-					<li>
+			<div class="resume-body">
+				<div class="resume-left-column">
+					<section class="resume-skills">
+						<header>
+							<h2>Skills</h2>
+						</header>
 						<ul>
-							<li><b><a href="https://protovision.github.io/322-fall-18/">protovision.github.io/322-fall-18</a></b></li>
-							<li><b><a href="https://protovision.github.io/cse201_spring2018/">protovision.github.io/cse201_spring2018</a></b></li>
-							<li><b><a href="https://protovision.github.io/cse_202_winter_2018/">protovision.github.io/cse_202_winter_2018</a></b></li>
-							<li><b><a href="https://protovision.github.io/202-2017-spring/">protovision.github.io/202-2017-spring</a></b></li>
-							<li><b><a href="https://protovision.github.io/202-2017-winter/">protovision.github.io/202-2017-winter</a></b></li>
+							<li>C</li>
+							<li>C++</li>
+							<li>JavaScript</li>
+							<li>WebAssembly</li>
+							<li>Assembly (x86-64)</li>
+							<li>Lua</li>
+							<li>Python</li>
+							<li>Bash</li>
+							<li>HTML</li>
+							<li>CSS</li>
+							<li>LaTeX</li>
+							<li>Node.js</li>
+							<li>Linux</li>
+							<li>Arduino</li>
 						</ul>
-						Introductory computer science course websites I created and ocassionally gave lectures from while being a teaching assistant for Dr. Turner at CSUSB.
-					</li>
-				</ul>
-			</section>
-		</main>
+					</section>
+					<section class="resume-projects">
+						<header>
+							<h2>Projects</h2>
+						</header>
+						<section>
+							<header>
+								<h3>CALottery Scratchers Web Scraper</h3>
+							</header>
+							<ul>
+								<li aria-label="Website">
+									<i class="fa fa-external-link"></i>
+									<a href="https://github.com/protovision/calottery-scratchers">github.com/protovision/calottery-scratchers</a>
+								</li>
+								<li aria-label="Github">
+									<i class="fa fa-github"></i>
+									<a href="https://github.com/protovision/calottery-scratchers">github.com/protovision/calottery-scratchers</a>
+								</li>
+							</ul>
+							<ul>
+								<li>A text-based application that lists the california lottery scratchers by the current highest average payouts</li>
+								<li>Outputs CSV data containing the average payout ratio, average payout, price, name, and id of each scratcher</li>
+								<li>Created in C. Depends on curl, json-c, and gumbo</li>
+							</ul>
+						</section>
+						<section>
+							<header>
+								<h3>Sorting Visualizer</h3>
+							</header>
+							<ul>
+								<li aria-label="Website">
+									<i class="fa fa-external-link"></i>
+									<a href="https://protovision.github.io/sorting-visualizer">protovision.github.io/sorting-visualizer</a>
+								</li>
+								<li aria-label="Github">
+									<i class="fa fa-github"></i>
+									<a href="https://github.com/Protovision/sorting-visualizer">protovision/sorting-visualizer</a>
+								</li>
+							</ul>
+							<ul>
+								<li>A VanillaJS web application for visualizing the process of a number of sorting algorithms</li>
+								<li>Supports user-defined sequence length, element range, and sorting speed. The sorting process can be paused and advanced one step at a time.</li>
+							</ul>
+						</section>
+						<section>
+							<header>
+								<h3>Numeric View</h3>
+							</header>
+							<ul>
+								<li aria-label="Website">
+									<i class="fa fa-external-link"></i>
+									<a href="https://protovision.github.io/numeric-view">protovision.github.io/numeric-view</a>
+								</li>
+								<li aria-label="Github">
+									<i class="fa fa-github"></i>
+									<a href="https://github.com/protovision/numeric-view">protovision/numeric-view</a>
+								</li>
+							</ul>
+							<ul>
+								<li>A VanillaJS web application for visualizing the binary representation of integer and floating-point numbers</li>
+								<li>Supports signed/unsigned integers of various bit widths and single/double-precision floating-point numbers in big/little endian bit ordering</li>
+							</ul>
+						</section>
+						<!--
+						<section>
+							<header>
+								<h3>Project Name</h3>
+							</header>
+							<ul>
+								<li aria-label="Website">
+									<i class="fa fa-external-link"></i>
+									<a href="#">Project Website</a>
+								</li>
+								<li aria-label="Github">
+									<i class="fa fa-github"></i>
+									<a href="#">Project Github</a>
+								</li>
+							</ul>
+							<ul>
+								<li>Project function</li>
+								<li>Technologies used, implemented, and improved</li>
+							</ul>
+						</section>-->
+					</div>
+					<div class="resume-right-column">
+						<section class="resume-experience">
+							<header>
+								<h2>Experience</h2>
+							</header>
+							<section>
+								<header>
+									<h3>Computer Science Lecturer and Tutor</h3>
+								</header>
+								<ul>
+									<li>California State University, San Bernardino</li>
+									<li>2016 - 2019</li>
+								</ul>
+								<ul>
+									<li>Lectured, prepared course material, and provided tutoring for the CSE department at CSUSB</li>
+									<li>Lectured for 1-2 hours per meeting, up to 3 times per week, on topics such as C++ and HTML/CSS, to 6 classes averaging 50 students each for 10 weeks per academic quarter under the supervision of Dr. David Turner.</li>
+								</ul>
+							</section>
+							<section>
+								<header>
+									<h3>Machine Learning Research Intern</h3>
+								</header>
+								<ul>
+									<li>University of California, Santa Barbara</li>
+									<li>2015</li>
+								</ul>
+								<ul>
+									<li>Researched and created deep learning image classifiers</li>
+									<li>Used Lua and Torch to implement deep artificial neural networks to train on tens of thousands of images. Achieved test accuracies of over 99.5% on the MNIST dataset of handwritten letters and 35% on the Tiny ImageNet dataset of various everyday objects</li>
+								</ul>
+							</section>
+							<section>
+								<header>
+									<h3>Lead Software Engineer</h3>
+								</header>
+								<ul>
+									<li>California State University, San Bernardino</li>
+									<li>2015</li>
+								</ul>
+								<ul>
+									<li>Lead a team on the development of a device that tracks room capacity with online synchronization</li>
+									<li>Assembled and programmed infrared-sensor Arduino devices and configured a web server to store and synchronize updates between the sensor devices and an Android app</li>
+								</ul>
+							</section>
+						</section>
+						<section class="resume-education">
+							<header>
+								<h2>Education</h2>
+							</header>
+							<section>
+								<header>
+									<h3>California State University, San Bernardino</h3>
+								</header>
+								<ul>
+									<li>Bachelor of Science in Computer Science</li>
+									<li>2019</li>
+								</ul>
+							</section>
+						</section>
+					</div>
+			</div>
+		</article>
 	</body>
 </html>
