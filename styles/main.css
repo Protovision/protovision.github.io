@@ -1,0 +1,78 @@
+.swoope-resume{
+	font-family:'Blinker',sans-serif;
+	font-size:16px;
+	line-height:1.5;
+	color:#111;
+	background-color:#eee;}
+.swoope-resume article{
+	box-sizing:border-box;
+	padding:1em;}
+.swoope-resume h1,
+.swoope-resume h2,
+.swoope-resume h3,
+.swoope-resume ul,
+.swoope-resume p{
+	box-sizing:border-box;
+	margin:0.25em 0;}
+.swoope-resume h1,
+.swoope-resume h2,
+.swoope-resume h3{
+	font-weight:bold;}
+.swoope-resume h1{font-size:2em;}
+.swoope-resume h2{font-size:1.5em;}
+.swoope-resume h3{font-size:1.0em;}
+.swoope-resume a:link,
+.swoope-resume a:visited{
+	color:#00e;
+	text-decoration:none;}
+.swoope-resume a:hover,
+.swoope-resume a:focus{
+	text-decoration:underline;}
+.swoope-resume a:active{
+	color:#0b0;}
+.swoope-resume-header{
+	text-align:center;}
+.swoope-resume-header>address>ul{
+	display:flex;
+	flex-wrap:wrap;
+	justify-content:space-between;}
+.swoope-resume-experience>header,
+.swoope-resume-projects>header,
+.swoope-resume-education>header{
+	border-bottom:1px solid;}
+.swoope-resume-experience>section>header>ul,
+.swoope-resume-education>section>header>ul,
+.swoope-resume-projects>section>header>ul{
+	display:flex;
+	flex-wrap:wrap;
+	justify-content:space-between;}
+@media all and (min-width:816px){
+	.swoope-resume{
+		background-color:#777;}
+	.swoope-resume>article{
+		margin:1em auto;
+		border:1px solid;
+		max-width:816px;
+		height:1056px;
+		background-color:#eee;}}
+@media print{
+	@page{
+		margin:0;
+		size:8.5in 11in;}
+	.swoope-resume{
+		font-size:12pt;
+		color:#000;
+		background-color:transparent;}
+	.swoope-resume>article{
+		margin:0;
+		border:none;
+		max-width:auto;
+		height:auto;
+		background-color:transparent;}
+	.swoope-resume-experience>header,
+	.swoope-resume-projects>header,
+	.swoope-resume-education>header{
+		border-bottom:none;}
+	.swoope-resume a{
+		color:#000;
+		text-decoration:none;}
