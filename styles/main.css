@@ -53,14 +53,14 @@
 		margin:1em auto;
 		border:1px solid;
 		max-width:816px;
-		/*height:1056px;*/
+		height:1056px;
 		background-color:#eee;}}
 @media print{
 	@page{
 		margin:0;
 		size:8.5in 11in;}
 	.swoope-resume{
-		font-size:4pt;
+		font-size:12pt;
 		color:#000;
 		background-color:transparent;}
 	.swoope-resume>article{
