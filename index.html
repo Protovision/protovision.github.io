@@ -2,132 +2,42 @@
 <html lang="en">
 	<head>
 		<meta charset="UTF-8">
-		<meta name="viewport" content="width=device-width,initial-scale=1.0">
-		<title>Mark Swoope</title>
+		<meta name="viewport" content="width=device-width,initial-scale=1">
 		<meta name="author" content="Mark Swoope">
+		<title>Mark Swoope</title>
 		<link rel="stylesheet" href="fonts/blinker/blinker.css">
-		<link rel="stylesheet" href="fonts/font-awesome-4.7.0/css/font-awesome.min.css">
-		<link rel="stylesheet" href="styles/reset.css">
+		<link rel="stylesheet" href="fonts/fontawesome-free-6.2.0-web/css/fontawesome.min.css">
+		<link rel="stylesheet" href="fonts/fontawesome-free-6.2.0-web/css/brands.css">
+		<link rel="stylesheet" href="fonts/fontawesome-free-6.2.0-web/css/regular.css">
 		<link rel="stylesheet" href="styles/main.css">
+		<script defer src="scripts/main.js"></script>
 	</head>
-	<body class="swoope-resume">
-		<article>
-			<header class="swoope-resume-header">
-				<h1>Mark Swoope</h1>
-				California, United States
+	<body>
+		<main>
+			<header id="swoope-header">
+				<h1 id="swoope-title"><a rel="index" href="#">Mark Swoope</a></h1>
 				<address>
-					<ul>
-						<li aria-label="Email">
-							<i class="fa fa-envelope-o" aria-hidden="true"></i>
-							<a href="mailto:markswoope@outlook.com">markswoope@outlook.com</a>
+					<ul id="swoope-links">
+						<li aria-label="Posts">
+							<i class="fa-regular fa-file-lines"></i>
+							<a href="#posts">Posts</a>
 						</li>
-						<li aria-label="Website">
-							<i class="fa fa-external-link"></i>
-							<a href="https://protovision.github.io">protovision.github.io</a>
+						<li aria-label="Email">
+							<i class="fa-regular fa-envelope" aria-hidden="true"></i>
+							<a rel="noopener" href="mailto:markswoope@outlook.com">markswoope@outlook.com</a>
 						</li>
 						<li aria-label="LinkedIn">
-							<i class="fa fa-linkedin"></i>
-							<a href="https://www.linkedin.com/in/mark-swoope">mark-swoope</a>
+							<i class="fa-brands fa-linkedin"></i>
+							<a rel="external noopener" href="https://www.linkedin.com/in/mark-swoope">mark-swoope</a>
 						</li>
 						<li aria-label="Github">
-							<i class="fa fa-github"></i>
-							<a href="https://github.com/protovision">protovision</a>
+							<i class="fa-brands fa-github"></i>
+							<a rel="external noopener" href="https://github.com/protovision">protovision</a>
 						</li>
 					</ul>
 				</address>
 			</header>
-			<section class="swoope-resume-experience">
-				<header>
-					<h2>Experience</h2>
-				</header>
-				<section>
-					<header>
-						<h3>Computer Science Lecturer and Tutor</h3>
-						<ul>
-							<li>CSUSB</li>
-							<li>San Bernardino, California</li>
-							<li>2016 - 2019</li>
-						</ul>
-					</header>
-					<p>Gave 1-2 hour lectures on C++ and HTML/CSS 3 times a week to classes averaging 50 students. Prepared course material and graded assignments under the supervision of Dr. Turner.</p>
-				</section>
-				<section>
-					<header>
-						<h3>Machine Learning Research Intern</h3>
-						<ul>
-							<li>UCSB</li>
-							<li>Santa Barbara, California</li>
-							<li>2015</li>
-						</ul>
-					</header>
-					<p>Used Lua and Torch to implement a deep artificial neural network that trained on 60,000 28x28 pixel images of handwritten digits and achieved a 99.5% accuracy over a test set of 10,000.</p>
-				</section>
-				<section>
-					<header>
-						<h3>Lead Software Engineer and Project Manager</h3>
-						<ul>
-							<li>CSUSB</li>
-							<li>San Bernardino, California</li>
-							<li>2015</li>
-						</ul>
-					</header>
-					<p>Lead a team of 4 for a project to track current room capacity. The project consists of an Arduino device, Android app, and a server that uses PHP and MySQL.</p>
-				</section>
-			</section>
-			<section class="swoope-resume-projects">
-				<header>
-					<h2>Projects</h2>
-				</header>
-				<section>
-					<header>
-						<h3>CALottery Scratchers Insight</h3>
-						<ul>
-							<li><a href="https://github.com/protovision/calottery-scratchers">https://github.com/protovision/calottery-scratchers</a></li>
-						</ul>
-					</header>
-					<p>A local web application that lists CALottery scratchers by their average highest payouts; implemented with: React, MaterialUI, Node.js, Express, Javascript, HTML, and CSS.</p>
-				</section>
-				<section>
-					<header>
-						<h3>socketstream</h3>
-						<ul>
-							<li><a href="https://github.com/protovision/socketstream">https://github.com/protovision/socketstream</a></li>
-						</ul>
-					</header>
-					<p>A C++ library that provides std::iostream derived classes for performing TCP/IP socket I/O.</p>
-				<section>
-					<header>
-						<h3>Sorting Visualizer</h3>
-						<ul>
-							<li><a href="https://protovision.github.io/sorting-visualizer">https://protovision.github.io/sorting-visualizer</a></li>
-						</ul>
-					</header>
-					<p>A website for visualizing sorting algorithms; implemented with: Javascript, HTML, and CSS.</p>
-				</section>
-				<section>
-					<header>
-						<h3>Numeric View</h3>
-						<ul>
-							<li><a href="https://protovision.github.io/numeric-view">https://protovision.github.io/numeric-view</a></li>
-						</ul>
-					</header>
-					<p>A website for manipulating numbers in binary; implemented with: Javascript, HTML, and CSS.</p>
-			</section>
-			<section class="swoope-resume-education">
-				<header>
-					<h2>Education</h2>
-				</header>
-				<section>
-					<header>
-						<h3>Bachelor of Science in Computer Science</h3>
-						<ul>
-							<li>CSUSB</li>
-							<li>San Bernardino, California</li>
-							<li>2019</li>
-						</ul>
-					</header>
-				</section>
-			</section>
-		</article>
+			<section id="swoope-content"></section>
+		</main>
 	</body>
 </html>
