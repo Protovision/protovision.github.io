@@ -1,0 +1,17 @@
+{
+	"name" : "protovision.github.io" ,
+	"version" : "1.0.0" ,
+	"description" : "Website for Mark Swoope" ,
+	"scripts" : {
+		"start" : "node server.js"} ,
+	"repository" : {
+		"type" : "git" ,
+		"url" : "git://github.com/protovision/protovision.github.io"} ,
+	"author" : "Mark Swoope <markswoope@outlook.com" ,
+	"bugs" : {
+		"url" : "https://github.com/protovision/protovision.github.io/issues"} ,
+	"homepage" : "https://github.com/protovision/protovision.github.io" ,
+	"dependencies" : {
+		"cors" : "2.x" ,
+		"express" : "4.x"}}
+

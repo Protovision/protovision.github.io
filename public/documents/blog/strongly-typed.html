@@ -1,0 +1,101 @@
+<header>
+	<h2>The Return of Strongly-Typed Languages</h2>
+	<nav>
+		<h3>Contents</h3>
+		<ul>
+			<li><a href="#/documents/blog/strongly-typed.html:the-quest-for-a-better-c-or-cpp">The Quest for a Better C or C++</a></li>
+			<li><a href="#/documents/blog/strongly-typed.html:null-values">Null values</a></li>
+			<li><a href="#/documents/blog/strongly-typed.html:error-handling">Error handling</a></li>
+			<li><a href="#/documents/blog/strongly-typed.html:unicode-and-string-handling">Unicode and string handling</a></li>
+			<li><a href="#/documents/blog/strongly-typed.html:modules">Modules</a></li>
+		</ul>
+		<hr>
+	</nav>
+</header>
+<section id="the-quest-for-a-better-c-or-cpp">
+	<header>
+		<h3>The quest for a better C or C++</h3>
+	</header>
+	<p>Two episodes:</p>
+	<ul>
+		<li><a rel="external noopener" href="https://handmade.network/podcast/ep/fe1a2a6a-3ac6-4ce5-b8fb-76f156c493e0">Race to Replace C and C++</q></a></li>
+		<li><a rel="external noopener" href="https://handmade.network/podcast/ep/57103cab-ff39-42b4-b59b-61c02ab526a2">The Race to Replace C and C++ (2.0)</a></li>
+	</ul>
+	<p>podcasted as part of a community known as the <q>Handmade Network</q>, has revealed how people from my generation are inspired by C and C++ to attempt to create better versions of C or C++.</p>
+	<p>These episodes are interviews between the host (Abner, the founder of Handmade Network) and Andrew Kelly (creator of the Zig language), Ginger Bill (creator of the Odin language), and some third guest.</p>
+	<p>Andrew and Ginger are special because they have managed to create their own programming languages and successfully market them and create communities behind them without the oversight of some major tech giant like Google (which backs the Go language), Microsoft (which has backs the TypeScript language), or Mozilla (which backs the Rust language).</p>
+	<p>What all of these current generation programming languages have in common is that they are C-like and they are statically or strongly-typed. What they do not have in common C is that they add common modern features such as: dynamic strings, tagged-unions, various forms of compile-time execution and code generation (as opposed to simple text-replacement macro expansions found in C), more advanced forms of data destructuring, more modern ways to perform iteration (in a functional style), and more opinionated ways to perform error handling.</p>
+	<p>Let's be clear that these features are at the language level, not the library level. There's also another language called <q><a rel="external noopener" href="https://harelang.org">Hare</a></q> which follows the same pattern (C-like, strongly-typed with modern features) but lacks metaprogramming features (like Go).</p>
+	<p>These attempts to make a better C or C++ mimic the days of Java, C#, and D at their same attempts in the early 2000s. Unlike the early 2000s where the idea of injecting more object-oriented programming features would make a better C or C++, today we have the idea that injecting more functional programming features into these inherently imperative languages that have been around for 30-40 years will make them better to use. I do not disagree that the functional style has many good practices, but it is a question of how the this style can be harmoniously blended with mixtures of imperative and object-oriented chunks.</p>
+	<p>I do not know what goes on in the heads of these language creators, but I suspect they add features in their languages somewhat unconciously at the level of what just feels good or what feels familiar but easier with less typing. I believe it is in the nature of old and popular languages (including human languages) to become more compact and abbreviated as the population grows and certain concepts and experiences become more commonplace. This process of abbreviation has a peak and then a descent when it causes the language to become ambiguous and thinking in detail and clarity to become stunted. </p>
+	<p>Like within programming languages, the conceptual abstractions we depend on replace the substance that they represent and we forget the more fundamental essence of things.</p>
+	<p>In the two handmade podcast episodes, we find dichotomy but also a divergence. Andrew was a web developer who decided to go more into system programming with an emphasis on being correct in terms of maximizing CPU cycles and minimizing memory usage. Ginger is a system programmer who has decided that it is better to program at a level where he assumes the system is always modern enough to support whatever he wants to do and to not let low-level details distract him from finishing his product.</p>
+	<p>There is wisdom in both outlooks. The concern with performance is native to the thinking of the imperative programmers. The concern with the algorithm apart from the system capabilities is native to the thinking of functional programmers. Overall, of course both of these languages (Zig and Odin) are imperative. They have more in common with each other than with real functional languages like Haskell.</p>
+	<p>The podcast episodes gets into small details like Andrew and Ginger's preferences when it comes to the idea of null values, error handling, and unicode and string handling. I think they spend too much time arguing about error handling.</p>
+</section>
+<section id="null-values">
+	<header>
+		<h3>Null values</h3>
+	</header>
+	<p>As a disclaimer, I have not tried either Zig or Odin so I have no position to comment their languages. I can comment on their interviews in these two podcast episodes. Functional programmers and programmers who love using result types for error handling prefer to have a unions with null types rather than have each type require supporting a null value. This seems to be what Andrew prefers. Ginger seems to prefer null values (or <q>zero values</q> as he calls them) for all data types to support; the advantages of which create a common constructor for all data types and a common initial state that can be checked for without knowing the data type; requiring zero value support for all types also makes all of them implicitly moveable.</p>
+	<p>Not forcing all types to support zero or null, is a negative liberty. Andrew argues that initializing a variable to null only to overwrite it immediately based on some condition is a waste of cpu cycles and may also confuse the optimizer; therefore it is better to leave the variable uninitialized until a meaningful value can be assigned. I would argue that this problem is the result of a language feature that is lacking: specifically the feature of conditional expressions (not conditional statements). C already supports conditional expressions with the <code>?:</code> operator but it does not allow statements within this expression, hence the need for a separate if-statement that performs imperative assignment to the uninitialized variable.</p>
+	<p>So if your code for calculating the initial value of a variable involves imperative statements that cannot be used in an expression, the more fundamental language feature that is required is the ability to return values out of local blocks. Looking at the documentation for Zig and the incomplete documentation for Odin, it does not appear that either of these languages support returning values from blocks; fortunately Rust supports this feature (however blocks cannot accept arguments in Rust).</p>
+	<p>I do side with the opinion that optional types are better than requiring zero values on all types, but only in so far as the language provides an elegant way to deconstruct tagged unions within an expression (which C and C++ do not provide). Functional programming features can be bad if they are imported into an imperative language in a partial way without the other functional features that are essential to using them properly.</p>
+	<p>The arguments in favor of null references (being easier to check for rather than requiring some unwrapping syntax; being a well established convention among most languages and platforms) are not based on pure reason but are based on historical and material circumstances.</p>
+</section>
+<section id="error-handling">
+	<header>
+		<h3>Error handling</h3>
+	</header>
+	<p>Error handling is a hot topic among people who code in C++ or any of it's derivatives. Let me enumerate some of the ways:</p>
+	<ol>
+		<li>Catching and throwing exceptions</li>
+		<li>Checking result types</li>
+		<li>Catching and throwing result types</li>
+		<li>Returning error codes with out-parameters</li>
+	</ol>
+	<p>These are the main ways. Let me first point out that the 3rd way (catching and throwing result types) is what I call it when you have code that uses keywords like <code>try</code> and <code>catch</code> but rather than working like classic C++ exceptions that involve stack unwinding, the code gets translated into checking a result type of an expression and automatically returning from the function if it is an error. This practice has been nicknamed <q>herbceptions</q> based on the <a rel="external noopener" href="https://www.open-std.org/jtc1/sc22/wg21/docs/papers/2018/p0709r1.pdf">C++ proposal by Herb Sutter</a>.</p>
+	<p>Andrew Kelly prefers the 3rd way. I do not know what Ginger Bill prefers other than his mantra that <q>errors are values</q>, he seems to be nihilistic about error handling. I prefer whatever is best supported or most ergonomic by the language I am using, but if I had to choose an error handling mechanism for my own programming language: I would not choose a solution that would be limited to only error handling, I think properly supporting first-class sum and product types will be sufficient and consequently the 2nd way of error handling (manually checking and unwrapping result types) will be the natural way to do it.</p>
+	<p>I actually prefer the 2nd way as I dislike hidden control flow and for the fact that it becomes harder to ignore errors.</p>
+	<p>When working in C, I prefer the 4th way since C does not support the features to make the 2nd way possible without defining and naming a new data type for every function that can fail. For C++, I think using exceptions are fine as long as your objects are <a rel="external noopener" href="https://www.stroustrup.com/except.pdf">exception safe</a> as outlined by Stroustrup.</p>
+	<p>Ever since the C++ introduced &ldquo;error conditions&rdquo;, there have been arguments online as to what scenario should constitute throwing an exception versus returning a variant that contains an error condition. Naturally, most people will pick whatever they aesthetically and ergonomically prefer but here is what I've heard about the domains of exceptions and error conditions:</p>
+	<ul>
+		<li>Exceptions are for non-recoverable errors. Error conditions are for recoverable errors.</li>
+		<li>Exceptions are for system-level errors.  Error conditions are for application-level errors.</li>
+		<li>Exceptions are for exceptional/unexpected/serious/rare errors. Error conditions are for expected/common errors.</li>
+		<li>Exceptions are only for out-of-memory errors. Error conditions are for everything else.</li>
+	</ul>
+	<p>Since there is no consensus, I think you should either use exceptions or error conditions but not both.</p>
+</section>
+<section id="unicode-and-string-handling">
+	<header>
+		<h3>Unicode and string handling</h3>
+	</header>
+	<p>Unicode seems to be the current way to support multiple human languages unlike locales and wchar_t both of <a rel="external noopener" href="https://github.com/mpv-player/mpv/commit/1e70e82baa91">which one particular developer called <q>shitfucked retarded legacy braindeath</q></a>. Some languages use UTF-16 others only use UTF-8. Supporting character classification routines for unicode requires maintaining a huge database of unicode classification data which I think is best supported at the library level (if at all) so as not to bloat the compiler.</p>
+	<p>According to their respective documentations, both Zig and Odin use length-prefixed strings and they both have ways of converting them to C-compatible strings. Both languages encode strings in UTF-8. These seem to be conventional and uncontroversial decisions.</p>
+	<p>One thing I would like to know is if Odin treats string literals as the way any other literals are treated in the language: as <q>ideal values</q> that have no type until bound to a variable or used in an expression. I do like the idea of having typeless literals that can have a concrete type inferred from context without being required to memorize and use literal suffixes as found in other languages. If all literals are required to have a type, then the language designer is forced to pick a default type for each literal which can end up being a bad decision in each instance that the chosen default type is not optimal for the particular platform the code is compiled on. Having default types may also lead to bugs in languages with implicit narrowing conversions; in languages with no implicit conversions, default types give unfair priority to a small set of types that must be explicitly converted when used with values of other types.</p>
+	<p>In languages with statically-allocated string literals, the type of a string may be a value-dependent type based on the length of the string. This is not the case with Zig and Odin as all strings have the same type and their lengths are stored as overhead; this makes things easier for the programmer at a small and reasonable cost for modern systems.</p>
+	<p>I do think that being able to encode more static information into a data type is good if the language has ways of abstracting over variations of that data type (using existential and universal quantifiers at the type theory level).</p>
+	<p>Having dedicated string types in a programming language is seen as useful and commonsense. For me, I see strings as being generalized by arrays which are generalized by product types. So I would like for my own programming language to support strings, not as it's own data type, but as a specialization of a product type.</p>
+	<p>Since I also prefer typeless literals, then my language should support typeless literal products for initializing product types. Therefore the string literal should be a typeless literal product of typeless byte values that encode to UTF-8 and the type of a variable initialized by it should be inferred.</p> 
+	<p>Quite controversially, I prefer to minimize storage overhead so I don't want force strings to be length prefixed but I also don't want to force strings to be null-terminated. Any particular domain-aware data type should be able to be encoded using elementary type constructions of sum or product types. The string can be encoded as a product of byte-value integers optionally with a length as part of that product. A result can be encoded as a product of a boolean and the sum between the result and the error. While having dedicated strings and dedicated result and error types seem useful, they are not fundamentally necessary for a language that wishes to keep it's type system simple and composable.</p>
+</section>
+<section id="modules">
+	<header>
+		<h3>Modules</h3>
+	</header>
+	<p>Modules are essential to today's large code bases. There is a positive acknowledgement of this with the adoption of ECMAscript modules, C++ modules, Rust crates, Go packages, and the modules present in Zig and Odin.</p>
+	<p>There are differing views on how modules should be organized and how they should import and export members. The Odin language forces each module to be stored in it's own respective file and each declaration within a module is exported by default unless explicitly marked as private. Zig also requires one module per file but unlike Odin it does not export everything by default. Technically C also has a module system but it is not apparent since C uses different terminology and keywords to refer to modules (translation units), imports (<code>#include</code>), exports (<code>extern</code>), and non-exported private members (<code>static</code>).</p>
+	<p>My opinions:</p>
+	<ul>
+		<li>The one-file-per-module restriction should be lifted.</li>
+		<li>Module members should <em>not</em> be exported by default</li>
+		<li>There should be no implicit imports, not even for the standard library.</li>
+		<li>There should be no explicit exports, except for perhaps a main function.</li>
+		<li>An import should be renameable within the scope of the module performing the import.</li>
+		<li>Modules should be nestable, but the nesting module should not implicitly import it and the nested module should not logically have any access to the nesting module.</li>
+		<li>Some exports cannot actually be exported (such as static constants and type definitions) and therefore always require forward declarations in the case of being a member of an external module therefore external modules must be forward declarable with the full definitions of non-truly-exportable entities before being imported into any other module.</li>
+		<li>Modules should not be assumed to be stored in the file system, consequently: the path representation string to an external module should not be assumed to take on any particular format and is therefore implementation-defined. Any standard library should be imported under a pre-defined name because the compiler will insert it as a preamble in the source code when requested.</li>
+	</ul>
+	<p>I think WebAssembly defines modules quite reasonably and would make a fine compilation target for a language that handles modules the way I prefer.</p>
+</section>
