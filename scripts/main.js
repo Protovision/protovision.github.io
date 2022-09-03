@@ -25,7 +25,8 @@
 		const fetchContent = async (path , containerElementTag) => {
 			const response = await(fetch(path));
 			if(!(response . ok)){
-				throw(Error('' + response . status + ': ' + response . statusText));};
+				throw(Error(
+					'Error ' + response . status + ': ' + response . statusText));};
 			const fragment = (document . createDocumentFragment)();
 			const content = (document . createElement)(containerElementTag);
 			content . innerHTML = await((response . text)());
@@ -33,10 +34,10 @@
 			return(fragment);};
 		const updateContent = async (path , containerElementTag) => {
 			scrollTo(0 , 0);
-			await(clearContent());
 			let content = null;
 			try{
-				content = await(fetchContent(path , containerElementTag));}
+				[, content] = await((Promise . all)([
+					clearContent() , fetchContent(path , containerElementTag)]));}
 			catch(error){
 				content = makeErrorContent(error . message);};
 			await(displayContent(content));};
