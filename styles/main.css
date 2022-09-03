@@ -34,6 +34,9 @@ a:link,a:visited{
 	text-decoration:none;}
 a:hover,a:focus{text-decoration:underline;}
 a:active{color:#0b7;}
+strong{
+	font-weight:bold;
+	color:red;}
 #swoope-title{text-align:center;}
 #swoope-links,
 ul.single-line-list,

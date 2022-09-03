@@ -1,7 +1,7 @@
 (() => {
 	(window . addEventListener)('DOMContentLoaded' , async (event) => {
-		const content = (document . getElementById)('swoope-content');
-		const makeErrorFragment = (message) => {
+		const contentContainer = (document . getElementById)('swoope-content');
+		const makeErrorContent = (message) => {
 			const fragment = (document . createDocumentFragment)();
 			const p = (document . createElement)('p');
 			const strong = (document . createElement)('strong');
@@ -10,34 +10,36 @@
 			(p . appendChild)(strong);
 			(fragment . appendChild)(p);
 			return(fragment);};
-		const eraseContent = async () => {
+		const clearContent = async () => {
 			(window . requestAnimationFrame)(() => {
-				if(content . lastChild){
-					(content . removeChild)(content . lastChild);};});};
-		const writeContent = async (fragment) => {
+				if(contentContainer . lastChild){
+					(contentContainer . removeChild)(
+						contentContainer . lastChild);};});};
+		const displayContent = async (content) => {
 			(window . requestAnimationFrame)(() => {
-				if(content . lastChild){
-					(content . replaceChild)(fragment , content . lastChild);}
+				if(contentContainer . lastChild){
+					(contentContainer . replaceChild)(
+						content , contentContainer . lastChild);}
 				else{
-					(content . appendChild)(fragment);};});};
-		const fetchFragment = async (path , containerElementTag) => {
+					(contentContainer . appendChild)(content);};});};
+		const fetchContent = async (path , containerElementTag) => {
 			const response = await(fetch(path));
 			if(!(response . ok)){
-				throw(response . statusText);};
+				throw(Error('' + response . status + ': ' + response . statusText));};
 			const fragment = (document . createDocumentFragment)();
-			const container = (document . createElement)(containerElementTag);
-			container . innerHTML = await((response . text)());
-			(fragment . appendChild)(container);
+			const content = (document . createElement)(containerElementTag);
+			content . innerHTML = await((response . text)());
+			(fragment . appendChild)(content);
 			return(fragment);};
 		const updateContent = async (path , containerElementTag) => {
 			scrollTo(0 , 0);
-			await(eraseContent());
-			let fragment = null;
+			await(clearContent());
+			let content = null;
 			try{
-				fragment = await(fetchFragment(path , containerElementTag));}
+				content = await(fetchContent(path , containerElementTag));}
 			catch(error){
-				fragment = makeErrorFragment(error);};
-			await(writeContent(fragment));};
+				content = makeErrorContent(error . message);};
+			await(displayContent(content));};
 		const refresh = async () => {
 			if(location . hash . length > 2){
 				const path = 'documents/' + ((location . hash . substr)(1)) + '.html';
