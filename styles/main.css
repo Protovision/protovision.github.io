@@ -18,7 +18,7 @@ body{
 	font-family:'Blinker',sans-serif;
 	line-height:1.5;}
 main{padding:1em;}
-h1,h2,h3,hr,p,ul,ol{margin:0.25em 0;}
+h1,h2,h3,hr,p,ul,ol,table{margin:0.25em 0;}
 h1,h2,h3{font-weight:bold;}
 h1{font-size:2em;}
 h2{
@@ -38,6 +38,15 @@ a:active{color:#0b7;}
 strong{
 	font-weight:bold;
 	color:red;}
+time,code,kbd,samp,pre{font-family:monospace;}
+em{font-style:italic;}
+table{
+	border:thin solid;
+	border-collapse:collapse;}
+th{font-weight:bold;}
+th,td{
+	border:thin solid;
+	padding:0 0.125em;}
 #swoope-title{text-align:center;}
 #swoope-links,
 ul.single-line-list,

@@ -1,0 +1,77 @@
+<header>
+	<h2>Unit and Bottom types</h2>
+	<time datetime="2022-09-06">2022-09-06</time>
+</header>
+<p>My notes for what unit types and bottom types are and how they should work 
+in a proper programming languages.</p>
+<p>Important definitions:</p>
+<ol>
+	<li>&forall; &sigma; . &sigma; &rarr; ()</li>
+	<li>&forall; &sigma; . &bot; &rarr; &sigma;</li>
+</ol>
+<p>Definition 1 says any type &sigma; can be converted to the unit type ().
+It is a morphism from any object to the terminal object in category theory, 
+ergo () is the terminal object.</p>
+<p>Definition 2 says the bottom type &bot; can be converted into any type 
+&sigma;. It is a morphism from the initial object to any object in 
+category theory, ergo &bot; is the initial object.</p>
+<p>If information is defined as an observable entity with 2 or more possible 
+states, then a unit type, which is the type of entities with 1 possible state,
+is not a type of information.</p>
+<p>The unit type is the empty product, which can be specified as the parameter
+or result of a function which denotes a function that can be applied with no
+argument or a function that yields no value when applied, respectively.</p>
+<p>Definition 1, the conversion from any type to (), works by taking 
+any term and discarding it which yields the absence of information in the 
+form of a term of the unit type. Besides always being convertible from any 
+other term, the unit type can always be introduced on it's own. Because () is 
+not a type of information, no term with this type can be referenced or 
+mutated.</p>
+<p>Before explaining how definition 2 works, let's first acknowledge that 
+&bot; is being used primarily as the result type of a function that never 
+terminates. These kinds of functions, belonging to &forall; &sigma; . &sigma; 
+&rarr; &bot;, can be implemented in a programming language by issuing a trap, 
+which usually indefinitely returns control to the host environment. &bot; can 
+also be implemented by infinite recursion.</p>
+<p>After entering a trap, the host environment may resume execution of the 
+program rather than terminating it, this can be the case for host environments
+that are debuggers; in this case, the host may send information to the program
+when it resumes, which becomes the result of the trap instruction.</p>
+<p>The result produced from a trap becomes the result of evaluating &bot; if 
+it's evaluation does indeed converge; therefore &bot; can be converted to 
+any type as the host may return a term of any type.</p>
+<p>Whereas () is the type of terms with 1 possible state, &bot; is said to be 
+the type of terms that lack any state. A more succinct definition for &bot; 
+in our case would be the type whose terms have no definite range of state: 
+the type of unknown state. But this definition seems to be more appropriate 
+for the top type &top;: the type that is said to contain all states of all 
+other types.</p>
+<p>The top type can be introduced for those trap operations that converge 
+and return anything while the bottom type can be refined to only those 
+operations that diverge.</p>
+<p>The new definitions are:</p>
+<ul>
+	<li>&rarr; ()</li>
+	<li>&forall; &sigma; . &sigma; &harr; ()</li>
+	<li>&bot; &rarr;</li>
+	<li>&forall; &sigma; . &top; &harr; &sigma;</li>
+	<li>&forall; &sigma; . ref &top; &harr; ref &sigma;</li>
+</ul>
+<p>Terms such as <code>abort</code> or <code>panic</code> which may be 
+defined as functions returning &bot; can be used to introduce &bot; and to
+signify the immediate termination (or non-termination) of a program.</p>
+<p>&top; can be introduced with a function like <code>system</code> which 
+performs something like a system call and will return anything. Notice the 
+new 4th and 5th definitions where the conversion is bi-directional. This 
+decision allows for any type to be converted to any other type by performing 
+an intermediary conversion to &top;, this applies to references as well, thus 
+effectively allowing a way for one to bypass the type system if needed.</p>
+<p>Notice also that I modified the unit type to be bi-directionally convertible
+on any type. This is more of an optional feature. Converting from () to some 
+type &sigma; involves creating a term of type &sigma; with a default value;
+this value could be the value derived from setting all it's value bits to
+zero. This imposes a requirement on all types (except &bot; and &top;) 
+that they support a default zero value. If this rule is used, then one can 
+say that all these types are movable by copying and clearing their bits.</p>
+
+
