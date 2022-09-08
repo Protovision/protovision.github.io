@@ -13,14 +13,14 @@
 		<script defer src="scripts/main.js"></script>
 	</head>
 	<body>
-		<main>
+		<main class="loading">
 			<header id="swoope-header">
-				<h1 id="swoope-title"><a rel="index" href="#/documents/index.html">Mark Swoope</a></h1>
+				<h1><a id="swoope-title" rel="index" href="#!/documents/index.html">Mark Swoope</a></h1>
 				<address>
 					<ul id="swoope-links">
 						<li aria-label="Blog">
 							<i class="fa-regular fa-file-lines"></i>
-							<a href="#/documents/blog/index.html">Blog</a>
+							<a id="swoope-blog" href="#!/documents/blog/index.html">Blog</a>
 						</li>
 						<li aria-label="Email">
 							<i class="fa-regular fa-envelope" aria-hidden="true"></i>
@@ -37,7 +37,7 @@
 					</ul>
 				</address>
 			</header>
-			<section id="swoope-content"></section>
+			<section id="swoope-content" class="loading"></section>
 		</main>
 	</body>
 </html>

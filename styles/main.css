@@ -17,10 +17,13 @@ body{
 	color:#111;
 	font-family:'Blinker',sans-serif;
 	line-height:1.5;}
-main{padding:1em;}
+main{
+	padding:1em;}
 h1,h2,h3,hr,p,ul,ol,table{margin:0.25em 0;}
 h1,h2,h3{font-weight:bold;}
-h1{font-size:2em;}
+h1{
+	font-size:2em;
+	text-align:center;}
 h2{
 	font-size:1.5em;
 	border-bottom:thin solid;}
@@ -47,7 +50,14 @@ th{font-weight:bold;}
 th,td{
 	border:thin solid;
 	padding:0 0.125em;}
-#swoope-title{text-align:center;}
+.loading{
+	opacity:0;
+	visibility:hidden;
+	transition:visibility 0s linear 0.25s,opacity 0.25s linear;}
+.loaded{
+	opacity:1;
+	visibility:visible;
+	transition:visibility 0s linear 0s,opacity 0.25s linear;}
 #swoope-links,
 ul.single-line-list,
 ol.single-line-list{
