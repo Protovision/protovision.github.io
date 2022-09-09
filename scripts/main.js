@@ -4,7 +4,7 @@
 		const title = (document . getElementById)('swoope-title');
 		const blog = (document . getElementById)('swoope-blog');
 		const contentContainer = (document . getElementById)('swoope-content');
-		const opacityTransitionTime = 500;
+		const opacityTransitionTime = 400;
 		const makeErrorContent = (message) => {
 			const fragment = (document . createDocumentFragment)();
 			const p = (document . createElement)('p');
@@ -60,9 +60,6 @@
 		const updateContent = async (oldUrl , newUrl) => {
 			const realOldUrl = parseUrl(oldUrl);
 			const realNewUrl = parseUrl(newUrl);
-			console.log('---');
-			console.log(realOldUrl);
-			console.log(realNewUrl);
 			if(realOldUrl . path == realNewUrl . path &&
 				realOldUrl . fragment != realNewUrl . fragment){
 					if(realNewUrl . fragment){
@@ -72,9 +69,9 @@
 						scrollTo(0 , 0);};
 					return;};
 			let content = null;
-			await(clearContent());
 			try{
-				content = await(fetchContent(realNewUrl . path));}
+				[, content] = await((Promise . all)([
+					clearContent() , fetchContent(realNewUrl . path)]));}
 			catch(error){
 				content = makeErrorContent(error . message);};
 			await(displayContent(content , realNewUrl . fragment));};
@@ -82,6 +79,7 @@
 			await(updateContent(event . oldURL , event . newURL));});
 		const hookHeaderLink = (link) => {
 			(link . addEventListener)('click' , async (event) => {
+				(event . target . blur)();
 				(event . preventDefault)();
 				(event . stopPropagation)();
 				const hash = (link . hash . startsWith)('#') ? 

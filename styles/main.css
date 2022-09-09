@@ -1,4 +1,6 @@
 :root,html{
+	margin:0 0 0 calc(100vw - 100%);
+	overflow:auto;
 	scroll-behavior:smooth;}
 ::selection{
 	background:yellow;}
@@ -53,11 +55,11 @@ th,td{
 .loading{
 	opacity:0;
 	visibility:hidden;
-	transition:visibility 0s linear 0.25s,opacity 0.25s linear;}
+	transition:visibility 0s linear 0.2s,opacity 0.2s linear;}
 .loaded{
 	opacity:1;
 	visibility:visible;
-	transition:visibility 0s linear 0s,opacity 0.25s linear;}
+	transition:visibility 0s linear 0s,opacity 0.2s linear;}
 #swoope-links,
 ul.single-line-list,
 ol.single-line-list{
