@@ -1,9 +1,3 @@
-:root,html{
-	margin:0 0 0 calc(100vw - 100%);
-	overflow:auto;
-	scroll-behavior:smooth;}
-::selection{
-	background:yellow;}
 *,*::before,*::after{
 	box-sizing:border-box;
 	margin:0;
@@ -14,13 +8,51 @@
 	color:inherit;
 	font:inherit;
 	vertical-align:baseline;}	
+
+:root,html{
+	margin:0 0 0 calc(100vw - 100%);
+	overflow:auto;
+	scroll-behavior:smooth;}
 body{
-	background-color:#eee;
 	color:#111;
+	background-color:#eee;
 	font-family:'Blinker',sans-serif;
 	line-height:1.5;}
 main{
 	padding:1em;}
+
+@media all and (min-width:40em){
+	body{
+		background-color:#777;}
+	main{
+		margin:1em auto;
+		border:thin solid;
+		max-width:40em;
+		min-height:calc(100vh - 2em);
+		background-color:#eee;}}
+
+@media print{
+	@page{
+		margin:1em;}
+	:root,html{
+		margin:0;}
+	body{
+		margin:0;
+		border:none;
+		padding:0;
+		font-size:12pt;
+		color:#000;
+		background-color:transparent;}
+	main{
+		margin:0;
+		border:none;
+		padding:0;
+		max-width:auto;
+		min-height:auto;
+		background-color:transparent;}}
+
+::selection{
+	background:yellow;}
 h1,h2,h3,hr,p,ul,ol,table{margin:0.25em 0;}
 h1,h2,h3{font-weight:bold;}
 h1{
@@ -52,6 +84,7 @@ th{font-weight:bold;}
 th,td{
 	border:thin solid;
 	padding:0 0.125em;}
+
 .loading{
 	opacity:0;
 	visibility:hidden;
@@ -60,6 +93,7 @@ th,td{
 	opacity:1;
 	visibility:visible;
 	transition:visibility 0s linear 0s,opacity 0.2s linear;}
+
 #swoope-links,
 ul.single-line-list,
 ol.single-line-list{
@@ -69,24 +103,4 @@ ol.single-line-list{
 	list-style-type:none;
 	padding-left:0;}
 #swoope-links a{padding-left:0.25em;}
-@media all and (min-width:40em){
-	body{
-		background-color:#777;}
-	main{
-		margin:1em auto;
-		border:thin solid;
-		max-width:40em;
-		min-height:calc(100vh - 2em);
-		background-color:#eee;}}
-@media print{
-	@page{
-		margin:0;}
-	:root,html{
-		margin:0;}
-	body{
-		font-size:12pt;
-		color:#000;
-		background-color:transparent;}
-	main{
-		max-width:auto;}}
 
