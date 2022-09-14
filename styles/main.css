@@ -81,6 +81,8 @@ ol.single-line-list{
 @media print{
 	@page{
 		margin:0;}
+	:root,html{
+		margin:0;}
 	body{
 		font-size:12pt;
 		color:#000;
