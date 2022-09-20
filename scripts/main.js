@@ -1,9 +1,7 @@
 (() => {
 	(window . addEventListener)('DOMContentLoaded' , async (event) => {
-		const main = (document . querySelector)('main');
-		const title = (document . getElementById)('swoope-title');
-		const blog = (document . getElementById)('swoope-blog');
-		const contentContainer = (document . getElementById)('swoope-content');
+		document . body . style . opacity = 1;
+		const mainSection = (document . getElementById)('main-section');
 		const opacityTransitionTime = 400;
 		const makeErrorContent = (message) => {
 			const fragment = (document . createDocumentFragment)();
@@ -18,17 +16,17 @@
 			return new Promise(resolve => setTimeout(resolve , ms));};
 		const clearContent = async () => {
 			scrollTo(0 , 0);
-			(contentContainer . classList . add)('loading');
-			(contentContainer . classList . remove)('loaded');
+			(mainSection . classList . add)('loading');
+			(mainSection . classList . remove)('loaded');
 			await(wait(opacityTransitionTime));};
 		const displayContent = async (content , hash) => {
-			if(contentContainer . lastChild){
-				(contentContainer . replaceChild)(
-					content , contentContainer . lastChild);}
+			if(mainSection . lastChild){
+				(mainSection . replaceChild)(
+					content , mainSection . lastChild);}
 			else{
-				(contentContainer . appendChild)(content);};
-			(contentContainer . classList . add)('loaded');
-			(contentContainer . classList . remove)('loading');
+				(mainSection . appendChild)(content);};
+			(mainSection . classList . add)('loaded');
+			(mainSection . classList . remove)('loading');
 			if(hash){
 				((document . getElementById)(hash) . 
 					scrollIntoView)();};};
@@ -77,19 +75,22 @@
 			await(displayContent(content , realNewUrl . fragment));};
 		(window . addEventListener)('hashchange' , async (event) => {
 			await(updateContent(event . oldURL , event . newURL));});
-		const hookHeaderLink = (link) => {
-			(link . addEventListener)('click' , async (event) => {
-				(event . target . blur)();
-				(event . preventDefault)();
-				(event . stopPropagation)();
-				const hash = (link . hash . startsWith)('#') ? 
-					link . hash : '#' + link . hash;
-				if(window . location . hash != hash){
-					window . location . hash = hash;}
-				else{
-					await(updateContent(window . location , link . href));};});};	
-		hookHeaderLink(title);
-		hookHeaderLink(blog);
-		await(updateContent(window . location , window . location));
-		(main . classList . remove)('loading');})})();
+		const internalLinkClick = async (event) => {
+			const link = event . target;
+			(link . blur)();
+			(event . preventDefault)();
+			(event . stopPropagation)();
+			const hash = (link . hash . startsWith)('#') ? 
+				link . hash : '#' + link . hash;
+			if(window . location . hash != hash){
+				window . location . hash = hash;}
+			else{
+				await(updateContent(window . location , link . href));};};
+		((document . getElementById)('main-h1') . addEventListener)(
+			'click' , internalLinkClick);
+		((document . querySelectorAll)('main-nav a') . forEach)(
+			(link) => {
+				if(! (link . relList . contains)('external')){
+					(link . addEventListener)('click' , internalLinkClick);};});
+		await(updateContent(window . location , window . location));});})();
 
