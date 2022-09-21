@@ -1,14 +1,15 @@
-<header>
-	<h2>The Return of Strongly-Typed Languages</h2>
+<header class="top-border">
+	<h2>C-like Languages</h2>
+	<p>by Mark Swoope</p>
 	<time datetime="2022-09-02">2022-09-02</time>
-	<nav>
+	<nav class="accented padded shaded">
 		<h3>Contents</h3>
 		<ol>
-			<li><a href="#!/documents/blog/strongly-typed.html:the-quest-for-a-better-c-or-cpp">The Quest for a Better C or C++</a></li>
-			<li><a href="#!/documents/blog/strongly-typed.html:null-values">Null values</a></li>
-			<li><a href="#!/documents/blog/strongly-typed.html:error-handling">Error handling</a></li>
-			<li><a href="#!/documents/blog/strongly-typed.html:unicode-and-string-handling">Unicode and string handling</a></li>
-			<li><a href="#!/documents/blog/strongly-typed.html:modules">Modules</a></li>
+			<li><a href="#!/documents/blog/c-like.html:the-quest-for-a-better-c-or-cpp">The Quest for a Better C or C++</a></li>
+			<li><a href="#!/documents/blog/c-like.html:null-values">Null values</a></li>
+			<li><a href="#!/documents/blog/c-like.html:error-handling">Error handling</a></li>
+			<li><a href="#!/documents/blog/c-like.html:unicode-and-string-handling">Unicode and string handling</a></li>
+			<li><a href="#!/documents/blog/c-like.html:modules">Modules</a></li>
 		</ol>
 	</nav>
 </header>
@@ -24,8 +25,8 @@
 	<p>podcasted as part of a community known as the <q>Handmade Network</q>, has revealed how people from my generation are inspired by C and C++ to attempt to create better versions of C or C++.</p>
 	<p>These episodes are interviews between the host (Abner, the founder of Handmade Network) and Andrew Kelly (creator of the Zig language), Ginger Bill (creator of the Odin language), and some third guest.</p>
 	<p>Andrew and Ginger are special because they have managed to create their own programming languages and successfully market them and create communities behind them without the oversight of some major tech giant like Google (which backs the Go language), Microsoft (which has backs the TypeScript language), or Mozilla (which backs the Rust language).</p>
-	<p>What all of these current generation programming languages have in common is that they are C-like and they are statically or strongly-typed. What they do not have in common C is that they add common modern features such as: dynamic strings, tagged-unions, various forms of compile-time execution and code generation (as opposed to simple text-replacement macro expansions found in C), more advanced forms of data destructuring, more modern ways to perform iteration (in a functional style), and more opinionated ways to perform error handling.</p>
-	<p>Let's be clear that these features are at the language level, not the library level. There's also another language called <q><a rel="external noopener" href="https://harelang.org">Hare</a></q> which follows the same pattern (C-like, strongly-typed with modern features) but lacks metaprogramming features (like Go).</p>
+	<p>What all of these current generation programming languages have in common is that they are C-like and they are statically or c-like. What they do not have in common C is that they add common modern features such as: dynamic strings, tagged-unions, various forms of compile-time execution and code generation (as opposed to simple text-replacement macro expansions found in C), more advanced forms of data destructuring, more modern ways to perform iteration (in a functional style), and more opinionated ways to perform error handling.</p>
+	<p>Let's be clear that these features are at the language level, not the library level. There's also another language called <q><a rel="external noopener" href="https://harelang.org">Hare</a></q> which follows the same pattern (C-like, c-like with modern features) but lacks metaprogramming features (like Go).</p>
 	<p>These attempts to make a better C or C++ mimic the days of Java, C#, and D at their same attempts in the early 2000s. Unlike the early 2000s where the idea of injecting more object-oriented programming features would make a better C or C++, today we have the idea that injecting more functional programming features into these inherently imperative languages that have been around for 30-40 years will make them better to use. I do not disagree that the functional style has many good practices, but it is a question of how the this style can be harmoniously blended with mixtures of imperative and object-oriented chunks.</p>
 	<p>I do not know what goes on in the heads of these language creators, but I suspect they add features in their languages somewhat unconciously at the level of what just feels good or what feels familiar but easier with less typing. I believe it is in the nature of old and popular languages (including human languages) to become more compact and abbreviated as the population grows and certain concepts and experiences become more commonplace. This process of abbreviation has a peak and then a descent when it causes the language to become ambiguous and thinking in detail and clarity to become stunted. </p>
 	<p>Like within programming languages, the conceptual abstractions we depend on replace the substance that they represent and we forget the more fundamental essence of things.</p>

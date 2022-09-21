@@ -88,7 +88,7 @@
 				await(updateContent(window . location , link . href));};};
 		((document . getElementById)('main-h1') . addEventListener)(
 			'click' , internalLinkClick);
-		((document . querySelectorAll)('main-nav a') . forEach)(
+		((document . querySelectorAll)('#main-nav a') . forEach)(
 			(link) => {
 				if(! (link . relList . contains)('external')){
 					(link . addEventListener)('click' , internalLinkClick);};});
