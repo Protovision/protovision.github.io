@@ -5,6 +5,7 @@
 	border:none;
 	padding:0;
 	background-color:inherit;
+	overflow-wrap:anywhere;
 	color:inherit;
 	font:inherit;
 	vertical-align:baseline;}	
@@ -19,19 +20,19 @@ body{
 	color:#111;
 	background-color:#eee;}
 main{
-	border-top:0.6em solid #07b;
-	padding:2.4em;}
+	border-top:0.25em solid #07b;
+	padding:1em;}
 
 ::selection{
 	background:yellow;}
 
-h1,h2,h3,h4,nav,hr,p,ul,ol,figure,table{margin:0.3em 0;}
+h1,h2,h3,h4,nav,hr,p,ul,ol,figure,table{margin:0.25em 0;}
 h1,h2,h3,h4{font-weight:bold;}
-h1{font-size:2.4em;}
-h2{font-size:1.8em;}
-h3{font-size:1.2em;}
+h1{font-size:2em;}
+h2{font-size:1.5em;}
+h3{font-size:1.25em;}
 hr{border-bottom:thin solid;}
-ul,ol{padding-left:1.6em;}
+ul,ol{padding-left:1.25em;}
 ul{list-style-type:square;}
 ol{list-style-type:decimal;}
 table{
@@ -41,7 +42,7 @@ table{
 th{font-weight:bold;}
 th,td{
 	border:thin solid;
-	padding:0 0.3em;
+	padding:0 0.25em;
 	vertical-align:middle;}
 a{font-weight:bold;}
 a:link,a:visited{
@@ -74,14 +75,14 @@ sup{
 .bottom-border{
 	border-bottom:thin solid;}
 .centered{
-	margin:0.3em auto;}
+	margin:0.15em auto;}
 .centered-text{
 	text-align:center;}
 .accented{
-	border-left:0.3em solid #07b;
-	padding-left:0.6em;}
+	border-left:0.25em solid #07b;
+	padding-left:0.25em;}
 .padded{
-	padding:0.3em 0.6em;}
+	padding:0.25em 0.5em;}
 .shaded{
 	background-color:#ddd;}
 
@@ -92,20 +93,21 @@ ol.unbulleted{
 ul.horizontal,
 ol.horizontal{
 	display:flex;
-	flex-wrap:wrap;}
+	flex-wrap:wrap;
+	flex-direction:column;}
 ul.spaced,
 ol.spaced{
-	justify-content:space-between;}
+	justify-content:flex-start;}
 ul.horizontal>li,
 ol.horizontal>li{
-	margin:0 1.2em 0 1.2em;}
+	margin:0;}
 ul.horizontal>li:first-child,
 ol.horizontal>li:first-child,
 ul.horizontal>li:last-child,
 ol.horizontal>li:last-child{
 	margin:0em;}
 table.plain{
-	margin:0.3em 0;
+	margin:0.25em 0;
 	border:none;}
 table.plain th,
 table.plain td{
@@ -114,14 +116,11 @@ table.plain td{
 #main-header nav{
 	margin:0;
 	border:none;
-	padding:0.3em 0;
+	padding:0.25em 0;
 	background-color:inherit;}
 
 #main-header address ul{
 	justify-content:space-evenly;}
-
-#main-header address a{
-	padding-left:0.3em;}
 
 @media screen and (min-width:40em){
 	:root,html{
@@ -129,12 +128,21 @@ table.plain td{
 	body{
 		background-color:#777;}
 	main{
-		margin:1.2em auto;
+		margin:1em auto;
 		border:thin solid black;
-		border-top:0.6em solid #07b;
+		border-top:0.5em solid #07b;
 		max-width:40em;
 		min-height:calc(100vh - 2em);
-		background-color:#eee;}}
+		background-color:#eee;}
+	ul.horizontal,
+	ol.horizontal{
+		flex-direction:row;}
+	ul.horizontal>li,
+	ol.horizontal>li{
+		margin:0 1em 0 1em;}
+	ul.spaced,
+	ol.spaced{
+		justify-content:space-between;}}
 
 @media print{
 	@page{
