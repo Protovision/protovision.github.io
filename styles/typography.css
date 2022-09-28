@@ -81,9 +81,9 @@ td,
 th{
 	padding:0 0.5em;}
 
-h1{font-size:2em;}
-h2{font-size:1.5em;}
-h3{font-size:1.25em;}
+h1{font-size:1.625em;}
+h2{font-size:1.375em;}
+h3{font-size:1.125em;}
 h4{font-size:1em;}
 h5{font-size:0.875em;}
 h6{font-size:0.75em;}
@@ -114,4 +114,8 @@ table{
 	max-width:100%;
 	overflow-x:auto;}
 
-:
+@media all and (min-width:40em){
+	h1{font-size:2em;}
+	h2{font-size:1.5em;}
+	h3{font-size:1.25em;}}
+
