@@ -1,0 +1,117 @@
+body{line-height:1.5;}
+
+address,
+article,
+aside,
+footer,
+header,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+main,
+nav,
+section,
+blockquote,
+dl,
+figcaption,
+figure,
+hr,
+menu,
+ol,
+p,
+pre,
+ul,
+caption,
+table,
+details{
+	margin-bottom:0.25em;}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+dt,
+figcaption,
+a,
+b,
+strong,
+time,
+var,
+th,
+summary{
+	font-weight:bolder;}
+
+dt,
+abbr,
+cite,
+dfn,
+em,
+i,
+q,
+var{
+	font-style:italic;}
+
+code,
+kbd,
+samp{
+	font-family:monospace;}
+
+blockquote,
+dd{
+	padding-left:0.5em;}
+
+td,
+th{
+	border:1px solid;}
+
+ol,
+ul{
+	padding-left:1.5em;}
+
+a:hover,
+a:focus{
+	text-decoration:underline;}
+
+td,
+th{
+	padding:0 0.5em;}
+
+h1{font-size:2em;}
+h2{font-size:1.5em;}
+h3{font-size:1.25em;}
+h4{font-size:1em;}
+h5{font-size:0.875em;}
+h6{font-size:0.75em;}
+blockquote{border-left:1px solid;}
+dd{margin-bottom:0.5em;}
+figcaption{text-align:center;}
+figure{
+	margin:0.5em auto;
+	padding:0.5em;}
+hr{border-top:1px solid;}
+ol{list-style-type:decimal;}
+p{text-indent:0.5em;}
+pre{
+	white-space:pre;
+	overflow:auto;}
+ul{list-style-type:square;}
+mark{text-decoration:underline;}
+s{text-decoration:line-through;}
+small{font-size:smaller;}
+sub{
+	font-size:smaller;
+	vertical-align:sub;}
+sup{
+	font-size:super;
+	vertical-align:super;}
+
+table{
+	max-width:100%;
+	overflow-x:auto;}
+
+:

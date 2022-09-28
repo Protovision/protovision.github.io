@@ -1,0 +1,24 @@
+*,
+::before,
+::after{
+	box-sizing:border-box;
+	margin:0;
+	outline:0;
+	border:0;
+	padding:0;
+	vertical-align:inherit;
+	font:inherit;
+	text-align:inherit;
+	text-decoration:none;}
+
+html{
+	font:sans-serif 16px normal normal normal normal 1;}
+
+menu,
+ol,
+ul{
+	list-style:none;}
+
+table{
+	border-collapse:collapse;}
+

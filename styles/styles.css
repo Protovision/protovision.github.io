@@ -1,0 +1,63 @@
+::selection{
+	background:yellow;}
+
+body{
+	background-color:#eee;
+	color:#111;
+	font-family:'Red Hat Text',sans-serif;}
+
+h1,h2,h3,h4,h5,h6{
+	font-family:'Red Hat Display',sans-serif;}
+
+a{color:#07b;}
+a:hover,
+a:focus{
+	color:#0b7;}
+a:active{
+	color:#b70;}
+
+.max-width{
+	width:100%;}
+.top-border{
+	border-top:1px solid;}
+.bottom-border{
+	border-bottom:1px solid;}	
+.centered{
+	margin:0.25em auto;}
+.centered-text{
+	text-align:center;}
+.accented{
+	border-left:0.25em solid #07b;
+	padding-left:0.5em;}
+.padded{
+	padding:0.25em 0.5em;}
+.shaded{
+	background-color:#ddd;}
+.unbulleted{
+	list-style-type:none;
+	padding-left:0;}
+
+@media screen and (min-width:52em){
+	body{background-color:#777;}
+	main{background-color:#eee;}}
+
+@media all and (min-width:40em){
+	.horizontal{
+		display:flex;
+		flex-wrap:wrap;
+		flex-direction:row;}
+	.horizontal>li:nth-child(even){
+		margin:0 1em;}
+	.spaced{
+		justify-content:space-between;}}
+
+.loading{
+	opacity:0;
+	visibility:hidden;
+	transition:visibility 0s linear 0.2s,opacity 0.2s linear;}
+
+.loaded{
+	opacity:1;
+	visibility:visible;
+	transition:visibility 0s linear 0s,opacity 0.2s linear;}
+
