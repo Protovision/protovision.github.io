@@ -41,7 +41,6 @@ a,
 b,
 strong,
 time,
-var,
 th,
 summary{
 	font-weight:bolder;}
@@ -97,18 +96,20 @@ hr{border-top:1px solid;}
 ol{list-style-type:decimal;}
 p{text-indent:0.5em;}
 pre{
-	white-space:pre;
+	white-space:nowrap;
 	overflow:auto;}
 ul{list-style-type:square;}
 mark{text-decoration:underline;}
 s{text-decoration:line-through;}
 small{font-size:smaller;}
-sub{
-	font-size:smaller;
-	vertical-align:sub;}
-sup{
-	font-size:super;
-	vertical-align:super;}
+sub,
+sup{font-size:smaller;}
+sub{vertical-align:sub;}
+sup{vertical-align:super;}
+th sub,
+td sub{vertical-align:-25%;}
+th sup,
+td sup{vertical-align:25%;}
 
 table{
 	max-width:100%;
