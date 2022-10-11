@@ -62,7 +62,7 @@ samp{
 
 blockquote,
 dd{
-	padding-left:0.5em;}
+	padding-left:1em;}
 
 td,
 th{
@@ -70,7 +70,7 @@ th{
 
 ol,
 ul{
-	padding-left:1.5em;}
+	padding-left:2em;}
 
 a:hover,
 a:focus{
@@ -90,18 +90,20 @@ blockquote{border-left:1px solid;}
 dd{margin-bottom:0.5em;}
 figcaption{text-align:center;}
 figure{
-	margin:0.5em auto;
-	padding:0.5em;}
-hr{border-top:1px solid;}
+	margin:0 auto;
+	padding:1em;}
+hr{
+	margin:1em 0;
+	border-top:1px solid;}
 ol{list-style-type:decimal;}
-p{text-indent:0.5em;}
+p{text-indent:1em;}
 pre{
 	white-space:nowrap;
 	overflow:auto;}
 ul{list-style-type:square;}
 mark{text-decoration:underline;}
 s{text-decoration:line-through;}
-small{font-size:smaller;}
+small{font-size:50%;}
 sub,
 sup{font-size:smaller;}
 sub{vertical-align:sub;}
@@ -113,7 +115,8 @@ td sup{vertical-align:25%;}
 
 table{
 	max-width:100%;
-	overflow-x:auto;}
+	overflow-x:auto;
+	border-collapse:collapse;}
 
 @media all and (min-width:40em){
 	h1{font-size:2em;}

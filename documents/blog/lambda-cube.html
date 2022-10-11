@@ -1,0 +1,111 @@
+<header class="top-border">
+	<h2>Lambda Cube - Part I</h2>
+	by Mark Swoope<br>
+	<time datetime="2022-10-08">2022-10-08</time>
+</header>
+<p>
+	I am beginning to understand the Lambda Cube and these are my notes.
+</p>
+<p>
+	The Lambda Cube categorizes the power of a typed lambda calculus by it's 
+	ability to create the following dependencies between types and terms:
+</p>
+<ul>
+	<li>Terms that depend on terms</li>
+	<li>Types that depend on terms</li>
+	<li>Terms that depend on types</li>
+	<li>Types that depend on types</li>
+</ul>
+<p>
+	A typed lambda calculus is a calculus of rewriting terms to other terms by 
+	following the rules of their types: it's main application lies in providing
+	a formal basis for a programming language.
+</p>
+<h3>Fundamentals</h3>
+<p>
+	The meaning of <q>term</q> and <q>type</q> needs to be made clear. At the 
+	most practical level, a term corresponds to a value within a computer 
+	program. A value is, roughly, something that the running program can store 
+	and operate on. Every value has a type which the compiler uses to ensure that 
+	source code is well-formed before transforming it into a program. Once 
+	compiled, a program no longer contains the type annotations on it's values. 
+	When running, a program stores and operates on it's values consistently 
+	according to the rules of the programming language as interpreted and 
+	enforced by the compiler of that program.
+</p>
+<p>
+	A <dfn>value</dfn> is a term that is irreducible and is the final translation 
+	of a term that has undergone reduction from compilation. If the programming 
+	language supports numeric types, then a value can be a number expressed 
+	directly. A function also counts as a value because on it's own, it is an 
+	irreducible term that can be stored and operated on (the main operation on a 
+	function is application).
+</p>
+<p>
+	The internal definition of a function is irrelevant and inaccessible to 
+	a running program; like any other kind of value, a function is a value 
+	of a particular type that a variable of the same type can bind to within 
+	the context of another function.
+</p>
+<p>
+	A function is expressed as a variable together with another term that depends
+	on that variable. A <dfn>variable</dfn> is a term expressed as a 
+	type-annotated name at the beginning of a function. The function is therefore
+	said to be the binding of a term to a term: a term that depends on a term.
+</p>
+<p>
+	A <dfn>function application</dfn> is a term that is recursively reducible to 
+	a value, it is expressed as the juxtaposition of two terms where the first 
+	term is a function. Function application reduces to the body of the function 
+	with it's occurrences of it's depended variable replaced with the 
+	application's second term: this is known as <dfn>&Beta;-reduction</dfn>.
+</p>
+<p>
+	If one step of &Beta;-reduction results in a term that is another function
+	application, then this can undergo &Beta;-reduction again and again until 
+	the final result is a value. Eventually, a program must reduce all it's 
+	terms to values but this may be done eagerly or lazily while the program is
+	running: for example, if a term that is a function application is used as an
+	argument to another function application, the inner function application 
+	may or may not go through full &Beta;-reduction to a value before being 
+	substituted into the outer function application's variable.
+</p>
+<p>
+	In summary, we arrive at the following definitions:
+</p>
+<dfn>
+	<dt>Term</dt>
+	<dd>A value, variable, function, or application</dd>
+	<dt>Type</dt>
+	<dd>A designation for a term that determines how that term can be used</dd>
+	<dt>Value</dt>
+	<dd>An irreducible term</dd>
+	<dt>Variable</dt>
+	<dd>A term as a type-annotated name</dd>
+	<dt>Function</dt>
+	<dd>A value as a variable together with a term that depends on it</dd>
+	<dt>Application</dt>
+	<dd>A term as a function together with a term</dd>
+</dfn>
+<p>
+	These definitions are absolute in the sense that they are consistent when 
+	viewed from the horizon of values being data values that have a run-time
+	presence in a program. But these definitions can be <q>lifted</q> to an
+	arbitrarily higher level with the definition of <em>value</em> being 
+	refined to <em>a term that is irreducible in the current level of 
+	the abstraction</em>. Where <dfn>level</dfn> refers to the interpretation
+	of the domain of a function. The 4 important levels are the levels of:
+	values, types, classes, and families.
+</p>
+<p>
+	A type function that operates on a higher level than a value function will 
+	treat types as values, type variables as terms, and type classes as types. 
+	A type class function that operates on a higher level than a type functions 
+	will treat type classes as values, type class variables as terms, and 
+	type families as types.
+</p>
+<p>
+	When I make part 2 of this article, I will explore these higher-level types 
+	as well as the higher-level abstractions enabled by the lambda cube and their
+	possible implementations.
+</p>

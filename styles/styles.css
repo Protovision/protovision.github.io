@@ -9,21 +9,27 @@ body{
 h1,h2,h3,h4,h5,h6{
 	font-family:'Red Hat Display',sans-serif;}
 
-main{border-top:0.5em solid #07b;}
+main{
+	border-top:0.5em solid #07b;}
 
-a{color:#07b;}
+a{
+	color:#07b;}
 a:hover,
 a:focus{
 	color:#0b7;}
 a:active{
 	color:#b70;}
 
-.max-width{
-	width:100%;}
 .top-border{
 	border-top:1px solid;}
 .bottom-border{
 	border-bottom:1px solid;}	
+.left-border{
+	border-left:1px solid;}
+.right-border{
+	border-right:1px solid;}
+.bordered{
+	border:1px solid;}
 .centered{
 	margin:0.25em auto;}
 .centered-text{
@@ -38,26 +44,14 @@ a:active{
 .unbulleted{
 	list-style-type:none;
 	padding-left:0;}
-
 .loading{
 	opacity:0;
 	visibility:hidden;
 	transition:visibility 0s linear 0.2s,opacity 0.2s linear;}
-
 .loaded{
 	opacity:1;
 	visibility:visible;
 	transition:visibility 0s linear 0s,opacity 0.2s linear;}
-
-@media all and (min-width:40em){
-	.horizontal{
-		display:flex;
-		flex-wrap:wrap;
-		flex-direction:row;}
-	.horizontal>li:nth-child(even){
-		margin:0 1em;}
-	.spaced{
-		justify-content:space-between;}}
 
 @media screen and (min-width:52em){
 	body{background-color:#777;}
