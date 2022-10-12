@@ -20,6 +20,16 @@ a:focus{
 a:active{
 	color:#b70;}
 
+code{
+	padding:0 0.5em;
+	background-color:#ddd;}
+
+.code{
+	padding:0.5em;
+	background-color:#ddd;
+	line-height:1.0;
+	font-family:monospace;}
+
 .top-border{
 	border-top:1px solid;}
 .bottom-border{
@@ -68,6 +78,8 @@ a:active{
 	a:focus{
 		color:#0ea;}
 	a:active{color:#ea0;}
+	code{background-color:#222;}
+	.code{background-color:#222;}
 	main{border-top-color:#0ae;}
 	.accented{border-left-color:#0ae;}
 	.shaded{background-color:#222;}}
