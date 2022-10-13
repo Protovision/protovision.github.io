@@ -1,35 +1,59 @@
+:root{
+	--color-dark-red:#800;
+	--color-red:#b00;
+	--color-light-red:#e00;
+	--color-dark-yellow:#880;
+	--color-yellow:#bb0;
+	--color-light-yellow:#ee0;
+	--color-dark-green:#080;
+	--color-green:#0b0;
+	--color-light-green:#0e0;
+	--color-dark-cyan:#088;
+	--color-cyan:#0bb;
+	--color-light-cyan:#0ee;
+	--color-dark-blue:#008;
+	--color-blue:#00b;
+	--color-light-blue:#00e;
+	--color-dark-pink:#808;
+	--color-pink:#b0b;
+	--color-light-pink:#e0e;
+	--color-black:#111;
+	--color-dark-gray:#222;
+	--color-medium-dark-gray:#333;
+	--color-medium-light-gray:#ccc;
+	--color-light-gray:#ddd;
+	--color-white:#eee;
+	--color-dark-accent:var(--color-dark-cyan);
+	--color-accent:var(--color-cyan);
+	--color-light-accent:var(--color-light-cyan);}
+
 ::selection{
-	background:yellow;}
+	background:var(--color-light-yellow);}
 
 body{
-	background-color:#eee;
-	color:#111;
+	background-color:var(--color-white);
+	color:var(--color-black);
 	font-family:'Red Hat Text',sans-serif;}
 
 h1,h2,h3,h4,h5,h6{
 	font-family:'Red Hat Display',sans-serif;}
 
+.code,code,samp,kbd{
+	font-family:'Red Hat Mono',monospace;
+	background-color:var(--color-light-gray);}
+
 main{
-	border-top:0.5em solid #07b;}
-
+	border-top:0.5em solid var(--color-dark-accent);}
 a{
-	color:#07b;}
-a:hover,
-a:focus{
-	color:#0b7;}
+	color:var(--color-dark-accent);}
 a:active{
-	color:#b70;}
-
+	color:var(--color-accent);}
 code{
-	padding:0 0.5em;
-	background-color:#ddd;}
+	padding:0 0.5em;}
 
 .code{
 	padding:0.5em;
-	background-color:#ddd;
-	line-height:1.0;
-	font-family:monospace;}
-
+	line-height:1.25;}
 .top-border{
 	border-top:1px solid;}
 .bottom-border{
@@ -45,12 +69,12 @@ code{
 .centered-text{
 	text-align:center;}
 .accented{
-	border-left:0.25em solid #07b;
+	border-left:0.25em solid var(--color-dark-accent);
 	padding-left:0.5em;}
 .padded{
 	padding:0.25em 0.5em;}
 .shaded{
-	background-color:#ddd;}
+	background-color:var(--color-light-gray);}
 .unbulleted{
 	list-style-type:none;
 	padding-left:0;}
@@ -64,28 +88,31 @@ code{
 	transition:visibility 0s linear 0s,opacity 0.2s linear;}
 
 @media screen and (min-width:52em){
-	body{background-color:#777;}
-	main{background-color:#eee;}}
+	body{
+		background-color:var(--color-medium-light-gray);}
+	main{
+		background-color:var(--color-white);}}
 
 @media screen and (prefers-color-scheme:dark){
 	::selection{
-		color:#111;}
+		background:var(--color-yellow);
+		color:var(--color-black);}
 	body{
-		background-color:#111;
-		color:#eee;}
-	a{color:#0ae;}
-	a:hover,
-	a:focus{
-		color:#0ea;}
-	a:active{color:#ea0;}
-	code{background-color:#222;}
-	.code{background-color:#222;}
-	main{border-top-color:#0ae;}
-	.accented{border-left-color:#0ae;}
-	.shaded{background-color:#222;}}
+		background-color:var(--color-dark-gray);
+		color:var(--color-white);}
+	main{
+		border-top-color:var(--color-light-accent);}
+	a{
+		color:var(--color-light-accent);}
+	a:active{
+		color:var(--color-accent);}
+	.shaded,.code,code,samp,kbd{
+		background-color:var(--color-medium-dark-gray);}
+	.accented{
+		border-left-color:var(--color-light-accent);}}
 
 @media screen and (prefers-color-scheme:dark) and (min-width:52em){
-	body{background-color:#333;}
-	main{background-color:#111;}}
+	body{background-color:var(--color-black);}
+	main{background-color:var(--color-dark-gray);}}
 	
 	
