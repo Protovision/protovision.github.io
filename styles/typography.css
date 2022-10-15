@@ -90,7 +90,7 @@ blockquote{border-left:1px solid;}
 dd{margin-bottom:0.5em;}
 figcaption{text-align:center;}
 figure{
-	margin:0 auto;
+	margin:0 auto 0.25em auto;
 	padding:1em;}
 hr{
 	margin:1em 0;

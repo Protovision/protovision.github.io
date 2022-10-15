@@ -4,6 +4,9 @@ html{
 
 main{padding:1em;}
 
+.tabular{
+	table-layout:fixed;}
+
 @media all and (min-width:40em){
 	.horizontal{
 		display:flex;

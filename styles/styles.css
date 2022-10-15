@@ -29,6 +29,9 @@
 
 ::selection{
 	background:var(--color-light-yellow);}
+mark{
+	text-decoration:none;
+	background-color:var(--color-light-yellow);}
 
 body{
 	background-color:var(--color-white);
@@ -54,6 +57,8 @@ code{
 .code{
 	padding:0.5em;
 	line-height:1.25;}
+.max-width{
+	width:100%;}
 .top-border{
 	border-top:1px solid;}
 .bottom-border{
@@ -78,6 +83,10 @@ code{
 .unbulleted{
 	list-style-type:none;
 	padding-left:0;}
+.bordered-rows>li,
+.bordered-rows>thead>tr,
+.bordered-rows>tbody>tr{
+	border-bottom:1px solid;}
 .loading{
 	opacity:0;
 	visibility:hidden;
@@ -96,6 +105,9 @@ code{
 @media screen and (prefers-color-scheme:dark){
 	::selection{
 		background:var(--color-yellow);
+		color:var(--color-black);}
+	mark{
+		background-color:var(--color-yellow);
 		color:var(--color-black);}
 	body{
 		background-color:var(--color-dark-gray);

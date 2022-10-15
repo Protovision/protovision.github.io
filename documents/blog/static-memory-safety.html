@@ -1,0 +1,299 @@
+<header>
+	<h2>Static Memory Safety</h2>
+	by Mark Swoope<br>
+	<time datetime="2022-10-15">2022-10-15</time>
+	<nav class="accented padded shaded">
+		<b>Contents</b>
+		<ol>
+			<li>
+				<a href="#!/documents/blog/static-memory-safety.html:introduction">
+					Introduction
+				</a>
+			</li>
+			<li>
+				<a href="#!/documents/blog/static-memory-safety.html:handles">
+					Handles
+				</a>
+			</li>
+			<li>
+				<a href="#!/documents/blog/static-memory-safety.html:linearity">
+					Linearity
+				</a>
+			</li>
+			<li>
+				<a href="#!/documents/blog/static-memory-safety.html:conclusion">
+					Conclusion
+				</a>
+			</li>
+		</ol>
+	</nav>
+</header>
+<section id="introduction">
+	<header>
+		<h3>Introduction</h3>
+	</header>
+	<p>
+		C's
+		<em>
+			<a
+				rel="external noreferrer noopener"
+				href="https://en.cppreference.com/w/c/language/restrict">
+				restrict semantics
+			</a>
+		</em>, C++'s
+		<em>
+			<a
+				rel="external noreferrer noopener"
+				href="https://en.cppreference.com/w/cpp/language/reference#Rvalue_references">
+				move semantics
+			</a>
+		</em>, and Rust's 
+		<em>
+			<a
+				rel="external noreferrer noopener"
+				href="https://doc.rust-lang.org/book/ch04-01-what-is-ownership.html">
+				ownership semantics
+			</a>
+		</em> all attempt to address the problem of mutable data aliasing at the 
+		language level. These are popular languages with devoted users, many of 
+		whom heavily appreciate each language's approach to handling aliasing.
+	</p>
+	<p>
+		C++'s 
+		<code><a
+			rel="external noreferrer noopener"
+			href="https://en.cppreference.com/w/cpp/memory/unique_ptr">unique_ptr</a></code>,
+		a library feature that is based on move semantics, is used like a 
+		reference and prohibits itself from being copied: thus it eliminates 
+		aliasing of the referenced data. This abstraction can be bypassed 
+		by using the 
+		<code><a
+			rel="external noreferrer noopener"
+			href="https://en.cppreference.com/w/cpp/memory/unique_ptr/get">get</a></code>
+		member function of a unique_ptr which reveals the underlying 
+		managed pointer.
+	</p>
+	<p>
+		Rust's ownership semantics rejects all programs where 2 or more usable 
+		references, with mutable access to the same mutable data region, can exist.
+		Ownership semantics can be bypassed within Rust code that is marked as 
+		<code><a
+			rel="external noreferrer noopener"
+			href="https://doc.rust-lang.org/book/ch19-01-unsafe-rust.html">unsafe</a></code>.
+	</p>
+	<p>
+		C's restrict semantics does not disallow mutable data aliasing, but it 
+		restricts it in a structured way which helps the compiler's analysis for 
+		optimization opportunities. Specifically, a restricted pointer,
+		existing as an initialized variable and while it has not gone out of scope, 
+		only allows access to it's referred object through an expression that 
+		involves reading that restricted pointer variable. The rules of copying 
+		restricted pointers are:
+	</p>
+	<ul>
+		<li>
+			A restricted pointer can be copied to a non-restricted pointer that 
+			is declared in either the same block or in an inner block.
+		</li>
+		<li>
+			A restricted pointer can be copied to a restricted pointer that 
+			is declared in an inner block.
+		</li>
+		<li>
+			A restricted pointer can be returned from a function and copied to a 
+			restricted pointer stored in the callee's block.
+		</li>
+	</ul>
+	<p>
+		From these rules, one can extrapolate that 2 or more restricted pointers 
+		declared in the same block shall never refer to overlapping regions of 
+		memory. This derived rule is the motivator for their most popular use as
+		function parameters.
+	</p>
+</section>	
+<section id="handles">
+	<header>
+		<h3>Handles</h3>
+	</header>
+	<p>
+		Some see the C++ and Rust approach, which are related to 
+		<a href="#!/documents/blog/linear-logic.html">Linear Logic</a>, as 
+		overly restrictive and have advocated using <em>handles</em> as an 
+		alternative.
+	</p>
+	<p>
+		In an article by Andre Weissflog titled <cite><a 
+		rel="external noreferrer noopener"
+		href="https://floooh.github.io/2018/06/17/handles-vs-pointers.html">
+		Handles are the better pointers</a></cite>, he proposes a programming 
+		style where you essentially write your own modules that handle the 
+		allocation of specific classes of objects that permit access to themselves
+		indirectly through a handle where only the module knows how to 
+		convert that handle back into a raw pointer.
+	</p>
+	<p>
+		This is a fine idea, but it breaks down as soon as a bypass is introduced
+		just like in the other approaches. And I quote from that article:
+	</p>
+	<blockquote class="accented shaded padded">
+		<p>
+			If user code needs to access the memory of an item directly it needs to obtain a pointer through a ‘lookup function’ which takes a handle as input and returns a pointer. As soon as such a lookup function exists, <mark>the fairly watertight memory safety scenario outlined above is no longer guaranteed, and the user code should adhere to a few rules</mark>:
+		</p>
+		<ul>
+			<li>pointers should never be stored anywhere, since the next time the pointer is used it may no longer point to the same item, or even to valid memory</li>
+			<li>a pointer should only be used in a simple code block, and not ‘across’ function calls</li>
+		</ul>
+		<p>
+			Every time a handle is converted into a pointer, the system can guarantee that the returned pointer still points to the same item that the handle was originally created for (more on this below), but this guarantee ‘decays’ over time since the item under the pointer may have been destroyed, or the underlying memory may have been reallocated to a different location (this is the same problem as iterator invalidation in C++).</p>
+	</blockquote>
+</section>
+<section id="escape-hatches">
+	<header>
+		<h3>Escape Hatches</h3>
+	</header>
+	<p>
+		All these approaches have in common that they do not fundamentally 
+		gaurantee anything because they all allow an <em><a 
+		rel="external noreferrer noopener" href="https://wiki.c2.com/?EscapeHatch">
+		escape hatch</a></em> from the normal rules or abstraction.
+	</p>
+	<p>
+		Escape hatches are often praised as being necessary but their use 
+		destroys any proof of invariants that an abstraction has previously upheld. 
+		Everything that the user does within an escape hatch is a black box to
+		the surrounding abstraction and it is only based on faith in the user's 
+		competence and good intent that he will restore the abstraction's 
+		invariants before the escape hatch closes.
+	</p>
+	<p>
+		An algorithm cannot be a program as a proof if it allows arbitrary escape 
+		hatches whose effects are localized only based on an honor system, 
+		otherwise the entire program can just be regarded as one big instance 
+		of the &bot; type because of the infectious nature of escape hatches to
+		potentially undo all the propositions that were previously established 
+		by the algorithm.
+	</p>
+	<p>
+		When an abstraction is packaged, it's state and it's operations form the 
+		seed of a consistent historical tree of valid possibilities. It is 
+		important that an abstraction does not become unpackaged, otherwise 
+		every operation provided by that abstraction can only assume garbage 
+		state corrupted by some escape hatch.
+	</p>
+	<p>
+		It is a fallacy to have <q>safe code that depends on unsafe code</q>, 
+		the latter subsumes the former and it just becomes unsafe code. period.
+		What is valid is to have unsafe code that depends on safe code: the 
+		safe code being an unaffected, separate component.
+	</p>
+	<p>
+		Rather than having escape hatches at all, I think a good programming 
+		language will separate safe from unsafe code and not allow the former 
+		to depend on the latter. This means that all programs with unsafe 
+		components should always have the unsafe parts at the outer layer 
+		which executes the safe parts in the inner layer. If any interaction 
+		with the outside world is considered to be a subset of unsafe code, then
+		all programs should essentially become monads: having an unsafe, 
+		imperative shell with a safe, functional core.
+	</p>
+</section>
+<section id="linearity">
+	<header>
+		<h3>Linearity</h3>
+	</header>
+	<p>
+		In regards to memory safety, using 
+		<a 
+			rel="external noreferrer noopener" 
+			href="https://wiki.c2.com/?LinearTypes">
+			linear types
+		</a> seems to be a good basis. There seems to be confusion regarding 
+		how they may actually work in a programming language but I have some 
+		understanding.
+	</p>
+	<p>
+		First, linearity does not apply to the type, instead it applies to the 
+		variable: So it is more clear to say <q>linear variable</q>. Second,
+		there must be a clear definition as to what constitutes the <em>use</em>
+		of a linear variable before deciding that they can only each be used once.
+	</p>
+	<p>
+		To maintain the property that a linear variable has exclusive access to
+		it's data, any operation that enables access to it's data should 
+		constitute a use of that linear variable; these operations are: 
+		directly reading that linear variable's value and obtaining a reference
+		to that linear variable's value.
+	</p>
+	<p>
+		For a functional language that does not allow variable reassignment, a 
+		linear variable essentially dies after being used. The value or 
+		reference obtained from it can then be stored to another linear variable
+		or consumed by an operation.
+	</p>
+	<p>
+		For an imperative language that <b>does</b> allow variable reassignment,
+		the language must keep track of whether or not a linear variable holds a
+		value. A linear variable should only be allowed to be reassigned after 
+		being used; after reassignment, a linear variable becomes unused again.
+	</p>
+	<p>
+		The imperative approach allows the names of linear variables to be reused
+		after their values have been consumed. This can also happen as an 
+		underlying optimization in the functional approach. 
+	</p>
+	<p>
+		A linear variable is only one-half of the problem of data aliasing. While
+		it is clear that 2 copies of the same value cannot be read out of a linear 
+		variable, nothing prevents 2 linear variables from being initialized with
+		the same value that was obtained from a non-linear, normal variable.
+	</p>
+	<p>
+		A short-sighted solution is to prevent assignment from normal variables 
+		to linear variables, but one can bypass this restriction by converting 
+		the lvalue from the normal variable into an rvalue by performing an 
+		identity operation. 
+	</p>
+	<p>
+		A solution would be to introduce proper linear types. A linear type is a 
+		type whose terms can only be produced from any of the following: 
+		reading a linear variable, obtaining the reference to a linear variable,
+		evaluating a linear operation, applying a linear function, and evaluating 
+		a linear constant. Linear terms, which are terms of linear types, would 
+		not be allowed to be stored into non-linear variables or used within 
+		non-linear operations. 
+	</p>
+	<p>
+		Linear terms should be explicitly convertible to their equivalent 
+		non-linear terms so that they can be used with the non-linear parts of a 
+		language, but this conversion should not be reversible.
+	</p>
+	<p>
+		This ability for non-linear terms to depend on linear terms through a
+		conversion is an example of unsafe code depending on safe code. But 
+		to maintain that safe code does not depend on unsafe code, it must be 
+		illegal to convert from a non-linear term to a linear one.
+	</p>
+</section>
+<section id="conclusion">
+	<header>
+		<h3>Conclusion</h3>
+	</header>
+	<p>
+		Memory safe abstractions only work if they do not expose implementation 
+		details or provide escape hatches. The presence of either disproves the 
+		abstraction and invalidates any invariants. Once safety has been dropped 
+		out, recovery is impossible to prove. 
+	</p>
+	<p>
+		A language should not allow safe code to depend on unsafe code through
+		the presence and use of escape hatches; rather, safe code should 
+		only be allowed to depend safe code while unsafe code can depend on 
+		both.
+	</p>
+	<p>
+		This notion should extend to the type system where unsafe types can be
+		obtained as a conversion from a safe type but safe types cannot be 
+		obtained as a conversion from an unsafe type. The unsafe types are the 
+		non-linear types and the safe types are the linear ones.
+	</p>
+</section>
