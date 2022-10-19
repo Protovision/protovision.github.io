@@ -8,8 +8,8 @@
 	--color-dark-green:#080;
 	--color-green:#0b0;
 	--color-light-green:#0e0;
-	--color-dark-cyan:#088;
-	--color-cyan:#0bb;
+	--color-dark-cyan:#088; 
+	--color-cyan:#0bb; 
 	--color-light-cyan:#0ee;
 	--color-dark-blue:#008;
 	--color-blue:#00b;
@@ -25,7 +25,10 @@
 	--color-white:#eee;
 	--color-dark-accent:var(--color-dark-cyan);
 	--color-accent:var(--color-cyan);
-	--color-light-accent:var(--color-light-cyan);}
+	--color-light-accent:var(--color-light-cyan);
+	--font-heading:'Inter',sans-serif;
+	--font-body:'Inter',sans-serif;
+	--font-code:'Azeret Mono',monospace;}
 
 ::selection{
 	background:var(--color-light-yellow);}
@@ -36,13 +39,13 @@ mark{
 body{
 	background-color:var(--color-white);
 	color:var(--color-black);
-	font-family:'Red Hat Text',sans-serif;}
+	font-family:var(--font-body);}
 
 h1,h2,h3,h4,h5,h6{
-	font-family:'Red Hat Display',sans-serif;}
+	font-family:var(--font-heading);}
 
 .code,code,samp,kbd{
-	font-family:'Red Hat Mono',monospace;
+	font-family:var(--font-code);
 	background-color:var(--color-light-gray);}
 
 main{

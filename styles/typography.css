@@ -35,15 +35,18 @@ h3,
 h4,
 h5,
 h6,
+th,
+:is(h1,h2,h3,h4,h5,h6,th) :is(dt,figcaption,a,b,strong,time,summary){
+	font-weight:600;}
+
 dt,
 figcaption,
 a,
 b,
 strong,
 time,
-th,
 summary{
-	font-weight:bolder;}
+	font-weight:500;}
 
 dt,
 abbr,
