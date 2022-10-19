@@ -73,6 +73,8 @@ code{
 	margin:0.25em auto;}
 .centered-text{
 	text-align:center;}
+.middled-text{
+	vertical-align:middle;}
 .accented{
 	border-left:0.25em solid var(--color-dark-accent);
 	padding-left:0.5em;}
