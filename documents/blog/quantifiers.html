@@ -94,24 +94,26 @@
 	Here is an existing correspondence between logic quantifiers and the 
 	dependent types:
 </p>
-<table>
-	<thead>
-		<tr>
-			<th>Quantifiers (Logic)</th>
-			<th>Dependent types (Type theory)</th>
-		</tr>
-	</thead>
-	<tbody>
-		<tr>
-			<td>&forall;x:T,&phi;x</td>
-			<td>&Pi;<sub>x:T</sub>&phi;(x)</td>
-		</tr>
-		<tr>
-			<td>&exist;x:T,&phi;x</td>
-			<td><span>&Sigma;</span><sub>x:T</sub>&phi;(x)</td>
-		</tr>
-	</tbody>
-</table>
+<figure>
+	<table class="centered">
+		<thead class="shaded">
+			<tr>
+				<th>Quantifiers (Logic)</th>
+				<th>Dependent types (Type theory)</th>
+			</tr>
+		</thead>
+		<tbody>
+			<tr>
+				<td>&forall;x:T,&phi;x</td>
+				<td>&Pi;<sub>x:T</sub>&phi;(x)</td>
+			</tr>
+			<tr>
+				<td>&exist;x:T,&phi;x</td>
+				<td>&Sigma;<sub>x:T</sub>&phi;(x)</td>
+			</tr>
+		</tbody>
+	</table>
+</figure>
 <p>
 	When I looked into this current correspondence and into what dependent types
 	are, there was bittersweetness. Dependent types, I have learned, simply 

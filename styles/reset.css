@@ -9,7 +9,8 @@
 	vertical-align:inherit;
 	font:inherit;
 	text-align:inherit;
-	text-decoration:none;}
+	text-decoration:none;
+	word-break:break-word;}
 
 html{
 	font:sans-serif 1rem normal normal normal normal 1;}

@@ -26,8 +26,7 @@
 	--color-dark-accent:var(--color-dark-cyan);
 	--color-accent:var(--color-cyan);
 	--color-light-accent:var(--color-light-cyan);
-	--font-heading:'Inter',sans-serif;
-	--font-body:'Inter',sans-serif;
+	--font-text:'Lexend','Inter','STIX Two Math',sans-serif;
 	--font-code:'Azeret Mono',monospace;}
 
 ::selection{
@@ -39,10 +38,10 @@ mark{
 body{
 	background-color:var(--color-white);
 	color:var(--color-black);
-	font-family:var(--font-body);}
+	font-family:var(--font-text);}
 
 h1,h2,h3,h4,h5,h6{
-	font-family:var(--font-heading);}
+	font-family:var(--font-text);}
 
 .code,code,samp,kbd{
 	font-family:var(--font-code);
