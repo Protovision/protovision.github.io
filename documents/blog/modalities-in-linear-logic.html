@@ -192,67 +192,37 @@
 <p>
 	Every linear binary connective has an interpretation from the point of 
 	view of the current producer and current consumer during the two phases of 
-	a transaction. These interpretations are:
+	a transaction. 
 </p>
-<figure>
-	<table class="centered centered-text middled-text">
-		<thead>
-			<tr class="shaded">
-				<th>Connective</th>
-				<th>Consuming</th>
-				<th>Producing</th>
-			</tr>
-		</thead>
-		<tbody>
-			<tr>
-				<td>&bigotimes;</td>
-				<td>Multiple resources that must be consumed together</td>
-				<td>Multiple resources that must be produced separately</td>
-			</tr>
-			<tr>
-				<td>&#8523;</td>
-				<td>Multiple resources that must be consumed separately</td>
-				<td>Multiple resources that must be produced together</td>
-			</tr>
-			<tr>
-				<td>&amp;</td>
-				<td>The choice of a resource to consume from a set of options</td>
-				<td>A random resource to produce from a set of possibilities</td>
-			</tr>
-			<tr>
-				<td>&bigoplus;</td>
-				<td>A random resource to consume from a set of possibilities</td>
-				<td>The choice of a resource to produce from a set of options</td>
-			</tr>
-	</table>
-</figure>
+<p>
+	From the point of view of the consumer:
+</p>
+<ul>
+	<li>&bigotimes;: Multiple resources that must be consumed together</li>
+	<li>&#8523;: Multiple resources that must be consumed separately</li>
+	<li>&amp;: The choice of a resource to consume from a set of options</li>
+	<li>&bigoplus;: A random resource to consume from a set of possibilities</li>
+</ul>
+<p>
+	From the point of view of the producer:
+</p>
+<ul>
+	<li>&bigotimes;: Multiple resources that must be produced separately</li>
+	<li>&#8523;: Multiple resources that must be produced together</li>
+	<li>&amp;: A random resource to produce from a set of possibilities</li>
+	<li>&bigoplus;: The choice of a resource to produce from a set of options</li>
+</ul>
 <p>
 	Here are my quick interpretations of ! (<em>of course</em>) and ? 
 	(<em>why not</em>) from the viewpoints of the consumer and producer,
 	respectively:
 </p>
-<figure>
-	<table class="centered centered-text middled-text">
-		<thead>
-			<tr class="shaded">
-				<th>Modality</th>
-				<th>Consuming</th>
-				<th>Producing</th>
-			</tr>
-		</thead>
-		<tbody>
-			<tr>
-				<td>!</td>
-				<td>A reusable voucher to consume a resource</td>
-				<td>A recurring order to produce a resource</td>
-			</tr>
-			<tr>
-				<td>?</td>
-				<td colspan="2">Zero or more occurrences of a resource</td>
-			</tr>
-		</tbody>
-	</table>
-</figure>
+<p>
+	For the consumer, a ! term is a resuable voucher to consume a resource.
+	For the producer, a ! term is a recurring order to produce a resource.
+	For both the consumer and producer, a ? term is zero or more occurrences of 
+	a resource.
+</p>
 <p>
 	While the modalities specify a non-linear potentiality or actuality to their 
 	resource, the modalities themselves are also non-linear. For a consumer, 
