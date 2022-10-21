@@ -17,7 +17,7 @@
 		Generating a different instance of the algorithm for each type that may
 		be used in the polymorphism. This is primarily how
 		<a
-			rel="external noopener"
+			rel="external noopener noreferrer"
 			href="https://en.wikipedia.org/wiki/Parametric_polymorphism">
 			Parametric Polymorphism
 		</a>
@@ -28,7 +28,7 @@
 		interface (a product of functions) for it for each unboxed type that may be 
 		used in the polymorphism. This is primarily how
 		<a 
-			rel="external noopener"
+			rel="external noopener noreferrer"
 			href="https://en.wikipedia.org/wiki/Subtyping">
 			Subtype Polymorphism
 		</a>
@@ -56,14 +56,14 @@
 	come to appreciate it for it's crucial role in the 
 	<abbr>
 		<a 
-			rel="external noopener" 
+			rel="external noopener noreferrer" 
 			href="https://en.cppreference.com/w/cpp/language/pimpl">
 			pImpl
 		</a>
 	</abbr>(<q>Pointer to implementation</q>) technique which produces a stable 
 	<abbr>
 		<a
-			rel="external noopener"
+			rel="external noopener noreferrer"
 			href="https://en.wikipedia.org/wiki/Application_binary_interface">
 			ABI
 		</a>
@@ -79,13 +79,13 @@
 <p>
 	I believe there is a correspondence between parametric polymorphism and 
 	<a
-		rel="external noopener"
+		rel="external noopener noreferrer"
 		href="https://en.wikipedia.org/wiki/Universal_quantification">
 		Universal Quantification
 	</a>
 	and there is a correspondence between subtype polymorphism and
 	<a
-		rel="external noopener"
+		rel="external noopener noreferrer"
 		href="https://en.wikipedia.org/wiki/Existential_quantification">
 		Existential Quantification
 	</a>
@@ -129,7 +129,7 @@
 	Of course, there is no requirement that &forall; and &exist; need to encode 
 	only dependent types. In
 	<a
-		rel="external noopener"
+		rel="external noopener noreferrer"
 		href="https://en.wikipedia.org/wiki/System_F">
 		System F
 	</a>, &forall; is used make terms depend on types: the expression
@@ -154,7 +154,7 @@
 </p>
 <p>
 	<a
-		rel="external noopener"
+		rel="external noopener noreferrer"
 		href="https://en.wikipedia.org/wiki/Type_class">
 		Type classes
 	</a>, I have read, address this issue by refining type variables to 
@@ -165,7 +165,7 @@
 <p>
 	In
 	<a
-		rel="external noopener"
+		rel="external noopener noreferrer"
 		href="https://en.wikipedia.org/wiki/Lambda_calculus">
 		lambda calculus
 	</a>, a &lambda; term does not have it's variable annotated and so it can 
@@ -174,7 +174,7 @@
 <p>
 	In
 	<a
-		rel="external noopener"
+		rel="external noopener noreferrer"
 		href="https://en.wikipedia.org/wiki/Simply_typed_lambda_calculus">
 		simply-typed lambda calulus
 	</a>, a &lambda; term has it's variable annotated with a type which places 
@@ -199,7 +199,7 @@
 	types and dependent types are types that depend on terms. But this problem 
 	is for another article where I will explore the 
 	<a
-		rel="external noopener"
+		rel="external noopener noreferrer"
 		href="https://en.wikipedia.org/wiki/Lambda_cube">
 		Lambda cube
 	</a>. For now, the encoding of parametric polymorphism as System F &Lambda;
@@ -225,13 +225,13 @@
 	&lambda;x:P.x+x ? And if type classes are to be implemented by 
 	subtyping with overhead-bearing mechanisms such as 
 	<a
-		rel="external noopener"
+		rel="external noopener noreferrer"
 		href="https://en.wikipedia.org/wiki/Virtual_method_table">
 		virtual method tables
 	</a> then how do we also encode zero-overhead polymorphic functions that 
 	are implemented with 
 	<a
-		rel="external noopener"
+		rel="external noopener noreferrer"
 		href="https://en.wikipedia.org/wiki/Monomorphization">
 		monomorphization
 	</a>?
@@ -244,13 +244,13 @@
 <p>
 	The 
 	<a
-		rel="external noopener"
+		rel="external noopener noreferrer"
 		href="https://ncatlab.org/nlab/show/dependent+product+type">
 		&Pi; type
 	</a> is the type of a function whose return type depends on the value of it's
 	argument. The
 	<a
-		rel="external noopener"
+		rel="external noopener noreferrer"
 		href="https://ncatlab.org/nlab/show/dependent+sum+type">
 		&Sigma; type
 	</a> is the type of a pair where the second component's type depends on the 
@@ -260,7 +260,7 @@
 	In a programming language like C, where the type of an array depends on the
 	number of elements it stores, the &Pi; type can be the type of a safer
 	<a
-		rel="external noopener"
+		rel="external noopener noreferrer"
 		href="https://en.cppreference.com/w/c/memory/malloc">
 		malloc
 	</a> function. malloc would have the type: 
@@ -283,7 +283,7 @@
 	is a paper 
 	<cite>
 		<a 
-			rel="external noopener"
+			rel="external noopener noreferrer"
 			href="https://homepages.inf.ed.ac.uk/gdp/publications/Abstract_existential.pdf">
 			Abstract Types Have Existential Type
 		</a>, by Mitchell and Plotkin
