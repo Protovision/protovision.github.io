@@ -174,7 +174,7 @@
 	We aleady see C-like languages today where something like 
 </p>
 <figure>
-	<pre class="code">
+	<pre class="no-margin code padded">
 		char (*(*x[3])())[5]
 	</pre>
 </figure>
@@ -182,7 +182,7 @@
 	is expressed as 
 </p>
 <figure>
-	<pre class="code">
+	<pre class="no-margin code padded">
 		x : [3]*(() -&gt; *[5]char)
 	</pre>
 </figure>
@@ -343,7 +343,7 @@
 	In C, I would like to write:
 </p>
 <figure>
-	<pre class="code">
+	<pre class="no-margin code padded">
 		struct { bool ok; T value; } do_something(...);
 	</pre>
 </figure>
@@ -351,7 +351,7 @@
 	but no, they make me write:
 </p>
 <figure>
-	<pre class="code">
+	<pre class="no-margin code padded">
 			struct do_something_result { bool ok; T value; };<br>
 			struct do_something_result do_something(...);
 	</pre>

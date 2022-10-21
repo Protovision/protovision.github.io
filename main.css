@@ -126,7 +126,7 @@ ul,
 caption,
 table,
 details{
-	margin-bottom:0.25em;}
+	margin-bottom:0.75em;}
 h1,
 h2,
 h3,
@@ -159,20 +159,23 @@ samp{
 	font-family:monospace;}
 blockquote,
 dd{
-	padding-left:1em;}
+	padding-left:0.75em;}
 td,
 th{
 	border:1px solid;}
+dl{
+	padding-left:0.75em;}
 ol,
 ul{
-	padding-left:2em;}
+	padding-left:1.75em;}
 a:hover,
 a:focus{
 	text-decoration:underline;}
 td,
 th{
-	padding:0 0.5em;
-	white-space:nowrap;}
+	padding:0 0.75em;
+	white-space:nowrap;
+	vertical-align:middle;}
 h1{font-size:1.625em;}
 h2{font-size:1.375em;}
 h3{font-size:1.125em;}
@@ -180,17 +183,15 @@ h4{font-size:1em;}
 h5{font-size:0.875em;}
 h6{font-size:0.75em;}
 blockquote{border-left:1px solid;}
-dd{margin-bottom:0.5em;}
+dd{margin-bottom:0.75em;}
 figcaption{text-align:center;}
 figure{
-	margin:0 auto 0.25em auto;
-	padding:1em;
 	overflow-x:auto;}
 hr{
 	margin:1em 0;
 	border-top:1px solid;}
 ol{list-style-type:decimal;}
-p{text-indent:1em;}
+p{text-indent:0.75em;}
 pre{
 	white-space:nowrap;
 	overflow:auto;}
@@ -215,7 +216,7 @@ sup{top:-0.5em;}
 html{
 	overflow:auto;
 	scroll-behavior:smooth;}
-main{padding:1em;}
+main{padding:0.75em;}
 .tabular{table-layout:fixed;}
 @media all and (min-width:40em){
 	.horizontal{
@@ -235,7 +236,7 @@ main{padding:1em;}
 		display:table-row;}
 	.tabular>*>*{
 		display:table-cell;
-		padding:0 0.5em;}}
+		padding:0 0.75em;}}
 @media screen and (min-width:52em){
 	html{margin-left:calc(100vw - 100%);}
 	body{padding:1em 0;}
@@ -280,11 +281,13 @@ a{
 a:active{
 	color:var(--color-accent);}
 .code,code{
-	padding:0 0.5em;}
+	padding:0 0.75em;}
 .code{
 	line-height:1.25;}
 .max-width{
 	width:100%;}
+.no-margin{
+	margin:0;}
 .top-border{
 	border-top:1px solid;}
 .bottom-border{
@@ -296,16 +299,15 @@ a:active{
 .bordered{
 	border:1px solid;}
 .centered{
-	margin:0.25em auto;}
+	margin:0 auto;}
 .centered-text{
 	text-align:center;}
 .middled-text{
 	vertical-align:middle;}
 .accented{
-	border-left:0.25em solid var(--color-dark-accent);
-	padding-left:0.5em;}
+	border-left:0.375em solid var(--color-dark-accent);}
 .padded{
-	padding:0.25em 0.5em;}
+	padding:0.75em;}
 .shaded{
 	background-color:var(--color-light-gray);}
 .unbulleted{
@@ -351,8 +353,4 @@ a:active{
 @media screen and (prefers-color-scheme:dark) and (min-width:52em){
 	body{background-color:var(--color-black);}
 	main{background-color:var(--color-dark-gray);}}
-
-
-
-
 
