@@ -223,8 +223,10 @@ main{padding:0.75em;}
 		display:flex;
 		flex-wrap:wrap;
 		flex-direction:row;}
-	.horizontal>li:nth-child(even){
-		margin:0 1em;}
+	.horizontal>li{
+		margin-right:1.5em;}
+	.horizontal>li:last-child{
+		margin-right:0;}
 	.spaced{
 		justify-content:space-between;}
 	.tabular{
@@ -300,6 +302,8 @@ a:active{
 	border:1px solid;}
 .centered{
 	margin:0 auto;}
+.no-indent{
+	text-indent:0;}
 .centered-text{
 	text-align:center;}
 .middled-text{
