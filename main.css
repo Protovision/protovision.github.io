@@ -218,6 +218,14 @@ html{
 	scroll-behavior:smooth;}
 main{padding:0.75em;}
 .tabular{table-layout:fixed;}
+.horizontal.words{
+	display:flex;
+	flex-wrap:wrap;
+	flex-direction:row;}
+.horizontal.words>li{
+	margin-right:1.5em;}
+.horizontal.words>li:last-child{
+	margin-right:0;}
 @media all and (min-width:40em){
 	.horizontal{
 		display:flex;
