@@ -96,6 +96,16 @@ table{
 
 /* Typography */
 
+footer,
+header,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+figure{
+	break-inside:avoid;}
 body{
 	line-height:1.5;
 	font-weight:var(--font-weight-regular);}
@@ -210,6 +220,14 @@ sup{top:-0.5em;}
 	h1{font-size:2em;}
 	h2{font-size:1.5em;}
 	h3{font-size:1.25em;}}
+@media print{
+	td,
+	th{
+		border:1pt solid;}
+	blockquote{
+		border-left:1pt solid;}
+	hr{
+		border-top:1px solid;}}
 
 /* Layout */
 
@@ -217,6 +235,12 @@ html{
 	overflow:auto;
 	scroll-behavior:smooth;}
 main{padding:0.75em;}
+.avoid-break-inside{
+	break-inside:avoid;}
+.always-break-before{
+	break-before:always;}
+.always-break-after{
+	break-after:always;}
 .tabular{table-layout:fixed;}
 .horizontal.words{
 	display:flex;
@@ -256,18 +280,20 @@ main{padding:0.75em;}
 		max-width:50em;
 		min-height:calc(100vh - 2em);}}
 @media print{
+	@page{
+		margin:3em;}
 	html,
 	body,
 	main{
-		margin:0!important;
-		border:0!important;
-		padding:0!important;
-		background-color:transparent!important;
-		color:#000!important;}
+		margin:0;
+		border:0;
+		padding:0;
+		background-color:transparent;
+		color:#000;}
 	main{
-		max-width:auto!important;
-		min-height:auto!important;}
-	#main-nav{display:none!important;}}
+		max-width:auto;
+		min-height:auto;}
+	#main-nav{display:none;}}
 
 
 /* Styling */
@@ -280,7 +306,8 @@ mark{
 body{
 	background-color:var(--color-white);
 	color:var(--color-black);
-	font-family:var(--font-family-text);}
+	font-family:var(--font-family-text);
+	print-color-adjust:exact!important;}
 .code,code,samp,kbd{
 	font-family:var(--font-family-code);
 	background-color:var(--color-light-gray);}
@@ -318,6 +345,8 @@ a:active{
 	vertical-align:middle;}
 .accented{
 	border-left:0.375em solid var(--color-dark-accent);}
+.margined{
+	margin:0.75em;}	
 .padded{
 	padding:0.75em;}
 .shaded{
@@ -365,4 +394,17 @@ a:active{
 @media screen and (prefers-color-scheme:dark) and (min-width:52em){
 	body{background-color:var(--color-black);}
 	main{background-color:var(--color-dark-gray);}}
+@media print{
+	main{
+		border-top:none;}
+	.bordered{
+		border:1pt solid;}
+	.top-border{
+		border-top:1pt solid;}
+	.bottom-border{
+		border-bottom:1pt solid;}
+	.left-border{
+		border-left:1pt solid;}
+	.right-border{
+		border-right:1pt solid;}}
 
