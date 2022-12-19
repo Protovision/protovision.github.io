@@ -1,0 +1,209 @@
+<header class="top-border">
+	<h2>Parse Tree Rewriting</h2>
+	by Mark Swoope
+	<br>
+	<time datetime="2022-12-14">2022-12-14</time>
+</header>
+<section>
+	<header>
+		<h3>Introduction</h3>
+	</header>
+	<p>
+		After self-educating myself about lexing and parsing, I have decided to not 
+		use a lexer and/or parser generator and to manually program one for the 
+		compiler of my new language.
+	</p>
+	<p>
+		As far as I have learned, it is common wisdom that the method of 
+		<em>recursive descent</em> is the only practical method for hand-written 
+		parsers. This method is strongly suited for languages described by the 
+		<dfn>LL(1) grammars</dfn> which are <em>context-free</em> grammars which 
+		an <em>LL(1) parser</em> can recognize.
+	</p>
+	<p>
+		A <dfn>context-free grammar</dfn> is a starting variable together with a 
+		set of relations (production rules) where each relation maps a variable to 
+		a sequence containing variables and strings. In this structure, variables 
+		represent patterns of sentences of the language for which the grammar 
+		describes and strings represent those parts of the sentences that are 
+		atomic and cannot be broken down further.
+	</p>
+	<p>
+		An <dfn>LL(1) parser</dfn> can recognize a subset of the context-free 
+		grammars, specifically the ones that lack ambiguity and left-recursion.
+		A context-free grammar is ambiguous if at any point during parsing, there 
+		is more than one production rule that can be transitioned into given the 
+		current production and current input string. A context-free grammar 
+		contains left-recursion if it contains a production rule whose first 
+		symbol on the right-hand-side causes the production to recurse (directly
+		or indirectly).
+	</p>
+	<p>
+		The problem with LL(1) grammars is that they cannot describe languages 
+		whose parse trees accurately structure sentences for languages that 
+		contain left-associative binary operators.
+	</p>
+	<p>
+		More powerful parsers can recognize a wider or even the whole set of 
+		context-free grammars while generating correct parse trees for them at the 
+		cost of memory, speed, and the ability for the parser to be hand-written 
+		(at which point a parser generator is needed). When a parser generator is 
+		used, one has to pay the cost of learning such a tool while also losing 
+		fine-grained control over the parsing process, including the loss of 
+		control over emitting effective diagnostic messages to the user of your 
+		language.
+	</p>
+	<p>
+		So I have decided to use recursive descent to create an initial parse 
+		tree after tokenization and this parse tree shall go through a 
+		post-processing step involving the rewriting of the tree according to a 
+		set of well-defined tree rewriting rules in order to fix up the tree to 
+		what it would have looked like when parsed by a more powerful, 
+		automatically-generated parser.
+	</p>
+</section>
+<section>
+	<header>
+		<h3>Notation</h3>
+	</header>
+	<p>
+		I made up my own variant of backus-naur form which I will use hitherto for
+		all my syntactic notation. The notation describes itself in itself as:
+	</p>
+	<figure>
+		<pre class="no-margin code padded">start&nbsp;=&gt;&nbsp;production&nbsp;,&nbsp;?!(&quot;;&quot;&nbsp;,&nbsp;production)&nbsp;;<br>production&nbsp;=&gt;&nbsp;variable&nbsp;,&nbsp;&quot;=&gt;&quot;&nbsp;,&nbsp;exclusion&nbsp;;<br>exclusion&nbsp;=&gt;&nbsp;exclusion&nbsp;,&nbsp;&quot;\&quot;&nbsp;,&nbsp;alternation&nbsp;|&nbsp;alternation&nbsp;;<br>alternation&nbsp;=&gt;&nbsp;alternation&nbsp;,&nbsp;&quot;|&quot;&nbsp;,&nbsp;concatenation&nbsp;|&nbsp;concatenation&nbsp;;<br>concatenation&nbsp;=&gt;&nbsp;concatenation&nbsp;,&nbsp;&quot;,&quot;&nbsp;,&nbsp;enumeration&nbsp;|&nbsp;enumeration&nbsp;;<br>enumeration&nbsp;=&gt;&nbsp;character&nbsp;,&nbsp;&quot;:&quot;&nbsp;,&nbsp;character&nbsp;|&nbsp;function&nbsp;;<br>function&nbsp;=&gt;&nbsp;option&nbsp;|&nbsp;repetition&nbsp;;<br>option&nbsp;=&gt;&nbsp;&quot;?&quot;&nbsp;,&nbsp;function&nbsp;|&nbsp;atom&nbsp;;<br>repetition&nbsp;=&gt;&nbsp;&quot;!&quot;&nbsp;,&nbsp;function&nbsp;|&nbsp;atom&nbsp;;<br>atom&nbsp;=&gt;&nbsp;variable&nbsp;|&nbsp;character&nbsp;|&nbsp;string&nbsp;|&nbsp;&quot;(&quot;&nbsp;,&nbsp;exclusion&nbsp;,&nbsp;&quot;)&quot;&nbsp;;<br>character&nbsp;=&gt;&nbsp;&quot;&#39;&quot;&nbsp;,&nbsp;(*&nbsp;\&nbsp;&quot;&#39;&quot;)&nbsp;,&nbsp;&quot;&#39;&quot;&nbsp;|&nbsp;&quot;*&quot;;<br>string&nbsp;=&gt;&nbsp;&#39;&quot;&#39;&nbsp;,&nbsp;!(*&nbsp;\&nbsp;&#39;&quot;&#39;)&nbsp;,&nbsp;&#39;&quot;&#39;&nbsp;;<br>variable&nbsp;=&gt;&nbsp;!(&#39;-&#39;&nbsp;|&nbsp;&#39;_&#39;&nbsp;|&nbsp;&#39;0&#39;&nbsp;:&nbsp;&#39;9&#39;&nbsp;|&nbsp;&#39;A&#39;&nbsp;:&nbsp;&#39;Z&#39;&nbsp;|&nbsp;&#39;a&#39;&nbsp;:&nbsp;&#39;z&#39;)<br><br></pre>
+	</figure>
+	<p>
+		An <em>exclusion</em> shall remove a possible string or character out of 
+		an alternation or enumeration, respectively. An <em>enumeration</em> 
+		matches a range of characters between the code points of two specified 
+		characters, inclusive. An <em>option</em> matches zero or one occurence 
+		of it's subpattern. A <em>repetition</em> matches one or more occurences 
+		of it's subpattern. To match zero or more occurence(s) of some pattern 
+		<var>e</var>, use the pattern <code>?!e</code>. The <em>*</em> symbol 
+		matches any character within the language's character set. Everything else 
+		should be self-explanatory.
+	</p>
+</section>
+<section>
+	<header>
+		<h3>The Language of Trees</h3>
+	</header>
+	<p>
+		I will use the following grammar for the language of trees:
+	</p>
+	<figure>
+		<pre class="no-margin code padded">start&nbsp;=&gt;&nbsp;tree&nbsp;;<br>tree&nbsp;=&gt;&nbsp;leaf&nbsp;|&nbsp;branch&nbsp;;<br>leaves&nbsp;=&gt;&nbsp;leaves&nbsp;,&nbsp;&quot;,&quot;&nbsp;,&nbsp;branch&nbsp;|&nbsp;branch&nbsp;;<br>branch&nbsp;=&gt;&nbsp;leaf&nbsp;,&nbsp;&quot;-&gt;&quot;&nbsp;,&nbsp;subtrees&nbsp;;<br>subtrees&nbsp;=&gt;&nbsp;leaf&nbsp;|&nbsp;&quot;(&quot;&nbsp;,&nbsp;leaves&nbsp;,&nbsp;&quot;)&quot;&nbsp;;<br>leaf&nbsp;=&gt;&nbsp;variable&nbsp;|&nbsp;character&nbsp;|&nbsp;string&nbsp;|&nbsp;&quot;(&quot;&nbsp;,&nbsp;leaf&nbsp;,&nbsp;&quot;)&quot;&nbsp;;<br>variable&nbsp;=&gt;&nbsp;!(&#39;-&#39;&nbsp;|&nbsp;&#39;_&#39;&nbsp;|&nbsp;&#39;0&#39;&nbsp;:&nbsp;&#39;9&#39;&nbsp;|&nbsp;&#39;A&#39;&nbsp;:&nbsp;&#39;Z&#39;&nbsp;|&nbsp;&#39;a&#39;&nbsp;:&nbsp;&#39;z&#39;)&nbsp;;<br>character&nbsp;=&gt;&nbsp;&quot;&#39;&quot;&nbsp;,&nbsp;(*&nbsp;\&nbsp;&quot;&#39;&quot;)&nbsp;,&nbsp;&quot;&#39;&quot;&nbsp;;<br>string&nbsp;=&gt;&nbsp;&#39;&quot;&#39;&nbsp;,&nbsp;(*&nbsp;\&nbsp;&#39;&quot;&#39;)&nbsp;,&nbsp;&#39;&quot;&#39;</pre>
+	</figure>
+</section>
+<section>	
+	<header>
+		<h3>Classic Context-Free Grammar Example</h3>
+	</header>
+	<p>
+		The quintessential example of a context-free grammar is that for the 
+		language of basic integer arithmetic:
+	</p>
+	<figure>
+		<pre class="no-margin code padded">start&nbsp;=&gt;&nbsp;addition&nbsp;;<br>addition&nbsp;=&gt;&nbsp;addition&nbsp;,&nbsp;(&quot;+&quot;&nbsp;|&nbsp;&quot;-&quot;)&nbsp;,&nbsp;multiplication&nbsp;|&nbsp;multiplication&nbsp;;<br>multiplication&nbsp;=&gt;&nbsp;multiplication&nbsp;,&nbsp;(&quot;*&quot;&nbsp;|&nbsp;&quot;/&quot;)&nbsp;,&nbsp;negation&nbsp;|&nbsp;negation&nbsp;;<br>negation&nbsp;=&gt;&nbsp;?!(&quot;+&quot;&nbsp;|&nbsp;&quot;-&quot;)&nbsp;,&nbsp;integer&nbsp;|&nbsp;integer&nbsp;;<br>integer&nbsp;=&gt;&nbsp;digits&nbsp;|&nbsp;&quot;(&quot;&nbsp;,&nbsp;addition&nbsp;,&nbsp;&quot;)&quot;&nbsp;;<br>digits&nbsp;=&gt;&nbsp;!(&#39;0&#39;&nbsp;:&nbsp;&#39;9&#39;)</pre>
+	</figure>
+	<p>An expression such as <code>-4 + 8 * 3</code> should be parsed as:</p>
+	<figure>
+		<pre class="no-margin code padded">start&nbsp;-&gt;<br>&nbsp;&nbsp;addition&nbsp;-&gt;&nbsp;(<br>&nbsp;&nbsp;&nbsp;&nbsp;addition&nbsp;-&gt;<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;multiplication&nbsp;-&gt;<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;negation&nbsp;-&gt;&nbsp;(<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&quot;-&quot;&nbsp;,<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;integer&nbsp;-&gt;<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;digits&nbsp;-&gt;<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&quot;4&quot;)&nbsp;,<br>&nbsp;&nbsp;&nbsp;&nbsp;&quot;+&quot;&nbsp;,<br>&nbsp;&nbsp;&nbsp;&nbsp;multiplication&nbsp;-&gt;&nbsp;(<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;multiplication&nbsp;-&gt;<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;negation&nbsp;-&gt;<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;integer&nbsp;-&gt;<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;digits&nbsp;-&gt;<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&quot;8&quot;&nbsp;,<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&quot;*&quot;&nbsp;,<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;negation&nbsp;-&gt;<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;integer&nbsp;-&gt;<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;digits&nbsp;-&gt;<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&quot;3&quot;))<br></pre>
+	</figure>
+</section>
+<section>
+	<header>
+		<h3>LL(1) Grammar</h3>
+	</header>
+	<p>
+		An LL(1) parser is incapable of parsing the above grammar of integer 
+		arithmetic into the above parse tree. The grammar must be rewritten in 
+		a way that an LL(1) parser or a recursive descent parser can always find 
+		the next production by only looking ahead by 1 token at any point during 
+		the parsing process.
+	</p>
+	<p>
+		In our example, this is done by removing left-recursion from the 
+		productions. For every production of the form 
+	<figure>
+		<pre class="no-margin padded">&Alpha;&nbsp;=&gt;&nbsp;&Alpha;&nbsp;,&nbsp;&sigma;&nbsp;,&nbsp;&Beta;&nbsp;|&nbsp;&Beta;</pre>
+	</figure>
+	<p>
+		where &Alpha; and &Beta; are each a distinct single non-terminal and 
+		&sigma; is a single terminal, it should be rewritten as:
+	</p>
+	<figure>
+		<pre class="no-margin padded">&Alpha;&nbsp;=&gt;&nbsp;&Beta;&nbsp;,&nbsp;?!(&sigma;&nbsp;,&nbsp;&Beta;)</pre>
+	</figure>
+	<p>
+		The LL(1) grammar for basic integer arithmetic becomes:
+	</p>
+	<figure>
+		<pre class="no-margin code padded">start&nbsp;=&gt;&nbsp;addition&nbsp;;<br>addition&nbsp;=&gt;&nbsp;multiplication&nbsp;,&nbsp;?!((&quot;+&quot;&nbsp;|&nbsp;&quot;-&quot;)&nbsp;,&nbsp;multiplication)&nbsp;;<br>multiplication&nbsp;=&gt;&nbsp;negation&nbsp;,&nbsp;?!((&quot;*&quot;&nbsp;|&nbsp;&quot;/&quot;)&nbsp;,&nbsp;negation)&nbsp;;<br>negation&nbsp;=&gt;&nbsp;?!(&quot;+&quot;&nbsp;|&nbsp;&quot;-&quot;)&nbsp;,&nbsp;integer&nbsp;|&nbsp;integer&nbsp;;<br>integer&nbsp;=&gt;&nbsp;digits&nbsp;|&nbsp;&quot;(&quot;&nbsp;,&nbsp;addition&nbsp;,&nbsp;&quot;)&quot;&nbsp;;<br>digits&nbsp;=&gt;&nbsp;!(&#39;0&#39;&nbsp;:&nbsp;&#39;9&#39;)<br></pre>
+	</figure>
+	<p>
+		Both grammars match the same pattern of strings, but they do not match
+		the same parse tree structures. This LL(1) grammar produces the following
+		parse tree for our <code>-4 * 8 + 3</code> example:
+	</p>
+	<figure>
+		<pre class="no-margin code padded">start&nbsp;-&gt;<br>&nbsp;&nbsp;addition&nbsp;-&gt;&nbsp;(<br>&nbsp;&nbsp;&nbsp;&nbsp;multiplication&nbsp;-&gt;&nbsp;(<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;negation&nbsp;-&gt;&nbsp;(<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&quot;-&quot;&nbsp;,<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;integer&nbsp;-&gt;<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;digits&nbsp;-&gt;<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&quot;4&quot;)&nbsp;,<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&quot;*&quot;&nbsp;,<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;negation&nbsp;-&gt;<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;integer&nbsp;-&gt;<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;digits&nbsp;-&gt;<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&quot;8&quot;)&nbsp;,<br>&nbsp;&nbsp;&nbsp;&nbsp;&quot;+&quot;&nbsp;,<br>&nbsp;&nbsp;&nbsp;&nbsp;multiplication&nbsp;-&gt;<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;negation&nbsp;-&gt;<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;integer&nbsp;-&gt;<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;digits&nbsp;-&gt;<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&quot;3&quot;)<br></pre>
+	</figure>
+</section>
+<section>
+	<header>
+		<h3>Tree Rewriting Language</h3>
+	</header>
+	<p>
+		The parse tree rewriting language is easier to express as one language that 
+		combines two other languages. The first language is simply a sequence of 
+		rewriting rules:
+	</p>
+	<figure>
+		<pre class="no-margin code padded">start&nbsp;=&gt;&nbsp;correction&nbsp;,&nbsp;?!(&quot;;&quot;&nbsp;,&nbsp;correction)&nbsp;;<br>rule&nbsp;=&gt;&nbsp;configuration&nbsp;,&nbsp;&quot;=&gt;&quot;&nbsp;,&nbsp;substitution<br></pre>
+	</figure>
+	<p>
+		Each rule describes a configuration/pattern of the tree to replace with a specified substitution. Each rule 
+		should be applied recursively on the tree until the pattern no longer matches the tree or any 
+		part of it before moving on to the next rule.
+	</p>
+	<p>
+		The language of tree patterns should support alternation, wildcards, and subpattern capturing (for being referenced by index within the substitution expression):
+	</p>
+	<figure>		
+		<pre class="no-margin code padded">start&nbsp;=&gt;&nbsp;alternation&nbsp;;<br>alternation&nbsp;=&gt;&nbsp;alternation&nbsp;,&nbsp;&quot;|&quot;&nbsp;,&nbsp;concatenation&nbsp;|&nbsp;concatenation&nbsp;;<br>concatenation&nbsp;=&gt;&nbsp;concatenation&nbsp;,&nbsp;&quot;,&quot;&nbsp;,&nbsp;inclusion&nbsp;|&nbsp;inclusion&nbsp;;<br>inclusion&nbsp;=&gt;&nbsp;node&nbsp;,&nbsp;&quot;-&gt;&quot;&nbsp;,&nbsp;function&nbsp;|&nbsp;function&nbsp;;<br>function&nbsp;=&gt;&nbsp;option&nbsp;|&nbsp;repetition&nbsp;;<br>option&nbsp;=&gt;&nbsp;&quot;?&quot;&nbsp;,&nbsp;function&nbsp;|&nbsp;atom&nbsp;;<br>repetition&nbsp;=&gt;&nbsp;&quot;!&quot;&nbsp;,&nbsp;function&nbsp;|&nbsp;atom&nbsp;;<br>atom&nbsp;=&gt;&nbsp;node&nbsp;|&nbsp;&quot;(&quot;&nbsp;,&nbsp;alternation&nbsp;,&nbsp;&quot;)&quot;&nbsp;|&nbsp;&quot;[&quot;&nbsp;,&nbsp;alternation&nbsp;,&nbsp;&quot;]&quot;&nbsp;;<br>node&nbsp;=&gt;&nbsp;&quot;@&quot;&nbsp;|&nbsp;variable&nbsp;|&nbsp;character&nbsp;|&nbsp;string&nbsp;;<br>variable&nbsp;=&gt;&nbsp;!(&#39;-&#39;&nbsp;|&nbsp;&#39;_&#39;&nbsp;|&nbsp;&#39;0&#39;&nbsp;:&nbsp;&#39;9&#39;&nbsp;|&nbsp;&#39;A&#39;&nbsp;:&nbsp;&#39;Z&#39;&nbsp;|&nbsp;&#39;a&#39;&nbsp;:&nbsp;&#39;z&#39;)&nbsp;;<br>character&nbsp;=&gt;&nbsp;&quot;&#39;&quot;&nbsp;,&nbsp;(*&nbsp;\&nbsp;&quot;&#39;&quot;)&nbsp;,&nbsp;&quot;&#39;&quot;&nbsp;|&nbsp;&quot;*&quot;&nbsp;;<br>string&nbsp;=&gt;&nbsp;&#39;&quot;&#39;&nbsp;,&nbsp;!(*&nbsp;\&nbsp;&#39;&quot;&#39;)&nbsp;,&nbsp;&#39;&quot;&#39;&nbsp;<br></pre>
+	</figure>
+	<p>
+		Inclusion represents a parent node and it's child/children. Concatenation 
+		represents siblings of nodes/node patterns. @ matches any subtree. Patterns 
+		grouped in square brackets are to be captured in the substituting 
+		expression.
+	</p>
+	<p>
+		The language of tree substitutions is simpler. A decimal natural number 
+		prefixed with $ represents a zero-based index to a captured matching 
+		subtree from the pattern expression, to be inserted into the substitution 
+		expression:
+	</p>
+	<figure>
+		<pre class="no-margin code padded">start&nbsp;=&gt;&nbsp;concatenation&nbsp;;<br>concatenation&nbsp;=&gt;&nbsp;concatenation&nbsp;,&nbsp;&quot;,&quot;&nbsp;,&nbsp;inclusion&nbsp;|&nbsp;inclusion&nbsp;;<br>inclusion&nbsp;=&gt;&nbsp;capture&nbsp;,&nbsp;&quot;-&gt;&quot;&nbsp;,&nbsp;capture&nbsp;|&nbsp;capture&nbsp;;<br>capture&nbsp;=&gt;&nbsp;&quot;$&quot;&nbsp;,&nbsp;index&nbsp;|&nbsp;atom&nbsp;;<br>index&nbsp;=&gt;&nbsp;&#39;0&#39;&nbsp;|&nbsp;(&#39;1&#39;&nbsp;:&nbsp;&#39;9&#39;)&nbsp;,&nbsp;?!(&#39;0&#39;&nbsp;:&nbsp;&#39;9&#39;)&nbsp;;<br>atom&nbsp;=&gt;&nbsp;variable&nbsp;|&nbsp;character&nbsp;|&nbsp;string&nbsp;|&nbsp;&quot;(&quot;&nbsp;,&nbsp;concatenation&nbsp;,&nbsp;&quot;)&quot;&nbsp;;<br>variable&nbsp;=&gt;&nbsp;!(&#39;-&#39;&nbsp;|&nbsp;&#39;_&#39;&nbsp;|&nbsp;&#39;0&#39;&nbsp;:&nbsp;&#39;9&#39;&nbsp;|&nbsp;&#39;A&#39;&nbsp;:&nbsp;&#39;Z&#39;&nbsp;|&nbsp;&#39;a&#39;&nbsp;:&nbsp;&#39;z&#39;)&nbsp;;<br>character&nbsp;=&gt;&nbsp;&quot;&#39;&quot;&nbsp;,&nbsp;(*&nbsp;\&nbsp;&quot;&#39;&quot;)&nbsp;,&nbsp;&quot;&#39;&quot;&nbsp;;<br>string&nbsp;=&gt;&nbsp;&#39;&quot;&#39;&nbsp;,&nbsp;!(*&nbsp;\&nbsp;&#39;&quot;&#39;)&nbsp;,&nbsp;&#39;&quot;&#39;&nbsp;<br></pre>
+	</figure>
+</section>
+<section>
+	<header>
+		<h3>LL(1) Parse Tree Rewriting Rules</h3>
+	</header>
+	<p>
+		Here I present the tree rewriting rules to convert a an LL(1) parse tree
+		for basic integer arithmetic to one that restores operator associativity:
+	</p>
+	<figure>
+		<pre class="no-margin code padded">addition&nbsp;-&gt;&nbsp;(<br>&nbsp;&nbsp;[@]&nbsp;,&nbsp;<br>&nbsp;&nbsp;[&quot;+&quot;&nbsp;|&nbsp;&quot;-&quot;]&nbsp;,&nbsp;<br>&nbsp;&nbsp;[@]&nbsp;,&nbsp;<br>&nbsp;&nbsp;[?!((&quot;+&quot;&nbsp;|&nbsp;&quot;-&quot;)&nbsp;,&nbsp;@)])&nbsp;=&gt;<br>&nbsp;&nbsp;&nbsp;&nbsp;addition&nbsp;-&gt;&nbsp;(<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;addition&nbsp;-&gt;&nbsp;(<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;$0&nbsp;,&nbsp;<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;$1&nbsp;,<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;$2)&nbsp;,<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;$3)&nbsp;;<br>multiplication&nbsp;-&gt;&nbsp;(<br>&nbsp;&nbsp;[@]&nbsp;,<br>&nbsp;&nbsp;[&quot;*&quot;&nbsp;|&nbsp;&quot;/&quot;]&nbsp;,<br>&nbsp;&nbsp;[@]&nbsp;,<br>&nbsp;&nbsp;[?!((&quot;*&quot;&nbsp;|&nbsp;&quot;/&quot;)&nbsp;,&nbsp;@)])&nbsp;=&gt;<br>&nbsp;&nbsp;&nbsp;&nbsp;multiplication&nbsp;-&gt;&nbsp;(<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;multiplication&nbsp;-&gt;&nbsp;(<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;$0&nbsp;,<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;$1&nbsp;,<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;$2)&nbsp;,<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;$3)</pre>
+	</figure>
+	<p>
+		The substitutions result in the same pattern shape so that the next 
+		substitution can be recursively applied until the rule for that operator 
+		has completely restored it's respective associativity.
+	</p>
+</section>
