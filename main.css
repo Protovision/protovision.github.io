@@ -292,7 +292,7 @@ main{padding:0.75em;}
 	main{
 		max-width:auto;
 		min-height:auto;}
-	#main-nav{display:none;}}
+	#main-nav,#main-footer{display:none;}}
 
 
 /* Styling */

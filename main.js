@@ -2,6 +2,7 @@
 	(window . addEventListener)('DOMContentLoaded' , async (event) => {
 		document . body . style . opacity = 1;
 		const mainSection = (document . getElementById)('main-section');
+		const mainFooter = (document . getElementById)('main-footer');
 		const opacityTransitionTime = 400;
 		const makeErrorContent = (message) => {
 			const fragment = (document . createDocumentFragment)();
@@ -16,6 +17,7 @@
 			return new Promise(resolve => setTimeout(resolve , ms));};
 		const clearContent = async () => {
 			scrollTo(0 , 0);
+			mainFooter . style . visibility = 'hidden';
 			(mainSection . classList . add)('loading');
 			(mainSection . classList . remove)('loaded');
 			await(wait(opacityTransitionTime));};
@@ -27,6 +29,7 @@
 				(mainSection . appendChild)(content);};
 			(mainSection . classList . add)('loaded');
 			(mainSection . classList . remove)('loading');
+			mainFooter . style . visibility = 'visible';
 			if(hash){
 				((document . getElementById)(hash) . 
 					scrollIntoView)();};};
