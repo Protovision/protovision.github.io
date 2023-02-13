@@ -212,8 +212,7 @@ small{font-size:50%;}
 sub,
 sup{
 	position:relative;
-	font-size:0.5em;
-	vertical-align:baseline;}
+	vertical-align:middle;}
 sub{bottom:-0.5em;}
 sup{top:-0.5em;}
 @media all and (min-width:40em){
@@ -318,7 +317,7 @@ a{
 a:active{
 	color:var(--color-accent);}
 .code,code{
-	padding:0 0.75em;}
+	padding:0 0.25em;}
 .code{
 	line-height:1.25;}
 .max-width{
@@ -351,6 +350,12 @@ a:active{
 	padding:0.75em;}
 .shaded{
 	background-color:var(--color-light-gray);}
+.single-spaced{
+	line-height:1.0;}
+.one-and-half-spaced{
+	line-height:1.5;}
+.double-spaced{
+	line-height:2.0;}
 .unbulleted{
 	list-style-type:none;
 	padding-left:0;}
