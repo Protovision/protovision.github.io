@@ -1,0 +1,267 @@
+<header class="top-border">
+	<h2>Existential Types</h2>
+	by Mark Swoope
+	<br>
+	<time datetime="2023-02-13">2023-02-13</time>
+</header>
+<p>
+	Existential types formalize the program activity of dynamic dispatch 
+	implemented through virtual functions. 
+</p>
+<p>
+	The most basic existential type is &exist;A.A which represents an unknown 
+	type called A. It is possible for a term of this type to exist; strictly speaking, 
+	there is no operation that can be performed on such a term since the valid 
+	operations for this term are unknown. Loosely speaking, a term of 
+	&exist;.A.A can possibly be copied, moved, and/or explicitly destroyed 
+	depending on the type system.
+</p>
+<p>
+	More generally, the type &exist;A.e where A occurs in e is an 
+	<em>incomplete</em> type in the sense that it is a type e expressed in terms 
+	of some unknown type A.
+</p>
+<p>
+	In the paper <cite>Abstract Types Have Existential Type, by Mitchell and 
+	Plotkin</cite>, syntax is introduced for introducing and eliminating 
+	existential types with semantics for how they implement abstract data types 
+	with dynamic dispatch.
+</p>
+<p>
+	The expression (pack Z with x to E), where the term x has a type that 
+	depends on Z, introduces a term of existential type E. The language uses E 
+	as a guide to type-erase each instance of Z in x while carefully not 
+	type-erasing terms whose structure coincidentally matches that of Z while not 
+	actually being Z.
+</p>
+<p>
+	For a language with strictly nominal type equivalence, the expression can 
+	be shortened to simply (pack x to E) and a kind of reverse pattern matching 
+	will be performed to strip x of implementation details.
+</p>
+<p>
+	An expression like (unpack A with y from e in b) introduces both a new opaque 
+	type A and term y whose type depends on A from the existential term e; A and 
+	y are bound to the scope of b.
+</p>
+<p>
+	When looking into implementation details, especially for a language with 
+	manual memory management, it is obvious how an existential term can be 
+	implemented with something like an opaque reference to heap storage; but it 
+	becomes less obvious as to how such a term can be cleaned up without 
+	having a garbage collector.
+</p>
+<p>
+	The answer seems to be to combine existential types with a linear type 
+	system. An additional expression like (drop e) will be required to free 
+	an existential term. 
+</p>
+<aside class="padded shaded">
+	<h3>An aside on linear types and imperative programming</h3>
+	<p>
+		Even though linear types have conventionally been 
+		described in the context of functional programming which conventionally 
+		uses garbage collection, they seem to naturally fit with imperative 
+		programming with manual memory management. 
+	</p>
+	<p>
+		Linear types need to reconciled with the existence of memory references 
+		and mutable variables present in imperative programming.
+	</p>
+	<p>
+		To do this, the initialization status of every linear variable needs to be 
+		tracked by the compiler:
+	</p>
+	<ul>
+		<li>A linear variable cannot be read if it is empty</li>
+		<li>A mutable linear variable cannot be assigned if it is not empty</li>
+		<li>A linear variable becomes empty after being read</li>
+		<li>A mutable linear variable becomes non-empty after being assigned</li>
+	</ul>
+	<p>
+		A block cannot access linear variables declared in any outer block. A 
+		linear variable can only be directly read/written by the block in 
+		which that linear variable is directly declared. Linear values can only be 
+		directly transferred across blocks via parameters and results; however, 
+		linear values can be indirectly transferred across blocks via linear 
+		references.
+	</p>
+	<ul>
+		<li>
+			Non-linear references cannot refer to linear variables
+		</li>
+		<li>
+			A linear reference made to a linear variable freezes the linear variable 
+			until the linear reference is eliminated
+		</li>
+		<li>
+			A linear reference must be qualified as a read-only, write-only, or 
+			a modify reference.
+			<ul>
+				<li>
+					A read-only linear reference can only be made to a non-empty linear 
+					variable. 
+				</li>
+				<li>
+					A write-only linear reference can only be made to an empty linear 
+					variable
+				</li>
+				<li>
+					A modify linear reference can only be made on a non-empty linear 
+					variable
+				</li>
+			</ul>
+		</li>
+		<li>
+			A read-only linear reference is eliminated by indirectly reading 
+			through it
+		</li>
+		<li>
+			A write-only linear reference is eliminated by indirectly writing through
+			it
+		</li>
+		<li>
+			A modify linear reference can be eliminated in a number of ways:
+			<ul>
+				<li>By directly eliminating it with no additional action</li>
+				<li>By indirectly swapping linear values through it</li>
+				<li>
+					By a binary operator of the language which takes the modify 
+					linear reference and a function from the referenced type to 
+					the referenced type. The operator indirectly reads from the 
+					reference, sends it to the function, and indirectly writes the 
+					result back out through the reference
+				</li>
+			</ul>
+		</li>
+		<li>
+			Because of the elimination rules for the different kinds of linear 
+			references, when a linear variable is unfrozen after the expiration of 
+			it's linear reference, the variable's initialization status is expected 
+			to be:
+		</li>
+		<ul>
+			<li>
+				Empty if it was unfrozen from the elimination of it's read-only 
+			linear reference
+			</li>
+			<li>
+				Non-empty if it was unfrozen from the elimination of it's write-only
+				linear reference
+			</li>
+			<li>
+				Non-empty if it was unfrozen from the elimination of it's modify 
+				linear reference
+			</li>
+		</ul>
+	</ul>
+</aside>
+<p>
+	A term made from (pack x to E) shall itself be stack allocated but 
+	each occurence of a term of the type to hide in x, which is not inside the 
+	body of a function, shall be replaced with an opaque reference to a heap 
+	allocated object of the hidden type and each function term in x shall have 
+	any occurence of the type to hide changed to an opaque reference within it's 
+	parameter and/or result type. The functions that use the hidden type in their 
+	body shall internally type cast from the opaque reference back to a reference 
+	to the original hidden type when necessary.
+</p>
+<p>
+	As an exception, dynamic allocation is not necessary if a term of the 
+	hidden type is stored statically; it can be rewritten as an opaque reference 
+	to itself directly.
+</p>
+<p>
+	Let's make clear as to what is being stored on the heap with existential 
+	terms. The term of type &exist;T.T is the presense of some term of unknown 
+	type: there is nothing we know about this term and therefore there is no 
+	way to use it. Internally it is stored as a memory reference to some opaque 
+	data stored on the heap. While it may be legal to produce a term of this 
+	type, there is no way to consume or clean up this term and therefore no 
+	source code that produces this term can be compiled under a linear type 
+	system.
+</p>
+<p>
+	What is slightly more useful is the term 
+	(&exist;A.A&#8523;A&#8888;A&#8523;A&#8888;1). It represents some term of 
+	unknown type A with a unary operation that transforms it and another 
+	unary operation that finalizes it. 
+</p>
+<p>
+	&#8523; is used to allow us to manually use each component of the unpacked 
+	&exist; term when we're ready. If &bigotimes; was used, then the process 
+	would automatically eliminate each component like a chemical reaction as 
+	soon as the &exist; term is unpacked which is also useful to have.
+</p>
+<p>
+	Let's show how this data algebra can be translated to C++. The C++ class:
+</p>
+<figure>
+	<pre class="no-margin padded code">#&nbsp;include&lt;cstddef&gt;<br>#&nbsp;include&lt;span&gt;<br>using&nbsp;namespace&nbsp;std;<br><br>template&lt;typename&nbsp;Type&gt;<br>struct&nbsp;Writer{<br>&nbsp;&nbsp;virtual&nbsp;ptrdiff_t&nbsp;write(span&lt;Type&gt;&nbsp;buffer)&nbsp;noexcept&nbsp;=&nbsp;0;<br>&nbsp;&nbsp;virtual&nbsp;~&nbsp;Writer()&nbsp;=&nbsp;default;};<br></pre>
+</figure>
+<p>
+	Assuming a normal type system, this class can be a translation from the expression:
+</p>
+<figure>
+	<pre class="no-margin shaded padded">
+		&forall; T . &exist; A . A &wedge; (A &wedge; &Sigma;<sub>n:size_t</sub> T<sup>n</sup> &rarr; ptrdiff_t) &wedge; (A &rarr; 1)
+	</pre>
+</figure>
+<p>
+	This abstract type is paramatized for any type (but not really, additional type checking with templates should be used to check if Type is movable and destructible.) and provides an interface for sending out an array of that type.
+</p>
+<p>
+	The &Sigma; type is a dependent type representing an array of n : size_t 
+	bytes. In a linear type system, the write function would consume both the 
+	array and A and return both a ptrdiff_t (representing the number of bytes 
+	written or a negative value on failure) and a new A; and the destructor would 
+	consume A without returning it. 
+</p>
+<p>
+	In C, the implementation would be:
+</p>
+<figure>
+	<pre class="no-margin padded code">#&nbsp;include&lt;stddef.h&gt;<br>#&nbsp;define&nbsp;writer(type)&nbsp;\<br>&nbsp;&nbsp;type&nbsp;##&nbsp;_writer<br>#&nbsp;define&nbsp;instantiate_writer(type)&nbsp;\<br>&nbsp;&nbsp;typedef&nbsp;struct{&nbsp;\<br>&nbsp;&nbsp;&nbsp;&nbsp;void(*&nbsp;state);&nbsp;\<br>&nbsp;&nbsp;&nbsp;&nbsp;ptrdiff_t(&nbsp;\<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(*&nbsp;write)(&nbsp;\<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;void(*&nbsp;restrict&nbsp;state)&nbsp;,&nbsp;\<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;size_t(length)&nbsp;,&nbsp;\<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;type(*&nbsp;restrict&nbsp;buffer)));&nbsp;\<br>&nbsp;&nbsp;&nbsp;&nbsp;void(&nbsp;\<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(*&nbsp;close)(&nbsp;\<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;void(*&nbsp;restrict&nbsp;state)));}&nbsp;\<br>&nbsp;&nbsp;(writer(type));<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<br></pre>
+</figure>
+<p>
+	In C, parametric polymorphism is accomplished with macros but with the 
+	disadvantage that instantiation must be performed manually. Dynamic dispatch
+	from existential quantification is accomplished using the <code>void *</code>
+	type for opaque terms with pointers to functions that accept <code>void *</code>	for manipulating those terms. Unlike this example, the function pointers 
+	would, in practice, usually be stored in a separate structure to be 
+	referenced by the instantiated writer type so that each instantiated writer 
+	instance only stores two pointers. I do not do that here since that would 
+	require defining another separate parametized type with a need for additional
+	macro definitions to support it, thus complicating the example.
+</p>
+<p>
+	Using macros with token concatenation to generate new identifiers is a 
+	relatively new application of the preprocessor I have learned to implement 
+	universal quantification in C, it relieves me from the necessity of using 
+	C++ as I work on the compiler for my new language which is not publically 
+	released yet. This combined with <code>void *</code> for type erasure for 
+	existential quantification pretty much makes C++ not fundamentally needed. 
+</p>
+<p>
+	It may seem senile to insist on using C over C++ in the current year for 
+	this project, but this insistence is rooted in the higher portability of 
+	the C language over C++ as well as the desire to avoid dealing with 
+	hidden control flow and the boilerplate of having to declare and default the 
+	many constructors, assignment operators, and swap operations for each 
+	type that I define. I am also going to use C as a compilation target so 
+	implementing the compiler in C avoids hypocrisy and is also aesthetically 
+	pleasing.
+</p>
+<p>
+	I also find it disgusting that <code>std::exception</code> uses 
+	<em>statically</em> stored strings for error messages with the downside that 
+	exceptions use hidden control flow possibly implemented by <em>dynamic</em> 
+	allocation when being propagated while <code>std::error_condition</code> 
+	uses <em>dynamically</em> stored strings for error messages but is otherwise 
+	propagated without dynamic allocation. What I want is non-dynamic allocation 
+	during error handling without hidden control flow. The C++ standard library
+	is useless and filled with legacy cruft.
+</p>
+<p>
+	So much for more language burning tangents, this signals the end of this post.
+</p>
