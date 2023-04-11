@@ -1,0 +1,102 @@
+<header class="top-border">
+	<h2>Module Types</h2>
+	by Mark Swoope
+	<br>
+	<time datetime="2023-04-03">2023-04-03</time>
+</header>
+<p>
+	The following articles have inspired me to make this article about 
+	formalizing modules in a programming language:
+</p>
+<ul>
+	<li>
+		<cite>
+			<a href="https://www.pathsensitive.com/2023/03/modules-matter-most-for-masses.html">
+				&lsquo;Modules Matter Most&rdquo; for the Masses
+			</a>
+		</cite>, by Jimmy Koppel
+	</li>
+	<li>
+		which the above is a response to
+		<cite>
+			<a href="https://existentialtype.wordpress.com/2011/04/16/modules-matter-most/">
+				Modules Matter Most
+			</a>
+		</cite>, by Robert Harper
+	</li>
+</ul>
+<p>
+	The authors of those articles are big shot computer scientists with several 
+	credentials. I am a nobody, mostly self-taught programming hobbyist who has 
+	yet to break into any kind of white collar position, much less in tech or 
+	academia.
+</p>
+<p>
+	Here I develop my own rudimentary theory that incorporates modules into a 
+	typed lambda calculus. I must first define the concept of a module: as a 
+	term and as a type.
+</p>
+<p>
+	As a term, a module exists meaningfully as a set of variables and functions.
+	The type of a module's variables and functions may depend on types defined 
+	within the scope of that module. 
+
+
+
+	A typed, lambda calculus formalizes a programming language by defining the 
+	rules in which typed terms can be introduced or eliminated within certain 
+	contexts. For modules to be supported, we must determine how a module term 
+	can be introduced/eliminated and how a module type is to be represented. 
+</p>
+<p>
+	First, the concept of a module must be made concrete. I shall define the 
+	module term as a term whose type may depend on a type whose scope is bound 
+	to that term. And a module type is a type that may depend on a type whose 
+	scope is bound to that type.
+</p>
+<p>
+	That sounds abstract so an example of a module type is:
+</p>
+<figure>
+	<pre class="no-margin shaded padded">
+		let&nbsp;type&nbsp;div_t&nbsp;=&nbsp;int&nbsp;&wedge;&nbsp;int&nbsp;in&nbsp;type&nbsp;(int&nbsp;&wedge;&nbsp;int&rarr;&nbsp;div_t)
+	</pre>
+</figure>
+<p>
+	This represents the type of modules that contain a function of type 
+	(int &wedge; int &rarr; div_t) where div_t is defined as (int &wedge; int) 
+	for those modules.
+</p>
+<p>
+	A term of this type could be expressed with:
+</p>
+<figure>
+	<pre class="no-margin shaded padded">
+		let&nbsp;type&nbsp;div_t&nbsp;=&nbsp;int&nbsp;&wedge;&nbsp;int&nbsp;in&nbsp;export(&lambda;x:(int&wedge;int).div_t(fst(x)/snd(x),fst(x)%snd(x)))
+	</pre>
+</figure>
+<p>
+	The export operator makes the inner lambda term usable from expressions 
+	external to the scope of this module term, without which it becomes 
+	encapsulated from outside use. This implies that a module type expresses 
+	only what is exported from module terms that belong to that type.
+</p>
+<p>
+	A module term may also be expressed using an <em>import</em> operator:
+</p>
+<figure>
+	<pre class="no-margin shaded padded">
+		import&nbsp;s&nbsp;:&nbsp;M
+	</pre>
+</figure>
+<p>
+	Here, M is a module type and s is a string that represents the name or path
+	of an externally-defined module existing in the host system; the import 
+	expression produces a new module term that implements module type M using 
+	the definition of the module referenced by s.
+</p>
+
+
+(lambda div_t :: * . (int , int) -> div_t)(int , int)
+
+

@@ -65,7 +65,7 @@
 	font-family:'Swoope-Edited STIX Two Math';
 	font-style:normal;
 	font-weight:400;
-	font-display:var(--font-display);
+	font-display:block;
 	src:url('fonts/stix-two-math/stix-two-math-normal-400.woff2') format('woff2');}
 
 /* Reset */
