@@ -3,6 +3,7 @@
 		document . body . style . opacity = 1;
 		const mainSection = (document . getElementById)('main-section');
 		const mainFooter = (document . getElementById)('main-footer');
+		const mainFooterScrollTop = (document . getElementById)('main-footer-scroll-top');
 		const opacityTransitionTime = 400;
 		const makeErrorContent = (message) => {
 			const fragment = (document . createDocumentFragment)();
@@ -95,5 +96,16 @@
 			(link) => {
 				if(! (link . relList . contains)('external')){
 					(link . addEventListener)('click' , internalLinkClick);};});
+		((document . getElementById)('main-footer-scroll-top') . addEventListener)(
+			'click' , async (event) => {
+				(event . preventDefault)();
+				(event . stopPropagation)();
+				(window . scrollTo)(0 , 0);
+				const hash = (window . location . hash . startsWith)('#') ? 
+					window . location . hash : '#' + window . location . hash;
+				const colon = hash ? hash . indexOf(':') : -1;
+				if(colon >= 0){
+					window . location . hash = (window . location . hash . substring)(
+						0 , colon);};});
 		await(updateContent(window . location , window . location));});})();
 

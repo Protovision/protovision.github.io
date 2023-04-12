@@ -39,9 +39,9 @@
 		or indirectly).
 	</p>
 	<p>
-		The problem with LL(1) grammars is that they cannot describe languages 
-		whose parse trees accurately structure sentences for languages that 
-		contain left-associative binary operators.
+		The problem with LL(1) grammars is that they cannot be used to produce 
+		parse trees that accurately reflect the associativity of the language's
+		operators.
 	</p>
 	<p>
 		More powerful parsers can recognize a wider or even the whole set of 
@@ -54,12 +54,23 @@
 		language.
 	</p>
 	<p>
-		So I have decided to use recursive descent to create an initial parse 
-		tree after tokenization and this parse tree shall go through a 
-		post-processing step involving the rewriting of the tree according to a 
-		set of well-defined tree rewriting rules in order to fix up the tree to 
-		what it would have looked like when parsed by a more powerful, 
-		automatically-generated parser.
+		So I have decided to use recursive descent for it's benefits. To deal with
+		the drawback of the LL(1) parse tree, there are two options:
+	</p>
+	<ol>
+		<li>
+			Pair the tree with a supplementary operator associativity table. The 
+			next phase of the compiler will use this table to correctly traverse 
+			the tree.
+		</li>
+		<li>
+			Rewrite the tree based on a sequence of pattern and substitution pairs. 
+		</li>
+	</ol>
+	<p>
+		Option 1 sounds easier to implement as it is the less general solution, but
+		it is also the less powerful solution since it cannot accomodate a language
+		that also supports operator distribution for which option 2 can perform.
 	</p>
 </section>
 <section>
