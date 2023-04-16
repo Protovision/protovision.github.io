@@ -1,0 +1,307 @@
+<header class="top-border">
+	<h2>Well-defined Arithmetic</h2>
+	by Mark Swoope
+	<br>
+	<time datetime="2023-04-15">2023-04-15</time>
+</header>
+<nav class="accented padded shaded">
+	<b>Contents</b>
+	<ol>
+		<li>
+			<a href="#!/documents/blog/well-defined-arithmetic.html:introduction">
+				Introduction
+			</a>
+		</li>
+		<li>
+			<a href="#!/documents/blog/well-defined-arithmetic.html:arithmetic-in-c">
+				Arithmetic in C
+			</a>
+		</li>
+		<li>
+			<a href="#!/documents/blog/well-defined-arithmetic.html:desired-arithmetic-behavior">
+				Desired Arithmetic Behavior
+			</a>
+		</li>
+	</ol>
+</nav>
+<section id="introduction">
+	<header>
+		<h3>1. Introduction</h3>
+	</header>
+	<p>
+		I have been opining to myself about how a programming language should 
+		define the behavior of arithmetic, especially in regards to integer types 
+		of limited precision. The compilation target language of the source 
+		language should be considered when making a practical decision. Popular 
+		wisdom can also be found in how other languages handle arithmetic but 
+		it would not be wise to blindly copy their methods.
+	</p>
+</section>
+<section id="arithmetic-in-c">
+	<header>
+		<h3>2. Arithmetic in C</h3>
+	</header>
+	<aside class="padded shaded">
+		The information in this section is taken from 
+		<cite>
+			<a href="http://www.open-std.org/jtc1/sc22/wg14/www/docs/n1570.pdf">
+				document N1570, ISO/IEC 9899:201x
+			</a>
+		</cite>: the final draft of the 2011 standard of the C programming 
+		language.
+	</aside>
+	<p>
+		I like to think that C would make a good target language for a new 
+		programming language. To stay portable, C makes very few assumptions about
+		the it's standard integer types. Here are those types and their minimum
+		requirements prior to the new C23 standard:
+	</p>
+	<figure>
+		<table class="centered centered-text" style="line-height:2;">
+			<thead class="shaded">
+				<tr>
+					<th>Type</th>
+					<th>Width</th>
+					<th>Range</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr>
+					<td><code>signed char</code></td>
+					<td>8</td>
+					<td>&plusmn;(2<sup>7</sup> - 1)</td>
+				</tr>
+				<tr>
+					<td><code>unsigned char</code></td>
+					<td>8</td>
+					<td>0 : (2<sup>8</sup> - 1)</td>
+				</tr>
+				<tr>
+					<td><code>signed short int</code></td>
+					<td>16</td>
+					<td>&plusmn;(2<sup>15</sup> - 1)</td>
+				</tr>
+				<tr>
+					<td><code>unsigned short int</code></td>
+					<td>16</td>
+					<td>0 : (2<sup>16</sup> - 1)</td>
+				</tr>
+				<tr>
+					<td><code>signed int</code></td>
+					<td>16</td>
+					<td>&plusmn;(2<sup>15</sup> - 1)</td>
+				</tr>
+				<tr>
+					<td><code>unsigned int</code></td>
+					<td>16</td>
+					<td>0 : (2<sup>16</sup> - 1)</td>
+				</tr>
+				<tr>
+					<td><code>signed long int</code></td>
+					<td>32</td>
+					<td>&plusmn;(2<sup>31</sup> - 1)</td>
+				</tr>
+				<tr>
+					<td><code>unsigned long int</code></td>
+					<td>32</td>
+					<td>0 : (2<sup>32</sup> - 1)</td>
+				</tr>
+				<tr>
+					<td><code>signed long long int</code></td>
+					<td>64</td>
+					<td>&plusmn;(2<sup>63</sup> - 1)</td>
+				</tr>
+				<tr>
+					<td><code>unsigned long long int</code></td>
+					<td>64</td>
+					<td>0 : (2<sup>64</sup> - 1)</td>
+				</tr>
+			</tbody>
+		</table>
+	</figure>
+	<p>
+		Some important definitions from C (definitions of my own extrapolations 
+		are unquoted):
+	</p>
+	<dl>
+		<dt>Bit</dt>
+		<dd>
+			<q>unit of data storage in the execution environment large enough to hold
+			an object that may have one of two values</q>
+		</dd>
+		<dt>Byte</dt>
+		<dd>
+			<q>addressable unit of data storage larage enough to hold any member of 
+			the basic character set of the execution environment</q>
+		</dd>
+		<dt>Object</dt>
+		<dd>
+			<q>region of data storage in the execution environment, the contents of 
+			which can represent values</q>
+		</dd>
+		<dt>Precision</dt>
+		<dd>
+			(of an integer type) <q>the number of bits it uses to represent values,
+			excluding any sign and padding bits</q>
+		</dd>
+		<dt>Size</dt>
+		<dd>
+			the number of bytes an object or any object of a specified complete type 
+			occupy in data storage
+		</dd>
+		<dt>Value</dt>
+		<dd>
+			<q>precise meaning of the contents of an object when interpreted as 
+			having a specific type</q>
+		</dd>
+		<dt>Width</dt>
+		<dd>
+			(of an integer type) the same as the precision except that the sign bit 
+			is also included
+		</dd>
+	</dl>
+	<p>
+		The size is the width plus the padding bit count, the width is the 
+		precision if there is no sign bit or precision + 1 otherwise, and the 
+		precision is the count of value bits excluding the sign bit.
+	</p>
+	<p>
+		It is not necessarily true that the bit size is always equal to the bit 
+		width for all integer types. Even though the standard repeatedly says 
+		that integer padding bits are unnecessary, it also says that 
+		implementations may include them for trap representations generated from 
+		overflows and division by zero.
+	</p>
+	<p>
+		As an exception, the standard does not grant the possibility of padding 
+		bits to <code>signed char</code> and <code>unsigned char</code>; this
+		exception also extends to <code>char</code> which, as a type distinct 
+		from either, has the same structure as one or the other.
+	</p>
+	<p>
+		Pre-C23 standards permit 3 possible value representations for 
+		signed integers:
+	</p>
+	<ul>
+		<li><em>sign and magnitude</em></li>
+		<li><em>two's complement</em></li>
+		<li><em>one's complement</em></li>
+	</ul>
+	<p>
+		Both <em>sign and magnitude</em> and <em>one's complement</em> support
+		the negative zero value for all signed integers. Two's complement does 
+		not support negative zero but it does extend each signed integer's
+		minimum value by one. 
+	</p>
+	<p>
+		When not in two's complement, it is undefined behavior to overflow with 
+		addition, subtraction, or multiplication; otherwise, the behavior is 
+		defined to wrap around: this is why two's complement became the industry
+		standard and eventually became mandatory in the C23 standard.
+	</p>
+	<p>
+		Regardless of the signed integer representation, undefined behavior in
+		arithmetic occurs in:
+	</p>
+	<ul>
+		<li>Division by zero</li>
+		<li>Remainder by zero</li>
+		<li>Bitwise left/right shift with a negative right-operand</li>
+		<li>Bitwise left/right shift overflow with a signed, nonnegative left-operand</li>
+		<li>
+			Bitwise left/right shift with a right operand that is <q>greater than or equal to 
+			the width of the promoted left operand
+		</li>
+	</ul>
+	<p>
+		Additionally, bitwise right shift with a negative left-operand is 
+		implementation-defined behavior.
+	</p>
+</section>
+<section id="desired-arithmetic-behavior">
+	<header>
+		<h3>3. Desired Arithmetic Behavior</h3>
+	</header>
+	<p>
+		I desire a language that does not produce undefined behavior (UB) or 
+		implementation-defined behavior (IB) in it's programs, so I dislike any 
+		language that copies C's arithmetic. Indeed it is better for the 
+		well-defined behavior of aborting the program on an arithmetic exception 
+		than it is to continue running with absurd results or results that vary 
+		with the current execution environment.
+	</p>
+	<p>
+		I believe some language authors have considered the run-time performance 
+		cost or compile-time static analysis cost of correctness to not be worth 
+		the benefit of eliminating UB from arithmetic. When I finish my language,
+		I will have to empirically weigh this cost too.
+	</p>
+	<p>
+		Despite the late standardization, it is a step in the right direction for 
+		C23 to reduce UB and IB by mandating two's complement; silent 
+		wraparound due to overflow, however, is often unanticipated by the 
+		programmer. 
+	</p>
+	<p>
+		Here are the ways to deal with overflows:
+	</p>
+	<ol>
+		<li>Abort</li>
+		<li>Throw an exception</li>
+		<li>Saturate</li>
+		<li>Wrap around</li>
+		<li>Return unit</li>
+	</ol>
+	<p>
+		Aborting the program or throwing an exception on overflow are not the 
+		best solutions because they both render the arithmetic operation as 
+		possibly divergent because control flow does not necessarily resume from 
+		where the operation was initiated: making total functions impossible to
+		write. 
+	</p>
+	<p>
+		Saturating arithmetic and modular (wrap around) arithmetic have their 
+		applications but the programmer should not be forced to have one or the 
+		other as the only option. I appreciate how the Zig language has 3 versions 
+		of each operator where overflow is possible: one that aborts, one that 
+		wraps around, and one that saturates.
+	</p>
+	<p>
+		I have not seen a language where the arithmetic operators return an 
+		optional result (a sum between the resulting value and the unit value). 
+		Option/result types are great for propagating errors or the indication of 
+		the uncomputability of an operation. Because these are sum types, they 
+		must be pattern matched to be eliminated and so things like possible 
+		overflows cannot be forgotten or ignored by the programmer.
+	</p>
+	<p>
+		For any possibly overflowing binary operator f, terms x and y of the same 
+		integer type T, and term z of type T | (): the expressions: x f y, x f z,
+		z f y, and z f z each have a resulting type T | (). If x f y fails, it 
+		returns (). If z matches (), the operation immediately returns (); 
+		otherwise, the computation is attempted and () is returned only on 
+		failure. This ensures that () does not need to be tediously checked after 
+		each operation because () will always be propagated through the 
+		composition to the surface.
+	</p>
+	<p>
+		Arithmetic operators that propagate unit which must be checked for by 
+		the end of their composition can be the recommended operators for 
+		arithmetic with specialized versions of these operators for performing 
+		saturation or wrap around on overflow available as well: this is what my
+		language will provide. I prefer to avoid possible divergence unless 
+		absolutely necessary (such as when performing a system call or calling 
+		foreign code), so I would not include aborting or stack unwinding in 
+		an arithmetic operator.
+	</p>
+	<p>
+		Proper attention must be paid to the C standard when implementing these 
+		operators. Sometimes what is said in the standard does not match the 
+		behavior of any implementation so prudence should be used when deciding 
+		to depend or not depend on a specific behavior for which the standard 
+		and the compiler vendors do not have a consensus with. And no matter what
+		is both standardized and implemented by the majority of implementations, 
+		there will always be a few things that Microsoft will do uniquely, not 
+		that I care.
+	</p>
+</section>
