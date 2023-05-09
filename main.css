@@ -80,12 +80,11 @@ h4,
 h5,
 h6,
 th,
-:is(h1,h2,h3,h4,h5,h6,th) :is(dt,figcaption,a,b,strong,time,summary),
+:is(h1,h2,h3,h4,h5,h6,th) :is(dt,figcaption,a,b,strong,summary),
 dt,
 figcaption,
 b,
 strong,
-time,
 summary{
 	font-weight:bold;}
 dt,
@@ -295,9 +294,10 @@ q{
 .code,
 code,
 kbd,
-samp{
-	font-family:var(--font-family-code);
-	padding:0 0.25em;
+samp,
+time{
+	font-family:var(--font-family-code);}
+.code{
 	line-height:1.25;}
 .max-width{
 	width:100%;}
