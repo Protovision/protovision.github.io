@@ -318,7 +318,7 @@ q,blockquote{
 .middled-text{
 	vertical-align:middle;}
 .accented{
-	border-left:0.375em solid AccentColor;}
+	border-left:0.375em solid LinkText;}
 .margined{
 	margin:0.75em;}	
 .padded{
