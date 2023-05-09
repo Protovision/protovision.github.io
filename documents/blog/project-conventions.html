@@ -1,373 +1,375 @@
-<header class="top-border">
-	<h2>Project Conventions</h2>
-	by Mark Swoope
-	<br>
-	<time datetime="2022-11-22">2022-11-22</time>
-</header>
-<section>
-	<p>
-		This entry is not related to type theory and is focused more on how I will
-		structure my new projects, both in their file organization and code.
-	</p>
-	<p>
-		The first aspect to the beginning of anything in a project is choosing a 
-		name. I am not talking about the name of the project, I still struggle with 
-		determining that, but the name of entities within the project. 
-	</p>
-	<p>
-		There are conventional names for top-level directory files. These should be 
-		kept according to convention but everything else can be of my choosing:
-	</p>
-	<ul>
-		<li><kbd>README.md</kbd></li>
-		<li><kbd>COPYING.md</kbd> or <kbd>LICENSE.md</kbd></li>
-	</ul>
-	<p>
-		Markdown is popular enough to warrant preference over plain text files. And 
-		the above files are conventional enough to keep their names as such. The 
-		choice of <kbd>COPYING</kbd> over <kbd>LICENSE</kbd> indicates an alignment 
-		with GNU and/or copyleft organizations. Microsoft Github, the most popular 
-		software 	repository host, chooses <kbd>LICENSE</kbd> for it's users by 
-		default.
-	</p>
-	<p>
-		The GNU Coding Standards recommends a handful of additional files which I 
-		deem unnecessary for my tasks. These are:
-	</p>
-	<ul>
-		<li>
-			<kbd>INSTALL</kbd>: Which contains <q>an explanation of the installation 
-			procedure</q>. I think this description should be kept inside the 
-			<kbd>README.md</kbd> file. 
-		</li>
-		<li>
-			<kbd>NEWS</kbd>: Which contains <q>a list of user-visible changes worth 
-			mentioning</q>. I think project news should be on the project website, 
-			preferrably on the front page. This implies all projects should have a 
-			website that supplements, in detail, the information found from the 
-			referencing <kbd>README.md</kbd> file.
-		</li>
-		<li>
-			<kbd>ChangeLog</kbd>: Which contains <q>all the changes made to program
-			source files</q>. This is completely obsoleted by the invention of 
-			version control systems such as Git. And GNU rightly acknowledges this 
-			and declares this file optional. 
-		</li>
-		<li>
-			<kbd>configure</kbd>: This file, coupled with other files such as 
-			<kbd>aclocal.m4</kbd>, <kbd>configure.ac</kbd>, <kbd>config.h.in</kbd>,
-			<kbd>Makefile.am</kbd>, and <kbd>Makefile.in</kbd> are part of the complex 
-			and overly engineered GNU Build System (known as Autotools) which nobody 
-			but GNU uses. It should be noted that a project can follow the 
-			<code>./configure &amp;&amp; make &amp;&amp; make install</code> build 
-			method without depending on autotools if the programmer manually wrote 
-			the <kbd>configure</kbd> script but this requires a lot of reading 
-			and adherence to GNU coding standards to get right.
-		</li>
-	</ul>
-	<p>
-		My preferred build system is plain Make without the use of CMake or 
-		autotools. I prefer the configuration of Make to happen in a separate 
-		make file filled with variables that the user can edit and that the main 
-		Makefile can subsequently include. It is simple enough and works well for 
-		my purposes. This configuration file should have the following variables:
-	</p>
-	<ul>
-		<li><code>prefix = /usr/local</code></li>
-		<li><code>exec_prefix = $(prefix)</code></li>
-		<li><code>bindir = $(exec_prefix)/bin</code></li>
-		<li><code>datarootdir = $(prefix)/share</code></li>
-		<li><code>includedir = $(prefix)/include</code></li>
-		<li><code>docdir = $(datarootdir)/doc</code></li>
-		<li><code>libdir = $(exec_prefix)/lib</code></li>
-		<li><code>srcdir = .</code></li>
-		<li><code>AR = ar</code></li>
-		<li><code>CC = cc</code></li>
-		<li><code>INSTALL = install</code></li>
-		<li><code>INSTALL_DATA = $(INSTALL) -m 644</code></li>
-		<li><code>INSTALL_PROGRAM = $(INSTALL)</code></li>
-		<li><code>CFLAGS = </code></li>
-		<li><code>CPPFLAGS = </code></li>
-		<li><code>LDFLAGS = </code></li>
-		<li><code>LDLIBS = </code></li>
-	</ul>
-	<p>
-		And the Makefile will perform it's operations in terms of these variables.
-	</p>
-	<p>
-		Apart from conventional files with their conventional names, I choose two
-		top-level directories for my project: <kbd>code</kbd> and 
-		<kbd>documents</kbd>. I now prefer to avoid abbreviations and acronyms 
-		when naming things; I also prefer to avoid words that have only been 
-		around for less than a century, but this is sometimes impossible.
-	</p>
-	<p>
-		The <kbd>documents</kbd> directory should contain the project's static 
-		website. This website should contain all documentation of the project, 
-		including:
-	</p>
-	<ul>
-		<li>Program manual</li>
-		<li>Library manual</li>
-		<li>Other manuals and references</li>
-		<li>Tutorials, guides, and examples</li>
-		<li>Installation instructions</li>
-		<li>Source code browser from within the website (nice but optional)</li>
-		<li>Prebuilt package downloads</li>
-		<li>News</li>
-		<li>Authors</li>
-		<li>License</li>
-		<li>Donations and sponsors</li>
-		<li>Links to associated forums and chat networks</li>
-		<li>Code of Conduct and obligatory virtue pledging allegiance pages</li>
-	</ul>
-	<p>
-		The <kbd>code</kbd> directory should contain all project source code in
-		the following sub-directory structure:
-	</p>
-	<ul>
-		<li><kbd>interfaces</kbd>: A set of subdirectories for each library that 
-		this project uses (including this project as a library), each containing 
-		header files of that library. 
-		<li><kbd>modules</kbd>: A set of subdirectories for each library that this 
-		project uses or generates (including this project as a library), each 
-		containing non-header source files of that library.</li>
-		<li><kbd>programs</kbd>: A set of subdirectories for each standalone 
-		exectuable program that this project uses or generates, each containing 
-		non-header source files of that program.
-	</ul>
-	<p>
-		Ultimately, program code from <kbd>code/programs/*/*.c</kbd> is compiled 
-		with library code from <kbd>code/modules/*/*.c</kbd>, both of which include
-		header files from the include path <kbd>code/interfaces</kbd>. Specific 
-		dependencies between source and header files can be automatically resolved
-		by using the <code>-M</code> and related GCC options and can somehow be 
-		imported into Make.
-	</p>
-	<p>
-		The intermediate result in the root directory is a directory called 
-		<kbd>objects</kbd> which is a mirror of the <kbd>code</kbd> directory 
-		(minus the <kbd>interfaces</kbd> subdirectory) with all <kbd>.c</kbd> files 
-		replaced with <kbd>.o</kbd> files.
-	</p>
-	<p>
-		The final result in the root directory are two directories: 
-		<kbd>modules</kbd> which is a mirror of <kbd>objects/modules</kbd> with 
-		all <kbd>.o</kbd> files replaced with <kbd>.a</kbd> or <kbd>.so</kbd> files
-		(depending on the configuration to build static or shared libraries), and 
-		<kbd>programs</kbd> which is a mirror of <kbd>objects/programs</kbd> with
-		all <kbd>.o</kbd> files made into their final executable programs. 
-	</p>
-	<p>
-		This system is good enough for me as a sole contributor to my own projects.
-		I have no need to learn or use build system generators such as CMake since 
-		I primarily use Vim, GCC, Make, and Linux. When I do work on my project 
-		from Windows, I use MSYS 2 which provides a decent terminal with ports of 
-		all the Linux and GNU utilities I use on Windows. I believe MSYS 2 is also 
-		portable on usb flash drives. 
-	</p>
-	<!--
-	<p>
-		I have never purchased an Apple product so 
-		I do not think about MacOS when programming, this is Ok because 
-		Mac users more educated, more cultured, and more affluent than non-Mac 
-		users so they can figure out how to port Linux software to Mac very easily.
-		They know that Mac is Unix without the bloat of GNU software so it is a 
-		superior Unix with a superior License and a superior curated App store made 
-		by a responsible and socially-conscious company working to make the world a 
-		better place and not for the greed of money like those other companies that 
-		overprice their products while depending on unethical labor.
-	</p>
-	-->
-	<p>
-		There is a possibility of course, that my projects of libraries and/or 
-		native tools shall be ported to run on Microsoft, Apple, Amazon, or Google 
-		owned software that is leased to the consumer, in which case I try to 
-		avoid compiler or platform specific code. This is not to say that I stick 
-		to C89, as this would be the most portable way to program in C, I prefer 
-		to use the version of C that is the previous from the current major 
-		revision which in this case is C11. I would prefer to use the current 
-		major revision (C23), but it is not released yet and it will take a while 
-		for adoption by the respectable compiler venders when it does get released.
-	</p>
-	<p>
-		The actual project code should aim to be ABI stable from the start by 
-		separating interface from implementation, thus reducing compilation 
-		dependencies and compilation time. This means that the use of 
-		code-generating polymorphic code is discouraged. Also the use of data 
-		types whose structure may change in later versions of the project is 
-		forbidden. When polymorphism is needed, it can be provided using 
-		function references attached to dynamically-allocated objects; these kinds 
-		of objects should not directly expose a mutable reference to any of their 
-		internal members even if the object represents a data structure.
-	</p>
-	<p>
-		The names of common operations of an object should be as follows:
-	</p>
-	<ul>
-		<li>
-			<code>make</code>: Dynamically allocates and initializes an object and 
-			returns a reference to it.
-		</li>
-		<li>
-			<code>fork</code>: Dynamically allocates and copy-initializes an object
-			from another existing object. A reference to the copy-initialized object 
-			is returned.
-		<li>
-			<code>kill</code>: Finalizes and deallocates an object.
-		</li>
-		<li>
-			<code>type</code>: A static, immutable string representing the type of 
-			the object implementing this interface.
-		</li>
-		<li>
-			<code>get</code>: Extracts data out of the object.
-		</li>
-		<li>
-			<code>put</code>: Inserts data into the object.
-		</li>
-		<li>
-			<code>swap</code>: Efficiently performs a <code>get</code> and 
-			<code>put</code> at the same time.
-		</li>
-	</ul>
-	<p>
-		Sometimes objects, especially data structures, store elements that 
-		themselves need to provide a way for copying, comparison, and destruction. 
-		The following operations can be provided for these elements:
-	</p>
-	<ul>
-		<li>
-			<code>copy</code>: Copy-initialize an already allocated object from 
-			another existing object. If this is null, then it is assumed the object
-			can be copied using <code>memcpy</code>. 
-		</li>
-		<li>
-			<code>test</code>: Perform a three-way comparison between two objects.
-			This operation is required for data structures that need it.
-		</li>
-		<li>
-			<code>wipe</code>: Finalize but do not deallocate an object. This 
-			operation does not modify the object since it could have been allocated 
-			in immutable storage. If this is null, then it is assumed the object is 
-			plain-old-data.
-		</li>
-	</ul>
-	<p>
-		It is with intent that all these operations are no more than 4 characters
-		long while not being abbreviated.
-	</p>
-	<p>
-		For my project, it is assumed that all objects can be moved with a 
-		<code>memcpy</code> operation. This movement results in the implicit 
-		destruction of the original object. This detail is important for the 
-		<code>get</code> and <code>put</code> operations which both use 
-		<code>memcpy</code> for the insertion or extraction of data on the object.
-		In addition to extraction, the <code>get</code> operation should directly 
-		destroy data out of an object if the target out-parameter is null. 
-	</p>
-	<p>
-		Often, objects can be constructed from other objects, in which case the 
-		constructed object takes ownership over it's components. Destroying the 
-		constructed object results in it's components being destroyed first. 
-		Objects that implement <code>kill</code> in their interface makes this 
-		possible.
-	</p>
-	<p>
-		Objects that perform dynamic memory allocation should take an allocator 
-		as part of their construction. The allocator can implement the same 
-		common interface as outlined above with these semantics:
-	</p>
-	<ul>
-		<li><code>fork</code>: Clones or <q>propagates</q> the allocator.</li>
-		<li><code>kill</code>: Destroys the allocator</li>
-		<li><code>test</code>: Compares two allocators. Zero for equal and non-zero 
-		otherwise.</li>
-		<li><code>get</code>: Allocate memory from the allocator.</li>
-		<li><code>put</code>: Return allocated memory back to the allocator.</li>
-		<li><code>swap</code>: Reallocate memory.</li>
-	</ul>
-	<p>
-		If <code>fork</code> is null, then it implies the allocator is stateless 
-		and cloning it will always return the same allocator. If <code>kill</code> 
-		is null, then the allocator is stateless and has no destruction method. 
-		If <code>test</code> is null, then the allocator type is stateless and 
-		shall always compare equal to other allocators of the same type. 
-	</p>
-	<p>
-		The common interface also works well for I/O streams:
-	</p>
-	<ul>	
-		<li><code>get</code>: Read from the stream.</li>
-		<li><code>put</code>: Write or push-back to the stream.</li>
-		<li><code>swap</code>: Read and then push-back to the stream.</li>
-	</ul>
-	<p>
-		For data structures:
-	</p>
-	<ul>
-		<li><code>get</code>: Extract an element.</li>
-		<li><code>put</code>: Insert an elemet.</li>
-		<li><code>swap</code>: Exchange an element.</li>
-	</ul>
-	<p>
-		The above operations shall be the only way a data structure grants 
-		element access. A data structure should never allow direct access to an 
-		element, even if it is immutable direct access because it is my insight
-		that a destructor can be invoked by the user on an immutable element 
-		(or they can outright drop the <code>const</code> qualifier from any 
-		pointer). The value here is strongly upholding invariants on data 
-		structures at the cost of speed.
-	</p>
-	<p>
-		Other perculiar practices I try to use for myself include:
-	</p>
-	<ul>
-		<li>Explicitly stating the storage class of all variables (
-		<code>register</code>, <code>extern</code>, <code>static</code>, and 
-		<code>auto</code>): Always using <code>register</code> for function 
-		parameters but never for other local variables. 
-		<li>Expressing pointers and qualifiers using right-to-left syntax and 
-		always with explicit parentheses around the declarator.</li>
-		<li>Declaring variables on separate lines.</li>
-		<li>Avoiding side-effects in subexpressions.</li>
-		<li>Avoiding implicit conversions, especially the arithmetic ones.</li>
-		<li>Always using braces around blocks even for single-statement blocks.</li>
-		<li>Preferring nested if-statements over short-circuiting operators and
-		using bitwise operators where short-circuiting is not required.</li>
-		<li>Explicitly casting the return value of a function call to 
-		<code>void</code> when the return value is not needed.</li>
-		<li>Explicitly casting a function parameter/variable to void when that 
-		parameter/variable is not needed.</li>
-		<li>Preferring to declare variables as <code>const</code> and pointer 
-		variables as <code>restrict</code> when possible.</li>
-		<li>Placing parameters/arguments of functions/function calls on separate 
-		lines if the parameter count is greater than 2.</li>
-		<li>Avoiding variable-length arrays</li>
-		<li>Avoiding <code>alloca</code></li>
-		<li>Avoiding flexible array members</li>
-		<li>Avoiding format strings and variadic arguments</li>
-		<li>Preferring to dereference function pointers before using them in order 
-		to show that an indirect call is being made.</li>
-		<li>Always making an expression within a boolean context be 
-		the result of a comparison operation.</li>
-		<li>Using spaces around all binary operators (including member access 
-		operators) and a space after all unary operators unless that unary operator
-		precedes an open parenthesis.</li>
-		<li>Using the correct suffix for literal expressions.</li>
-	</ul>
-	<p>
-		There are compiler options that can help with these preferences. After 
-		skimming through the entire GCC man page, I made a specific list of GCC 
-		options for my Makefile. With these options, I also make all non-standard C
-		into warnings and all warnings into errors. I also make the compiler stop 
-		after the first error and I turn off unnecessary (for me) diagnostic 
-		information (carets, labels, and paths) to keep the terminal 
-		uncluttered and speed up compilation.
-	</p>
-	<p>
-		I hope this project structure and organization can help me stay productive 
-		and can help me remember where I left off when I take breaks and come back 
-		to my code after long periods.
-	</p>
-</section>	
+<article>
+	<header class="top-border">
+		<h2>Project Conventions</h2>
+		by Mark Swoope
+		<br>
+		<time datetime="2022-11-22">2022-11-22</time>
+	</header>
+	<section>
+		<p>
+			This entry is not related to type theory and is focused more on how I will
+			structure my new projects, both in their file organization and code.
+		</p>
+		<p>
+			The first aspect to the beginning of anything in a project is choosing a 
+			name. I am not talking about the name of the project, I still struggle with 
+			determining that, but the name of entities within the project. 
+		</p>
+		<p>
+			There are conventional names for top-level directory files. These should be 
+			kept according to convention but everything else can be of my choosing:
+		</p>
+		<ul>
+			<li><kbd>README.md</kbd></li>
+			<li><kbd>COPYING.md</kbd> or <kbd>LICENSE.md</kbd></li>
+		</ul>
+		<p>
+			Markdown is popular enough to warrant preference over plain text files. And 
+			the above files are conventional enough to keep their names as such. The 
+			choice of <kbd>COPYING</kbd> over <kbd>LICENSE</kbd> indicates an alignment 
+			with GNU and/or copyleft organizations. Microsoft Github, the most popular 
+			software 	repository host, chooses <kbd>LICENSE</kbd> for it's users by 
+			default.
+		</p>
+		<p>
+			The GNU Coding Standards recommends a handful of additional files which I 
+			deem unnecessary for my tasks. These are:
+		</p>
+		<ul>
+			<li>
+				<kbd>INSTALL</kbd>: Which contains <q>an explanation of the installation 
+				procedure</q>. I think this description should be kept inside the 
+				<kbd>README.md</kbd> file. 
+			</li>
+			<li>
+				<kbd>NEWS</kbd>: Which contains <q>a list of user-visible changes worth 
+				mentioning</q>. I think project news should be on the project website, 
+				preferrably on the front page. This implies all projects should have a 
+				website that supplements, in detail, the information found from the 
+				referencing <kbd>README.md</kbd> file.
+			</li>
+			<li>
+				<kbd>ChangeLog</kbd>: Which contains <q>all the changes made to program
+				source files</q>. This is completely obsoleted by the invention of 
+				version control systems such as Git. And GNU rightly acknowledges this 
+				and declares this file optional. 
+			</li>
+			<li>
+				<kbd>configure</kbd>: This file, coupled with other files such as 
+				<kbd>aclocal.m4</kbd>, <kbd>configure.ac</kbd>, <kbd>config.h.in</kbd>,
+				<kbd>Makefile.am</kbd>, and <kbd>Makefile.in</kbd> are part of the complex 
+				and overly engineered GNU Build System (known as Autotools) which nobody 
+				but GNU uses. It should be noted that a project can follow the 
+				<code>./configure &amp;&amp; make &amp;&amp; make install</code> build 
+				method without depending on autotools if the programmer manually wrote 
+				the <kbd>configure</kbd> script but this requires a lot of reading 
+				and adherence to GNU coding standards to get right.
+			</li>
+		</ul>
+		<p>
+			My preferred build system is plain Make without the use of CMake or 
+			autotools. I prefer the configuration of Make to happen in a separate 
+			make file filled with variables that the user can edit and that the main 
+			Makefile can subsequently include. It is simple enough and works well for 
+			my purposes. This configuration file should have the following variables:
+		</p>
+		<ul>
+			<li><code>prefix = /usr/local</code></li>
+			<li><code>exec_prefix = $(prefix)</code></li>
+			<li><code>bindir = $(exec_prefix)/bin</code></li>
+			<li><code>datarootdir = $(prefix)/share</code></li>
+			<li><code>includedir = $(prefix)/include</code></li>
+			<li><code>docdir = $(datarootdir)/doc</code></li>
+			<li><code>libdir = $(exec_prefix)/lib</code></li>
+			<li><code>srcdir = .</code></li>
+			<li><code>AR = ar</code></li>
+			<li><code>CC = cc</code></li>
+			<li><code>INSTALL = install</code></li>
+			<li><code>INSTALL_DATA = $(INSTALL) -m 644</code></li>
+			<li><code>INSTALL_PROGRAM = $(INSTALL)</code></li>
+			<li><code>CFLAGS = </code></li>
+			<li><code>CPPFLAGS = </code></li>
+			<li><code>LDFLAGS = </code></li>
+			<li><code>LDLIBS = </code></li>
+		</ul>
+		<p>
+			And the Makefile will perform it's operations in terms of these variables.
+		</p>
+		<p>
+			Apart from conventional files with their conventional names, I choose two
+			top-level directories for my project: <kbd>code</kbd> and 
+			<kbd>documents</kbd>. I now prefer to avoid abbreviations and acronyms 
+			when naming things; I also prefer to avoid words that have only been 
+			around for less than a century, but this is sometimes impossible.
+		</p>
+		<p>
+			The <kbd>documents</kbd> directory should contain the project's static 
+			website. This website should contain all documentation of the project, 
+			including:
+		</p>
+		<ul>
+			<li>Program manual</li>
+			<li>Library manual</li>
+			<li>Other manuals and references</li>
+			<li>Tutorials, guides, and examples</li>
+			<li>Installation instructions</li>
+			<li>Source code browser from within the website (nice but optional)</li>
+			<li>Prebuilt package downloads</li>
+			<li>News</li>
+			<li>Authors</li>
+			<li>License</li>
+			<li>Donations and sponsors</li>
+			<li>Links to associated forums and chat networks</li>
+			<li>Code of Conduct and obligatory virtue pledging allegiance pages</li>
+		</ul>
+		<p>
+			The <kbd>code</kbd> directory should contain all project source code in
+			the following sub-directory structure:
+		</p>
+		<ul>
+			<li><kbd>interfaces</kbd>: A set of subdirectories for each library that 
+			this project uses (including this project as a library), each containing 
+			header files of that library. 
+			<li><kbd>modules</kbd>: A set of subdirectories for each library that this 
+			project uses or generates (including this project as a library), each 
+			containing non-header source files of that library.</li>
+			<li><kbd>programs</kbd>: A set of subdirectories for each standalone 
+			exectuable program that this project uses or generates, each containing 
+			non-header source files of that program.
+		</ul>
+		<p>
+			Ultimately, program code from <kbd>code/programs/*/*.c</kbd> is compiled 
+			with library code from <kbd>code/modules/*/*.c</kbd>, both of which include
+			header files from the include path <kbd>code/interfaces</kbd>. Specific 
+			dependencies between source and header files can be automatically resolved
+			by using the <code>-M</code> and related GCC options and can somehow be 
+			imported into Make.
+		</p>
+		<p>
+			The intermediate result in the root directory is a directory called 
+			<kbd>objects</kbd> which is a mirror of the <kbd>code</kbd> directory 
+			(minus the <kbd>interfaces</kbd> subdirectory) with all <kbd>.c</kbd> files 
+			replaced with <kbd>.o</kbd> files.
+		</p>
+		<p>
+			The final result in the root directory are two directories: 
+			<kbd>modules</kbd> which is a mirror of <kbd>objects/modules</kbd> with 
+			all <kbd>.o</kbd> files replaced with <kbd>.a</kbd> or <kbd>.so</kbd> files
+			(depending on the configuration to build static or shared libraries), and 
+			<kbd>programs</kbd> which is a mirror of <kbd>objects/programs</kbd> with
+			all <kbd>.o</kbd> files made into their final executable programs. 
+		</p>
+		<p>
+			This system is good enough for me as a sole contributor to my own projects.
+			I have no need to learn or use build system generators such as CMake since 
+			I primarily use Vim, GCC, Make, and Linux. When I do work on my project 
+			from Windows, I use MSYS 2 which provides a decent terminal with ports of 
+			all the Linux and GNU utilities I use on Windows. I believe MSYS 2 is also 
+			portable on usb flash drives. 
+		</p>
+		<!--
+		<p>
+			I have never purchased an Apple product so 
+			I do not think about MacOS when programming, this is Ok because 
+			Mac users more educated, more cultured, and more affluent than non-Mac 
+			users so they can figure out how to port Linux software to Mac very easily.
+			They know that Mac is Unix without the bloat of GNU software so it is a 
+			superior Unix with a superior License and a superior curated App store made 
+			by a responsible and socially-conscious company working to make the world a 
+			better place and not for the greed of money like those other companies that 
+			overprice their products while depending on unethical labor.
+		</p>
+		-->
+		<p>
+			There is a possibility of course, that my projects of libraries and/or 
+			native tools shall be ported to run on Microsoft, Apple, Amazon, or Google 
+			owned software that is leased to the consumer, in which case I try to 
+			avoid compiler or platform specific code. This is not to say that I stick 
+			to C89, as this would be the most portable way to program in C, I prefer 
+			to use the version of C that is the previous from the current major 
+			revision which in this case is C11. I would prefer to use the current 
+			major revision (C23), but it is not released yet and it will take a while 
+			for adoption by the respectable compiler venders when it does get released.
+		</p>
+		<p>
+			The actual project code should aim to be ABI stable from the start by 
+			separating interface from implementation, thus reducing compilation 
+			dependencies and compilation time. This means that the use of 
+			code-generating polymorphic code is discouraged. Also the use of data 
+			types whose structure may change in later versions of the project is 
+			forbidden. When polymorphism is needed, it can be provided using 
+			function references attached to dynamically-allocated objects; these kinds 
+			of objects should not directly expose a mutable reference to any of their 
+			internal members even if the object represents a data structure.
+		</p>
+		<p>
+			The names of common operations of an object should be as follows:
+		</p>
+		<ul>
+			<li>
+				<code>make</code>: Dynamically allocates and initializes an object and 
+				returns a reference to it.
+			</li>
+			<li>
+				<code>fork</code>: Dynamically allocates and copy-initializes an object
+				from another existing object. A reference to the copy-initialized object 
+				is returned.
+			<li>
+				<code>kill</code>: Finalizes and deallocates an object.
+			</li>
+			<li>
+				<code>type</code>: A static, immutable string representing the type of 
+				the object implementing this interface.
+			</li>
+			<li>
+				<code>get</code>: Extracts data out of the object.
+			</li>
+			<li>
+				<code>put</code>: Inserts data into the object.
+			</li>
+			<li>
+				<code>swap</code>: Efficiently performs a <code>get</code> and 
+				<code>put</code> at the same time.
+			</li>
+		</ul>
+		<p>
+			Sometimes objects, especially data structures, store elements that 
+			themselves need to provide a way for copying, comparison, and destruction. 
+			The following operations can be provided for these elements:
+		</p>
+		<ul>
+			<li>
+				<code>copy</code>: Copy-initialize an already allocated object from 
+				another existing object. If this is null, then it is assumed the object
+				can be copied using <code>memcpy</code>. 
+			</li>
+			<li>
+				<code>test</code>: Perform a three-way comparison between two objects.
+				This operation is required for data structures that need it.
+			</li>
+			<li>
+				<code>wipe</code>: Finalize but do not deallocate an object. This 
+				operation does not modify the object since it could have been allocated 
+				in immutable storage. If this is null, then it is assumed the object is 
+				plain-old-data.
+			</li>
+		</ul>
+		<p>
+			It is with intent that all these operations are no more than 4 characters
+			long while not being abbreviated.
+		</p>
+		<p>
+			For my project, it is assumed that all objects can be moved with a 
+			<code>memcpy</code> operation. This movement results in the implicit 
+			destruction of the original object. This detail is important for the 
+			<code>get</code> and <code>put</code> operations which both use 
+			<code>memcpy</code> for the insertion or extraction of data on the object.
+			In addition to extraction, the <code>get</code> operation should directly 
+			destroy data out of an object if the target out-parameter is null. 
+		</p>
+		<p>
+			Often, objects can be constructed from other objects, in which case the 
+			constructed object takes ownership over it's components. Destroying the 
+			constructed object results in it's components being destroyed first. 
+			Objects that implement <code>kill</code> in their interface makes this 
+			possible.
+		</p>
+		<p>
+			Objects that perform dynamic memory allocation should take an allocator 
+			as part of their construction. The allocator can implement the same 
+			common interface as outlined above with these semantics:
+		</p>
+		<ul>
+			<li><code>fork</code>: Clones or <q>propagates</q> the allocator.</li>
+			<li><code>kill</code>: Destroys the allocator</li>
+			<li><code>test</code>: Compares two allocators. Zero for equal and non-zero 
+			otherwise.</li>
+			<li><code>get</code>: Allocate memory from the allocator.</li>
+			<li><code>put</code>: Return allocated memory back to the allocator.</li>
+			<li><code>swap</code>: Reallocate memory.</li>
+		</ul>
+		<p>
+			If <code>fork</code> is null, then it implies the allocator is stateless 
+			and cloning it will always return the same allocator. If <code>kill</code> 
+			is null, then the allocator is stateless and has no destruction method. 
+			If <code>test</code> is null, then the allocator type is stateless and 
+			shall always compare equal to other allocators of the same type. 
+		</p>
+		<p>
+			The common interface also works well for I/O streams:
+		</p>
+		<ul>	
+			<li><code>get</code>: Read from the stream.</li>
+			<li><code>put</code>: Write or push-back to the stream.</li>
+			<li><code>swap</code>: Read and then push-back to the stream.</li>
+		</ul>
+		<p>
+			For data structures:
+		</p>
+		<ul>
+			<li><code>get</code>: Extract an element.</li>
+			<li><code>put</code>: Insert an elemet.</li>
+			<li><code>swap</code>: Exchange an element.</li>
+		</ul>
+		<p>
+			The above operations shall be the only way a data structure grants 
+			element access. A data structure should never allow direct access to an 
+			element, even if it is immutable direct access because it is my insight
+			that a destructor can be invoked by the user on an immutable element 
+			(or they can outright drop the <code>const</code> qualifier from any 
+			pointer). The value here is strongly upholding invariants on data 
+			structures at the cost of speed.
+		</p>
+		<p>
+			Other perculiar practices I try to use for myself include:
+		</p>
+		<ul>
+			<li>Explicitly stating the storage class of all variables (
+			<code>register</code>, <code>extern</code>, <code>static</code>, and 
+			<code>auto</code>): Always using <code>register</code> for function 
+			parameters but never for other local variables. 
+			<li>Expressing pointers and qualifiers using right-to-left syntax and 
+			always with explicit parentheses around the declarator.</li>
+			<li>Declaring variables on separate lines.</li>
+			<li>Avoiding side-effects in subexpressions.</li>
+			<li>Avoiding implicit conversions, especially the arithmetic ones.</li>
+			<li>Always using braces around blocks even for single-statement blocks.</li>
+			<li>Preferring nested if-statements over short-circuiting operators and
+			using bitwise operators where short-circuiting is not required.</li>
+			<li>Explicitly casting the return value of a function call to 
+			<code>void</code> when the return value is not needed.</li>
+			<li>Explicitly casting a function parameter/variable to void when that 
+			parameter/variable is not needed.</li>
+			<li>Preferring to declare variables as <code>const</code> and pointer 
+			variables as <code>restrict</code> when possible.</li>
+			<li>Placing parameters/arguments of functions/function calls on separate 
+			lines if the parameter count is greater than 2.</li>
+			<li>Avoiding variable-length arrays</li>
+			<li>Avoiding <code>alloca</code></li>
+			<li>Avoiding flexible array members</li>
+			<li>Avoiding format strings and variadic arguments</li>
+			<li>Preferring to dereference function pointers before using them in order 
+			to show that an indirect call is being made.</li>
+			<li>Always making an expression within a boolean context be 
+			the result of a comparison operation.</li>
+			<li>Using spaces around all binary operators (including member access 
+			operators) and a space after all unary operators unless that unary operator
+			precedes an open parenthesis.</li>
+			<li>Using the correct suffix for literal expressions.</li>
+		</ul>
+		<p>
+			There are compiler options that can help with these preferences. After 
+			skimming through the entire GCC man page, I made a specific list of GCC 
+			options for my Makefile. With these options, I also make all non-standard C
+			into warnings and all warnings into errors. I also make the compiler stop 
+			after the first error and I turn off unnecessary (for me) diagnostic 
+			information (carets, labels, and paths) to keep the terminal 
+			uncluttered and speed up compilation.
+		</p>
+		<p>
+			I hope this project structure and organization can help me stay productive 
+			and can help me remember where I left off when I take breaks and come back 
+			to my code after long periods.
+		</p>
+	</section>	
+</article>

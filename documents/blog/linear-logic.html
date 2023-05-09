@@ -1,582 +1,585 @@
-<header class="top-border">
-	<h2>A Practical Interpretation of Linear Logic</h2>
-	by Mark Swoope<br>
-	<time datetime="2022-09-14">2022-09-14</time>
-</header>
-<nav class="accented padded shaded">
-	<b>Contents</b>
-	<ol>
-		<li>
-			<a href="#!/documents/blog/linear-logic.html:intro">
-				Introduction
-			</a>
-		</li>
-		<li>
-			<a href="#!/documents/blog/linear-logic.html:cut">
-				Cut
-			</a>
-		</li>
-		<li>
-			<a href="#!/documents/blog/linear-logic.html:lollipop">
-				Linear implication
-			</a>
-		</li>
-		<li>
-			<a href="#!/documents/blog/linear-logic.html:times">
-				Multiplicative conjunction
-			</a>
-		</li>
-		<li>
-			<a href="#!/documents/blog/linear-logic.html:par">
-				Multiplicative disjunction
-			</a>
-		</li>
-		<li>
-			<a href="#!/documents/blog/linear-logic.html:with">
-				Additive conjunction
-			</a>
-		</li>
-		<li>
-			<a href="#!/documents/blog/linear-logic.html:plus">
-				Additive disjunction
-			</a>
-		</li>
-		<li>
-			<a href="#!/documents/blog/linear-logic.html:end">
-				Conclusion
-			</a>
-		</li>
-	</ol>
-</nav>
-<section id="intro">
-	<header>
-		<h3>1. Introduction</h3>
+<article>
+	<header class="top-border">
+		<h2>A Practical Interpretation of Linear Logic</h2>
+		by Mark Swoope<br>
+		<time datetime="2022-09-14">2022-09-14</time>
 	</header>
-	<p>
-		I possess only an undergraduate computer science degree from a modest 
-		affordable commuter college so forgive me for any inaccuracies of this 
-		subject matter for which I: do not proclaim expertise in, let alone am 
-		even worthy enough to study. This article contains my interpretation of 
-		linear logic and how it could be employed in a programming language.
-	</p>
-	<p>
-		I will skip the history and background theories and jump straight to the 
-		topic. I will not acknowledge other people's interpretations of linear 
-		logic nor will I mention any existing programming languages that seem 
-		to take an interpretation of a fragment of it's semantics.
-	</p>
-	<p>
-		It is said that linear logic involves the notion of &ldquo;use-once&rdquo;
-		variables. Each variable cannot be left unused but it cannot be used more 
-		than once. What would this mean in an actual programming language? What,
-		in a computer program based on linear logic, would correspond to the 
-		&ldquo;use&rdquo; of a &ldquo;linear variable&rdquo;?
-	</p>
-	<p>For an actual computer program, I believe these should be the 
-	prerequisites for a linear variable:</p>
-	<ul>
-		<li>It has a type</li>
-		<li>It has a name</li>
-		<li>It is initialized on declaration</li>
-		<li>It cannot be reassigned</li>
-	</ul>
-	<p>So it is like a variable in a pure functional programming language; what 
-	makes it linear is the restriction on it's use.</p>
-	<p>
-		I define the <em>use</em> of a linear variable as any operation that 
-		performs one (but not both) of the following:
-	</p>
-	<ul>
-		<li>Reads the linear variable's value</li>
-		<li>Computes the address of the linear variable (if it is addressible)</li>
-	</ul>
-	<p>
-		After a linear variable is used, it cannot be used anymore. The value of
-		that variable, however, can be &rdquo;reused&rdquo; by propagating it 
-		through a new linear variable.
-	</p>
-	<p>
-		These simple rules ensure that no value has more than one point of access 
-		and so a linear type system disallows aliasing which promotes optimization
-		at the cost of ease.
-	</p>
-	<p>
-		I will cover in detail my interpretation of the following linear logic 
-		connectives:
-	</p>
-	<figure>
-		<table class="centered centered-text">
-			<thead class="shaded">
-				<tr>
-					<th>Symbol</th>
-					<th>Name</th>
-					<th>Description</th>
-				</tr>
-			</thead>
-			<tbody>
-				<tr>
-					<td>&#8888;</td>
-					<td><em>Lollipop</em></td>
-					<td>Linear implication</td>
-				</tr>
-				<tr>
-					<td>&bigotimes;</td>
-					<td><em>Times</em></td>
-					<td>Multiplicative conjunction</td>
-				</tr>
-				<tr>
-					<td>&#8523;</td>
-					<td><em>Par</em></td>
-					<td>Multiplicative disjunction</td>
-				</tr>
-				<tr>
-					<td>&amp;</td>
-					<td><em>With</em></td>
-					<td>Additive conjunction</td>
-				</tr>
-				<tr>
-					<td>&bigoplus;</td>
-					<td><em>Plus</em></td>
-					<td>Additive disjunction</td>
-				</tr>
-			</tbody>
-		</table>
-	</figure>
-	<p>
-		Each section shall start by enumerating the relevant inference rules for 
-		the connective in question. The assumptions and conclusion of each rule 
-		is composed of sequents which are expressions whose primary symbol is 
-		&vdash;.
-	</p>
-	<p>The inference rules have been referenced from the <cite><a 
-	rel="external noopener noreferrer" 
-	href="http://iml.univ-mrs.fr/~lafont/pub/llpages.pdf">Linear Logic Pages, 
-	by Yves Lafont</a></cite></p>
-	<p>
-		In my interpretation, a sequent that is presented in linear logic 
-		represents a possible <em>transaction</em> of resources (including 
-		resources that can operate on other resources).
-	</p>
-	<p>
-		The left-hand side of a sequent represents what the transaction demands and 
-		the right-hand side represents what can be supplied if these demands are 
-		met. The execution of the transaction is an exchange: what is demanded gets
-		traded for what is to be supplied by the end of the transaction.
-	</p>
-	<p>
-		Every single transaction involves two agents that perform the exchange 
-		of resources. At the beginning of a transaction, one agent takes the role 
-		of a producer and the other takes the role of the consumer. During this
-		phase, the producer first gives to the consumer what is demanded. 
-	</p>
-	<p>
-		At the end of a transaction, the original consumer becomes the producer and 
-		the original producer either becomes the consumer or is replaced by a new 
-		consumer. In either case, the new producer/original consumer  gives out 
-		what is owed after originally consuming what was demanded.
-	</p>
-	<p>
-		The beginning of a transaction corresponds to calling a function: the 
-		producer is the function caller that produces arguments for the call and 
-		the consumer is the function callee that consumes those arguments.
-	</p>
-	<p>
-		The end of a transaction corresponds to returning from a function call:
-		the producer is now the currently executing function that is now 
-		terminating and returning it's results; the consumer is either the caller 
-		of the returning function or it is a continuation function.
-	</p>
-</section>
-<section id="cut">
-	<header>
-		<h3>2. Cut</h3>
-	</header>
-	<p>
-		The following rule shows how a production of one transaction can be 
-		consumed by another transaction:
-	</p>
-	<figure>
-		<table class="centered centered-text">
-			<thead class="shaded">
-				<tr>
-					<th>Assumptions</th>
-					<th>Conclusion</th>
-					<th>Rule</th>
-				</tr>
-			</thead>
-			<tbody>
-				<tr>
-					<td>
-						&Gamma; &vdash; A, &Delta;<br>
-						&Theta;, A &vdash; &Lambda;
-					</td>
-					<td>&Gamma;, &Theta; &vdash; &Delta;, &Lambda;</td>
-					<td>cut</td>
-				</tr>
-		</table>
-	</figure>
-	<p>
-		The cut rule is interesting because it enables consistent ordering of 
-		execution: the transition from &Theta; to &Lambda; cannot happen until 
-		the transition from &Gamma; to &Delta; has occurred. The resource A is the
-		key that gets passed along from one transaction to it's waiting dependent 
-		transaction.
-	</p>
-	<p>
-		This shows that resources do not need to only model data, they can model 
-		data that has undergone a history of state transitions such as a file 
-		descriptor that can be opened or closed or a socket that can be bound,
-		unbound, listening, connected, shutdown, or closed.
-	</p>
-</section>
-<section id="lollipop">
-	<header>
-		<h3>3. Linear implication</h3>
-	</header>
-	<figure>
-		<table class="centered centered-text">
-			<thead class="shaded">
-				<tr>
-					<th>Assumptions</th>
-					<th>Conclusion</th>
-					<th>Rule</th>
-				</tr>
-			</thead>
-			<tbody>
-				<tr>
-					<td>&Gamma;, A &vdash; B, &Delta;</td>
-					<td>&Gamma; &vdash; A &#8888; B, &Delta;</td>
-					<td>&vdash; &#8888;</td>
-				</tr>
-				<tr>
-					<td>
-						&Gamma; &vdash; A, &Delta;<br>
-						&Theta;, B &vdash; &Lambda;
-					</td>
-					<td>
-						&Gamma;, &Theta;, A &#8888; B &vdash; &Delta;, &Lambda;
-					</td>
-					<td>&#8888; &vdash;</td>
-				</tr>
-			</tbody>
-		</table>
-	</figure>
-	<p>
-		A formula A &#8888; B is like a function type: it consumes an A and 
-		produces a B. Unlike a normal function type, the value of the argument 
-		given to a function of this type during application cannot be accessed 
-		anymore unless that function gives the value of that argument back as 
-		it's result. The presence of A and A &#8888; B reduces to only B.
-	</p>
-	<p>
-		The &vdash; &#8888; rule says that if a transaction can produce a B after 
-		consuming an A, then the transaction can be rewritten to not consume an A 
-		and produce an unexecuted transaction which can produce a B after consuming 
-		an A.
-	</p>
-	<p>
-		The &#8888; &vdash; rule can be simplified to say that if one transaction 
-		produces an A for free and another transaction produces nothing for B, then 
-		we can combine both transactions together with a third transaction that can 
-		produce a B from an A. The three transactions cancel each other out. We are 
-		left with a transaction that consumes nothing and produces nothing.
-	</p>
-</section>
-<section id="times">
-	<header>
-		<h3>4. Multiplicative conjunction</h3>
-	</header>
-	<figure>
-		<table class="centered centered-text">
-			<thead class="shaded">
-				<tr>
-					<th>Assumptions</th>
-					<th>Conclusion</th>
-					<th>Rule</th>
-				</tr>
-			</thead>
-			<tbody>
-				<tr>
-					<td>
-						&Gamma; &vdash; A, &Delta;<br>
-						&Theta; &vdash; B, &Lambda;
-					</td>
-					<td>
-						&Gamma;, &Theta; &vdash; A &bigotimes; B, &Delta;, &Lambda;
-					</td>
-					<td>&vdash; &bigotimes;</td>
-				</tr>
-				<tr>
-					<td>&Gamma;, A, B &vdash; &Delta;</td>
-					<td>&Gamma;, A &bigotimes; B &vdash; &Delta;</td>
-					<td>&bigotimes; &vdash;</td>
-				</tr>
-			</tbody>
-		</table>
-	</figure>
-	<p>
-		A &bigotimes; B means that from the point of view of a single agent, A and
-		B are both present together and they are strongly bonded. They form a 
-		product which can never exist in a partially constructed state: it either 
-		exists as a whole with each component present or it doesn't exist at all.
-		The times-product cannot be taken apart one-by-one. 
-	</p>
-	<p>
-		In a computer program, the times-product can be a record, tuple, or array. 
-		In linear logic, it is not valid to use a single component of a 
-		times-product without using the rest; all components must be used at once.
-		This has the consequence that components of times-products cannot, in 
-		theory, be updated in-place. To update a times-product requires sending it 
-		to a transaction that consumes it and produces a new times-product 
-		containing the updated components.
-	</p>
-	<p>
-		The &vdash; &bigotimes; rule says if A and B can be produced independently 
-		(using different transactions that can potentially run in parallel without 
-		sharing state), then the product A &bigotimes; B can be produced.
-	</p>
-	<p>
-		The &bigotimes; &vdash; rule says if A and B are demanded in a transaction,
-		then that transaction can be rewritten to demand A &bigotimes; B. This 
-		means that all resources on the left-hand side of the sequent implicitly
-		form a times-product. It also means that any transaction can only demand 
-		one resource; if it has several components, each component must have been
-		produced by a separate independent transaction. This guarantees that the 
-		order of execution of the transactions that produce what is demanded by
-		the current transaction does not affect the final outcome. In this respect,
-		&bigotimes; guarantees safe concurrency.
-	</p>
-	<p>
-		Notice how two transactions are required to produce a times-product but 
-		only one transaction is required to consume a times-product. This is 
-		because a times-product, <b>after it is already made</b>, is treated as one 
-		resource which can be passed into and out of transactions. <b>Before it is
-		made</b>, each component must be produced which requires a transaction.
-	</p>
-</section>
-<section id="par">
-	<header>
-		<h3>5. Multiplicative disjunction</h3>
-	</header>
-	<figure>
-		<table class="centered centered-text">
-			<thead class="shaded">
-				<tr>
-					<th>Assumptions</th>
-					<th>Conclusion</th>
-					<th>Rule</th>
-				</tr>
-			</thead>
-			<tbody>
-				<tr>
-					<td>
-						&Gamma;, A &vdash; &Delta;<br>
-						&Theta;, B &vdash; &Lambda;
-					</td>
-					<td>
-						&Gamma;, &Theta;, A &#8523; B &vdash; &Delta;, &Lambda;
-					</td>
-					<td>
-						&#8523; &vdash;
-					</td>
-				</tr>
-				<tr>
-					<td>&Gamma; &vdash; A, B, &Delta;</td>
-					<td>&Gamma; &vdash; A &#8523; B, &Delta;</td>
-					<td>&vdash; &#8523;</td>
-				</tr>
-			</tbody>
-		</table>
-	</figure>
-	<p>
-		If &bigotimes; means multiple resources treated as a single resource, then
-		the simplest definition of &#8523; (<em>par</em>) is: multiple resources
-		<b>not</b> treated as a single resource.
-	</p>
-	<p>
-		The resource A &#8523; B can be introduced in the &#8523; &vdash; rule if 
-		A and B are to be consumed separately: meaning that each component is 
-		consumed asynchronously and concurrently with the rest.
-	</p>
-	<p>
-		In the &vdash; &#8523; rule, any transaction that produces an A and B can 
-		be rewritten to produce A &#8523; B instead. Therefore the entire 
-		right-hand side of a sequent is an implicit par-product. Considered with
-		the &bigotimes; &vdash; rule, every transaction takes the implicit form:
-	</p>
-	<p>
-		A<sub>1</sub> &bigotimes; ... A<sub>n</sub> &vdash; B<sub>1</sub> &#8523; ... 
-		B<sub>n</sub>
-	</p>
-	<p>
-		This means that a transaction cannot begin until the evaluation of it's 
-		inputs have converged and synchronized together. Also the outputs of 
-		a terminated transaction can diverge and be consumed asynchronously.
-	</p>
-	<p>&#8523; is dual to &bigotimes; for the following reasons:</p>
-	<ul>
-		<li>
-			&#8523; is consumed by multiple transaction while &bigotimes; is 
-			consumed by a single transaction.
-		</li>
-		<li>
-			&#8523; is produced by a single transaction while &bigotimes; is 
-			produced by multiple transactions.
-		</li>
-	</ul>
-	<p class="shaded padded">
-		<b>The shape of a transaction then takes the form of an hourglass or 
-		wormhole. Inputs and outputs go into or out of a funnel. The multiplicative 
-		aspect of times and par deal with the multiplicity of resources in space 
-		and the multiplicity of their respective exchanges in time.</b>
-	</p>
-</section>
-<section id="with">
-	<header>
-		<h3>6. Additive conjunction</h3>
-	</header>
-	<figure>
-		<table class="centered centered-text">
-			<thead class="shaded">
-				<tr>
-					<th>Assumptions</th>
-					<th>Conclusion</th>
-					<th>Rule</th>
-				</tr>
-			</thead>
-			<tbody>
-				<tr>
-					<td>
-						&Gamma; &vdash; A, &Delta;<br>
-						&Gamma; &vdash; B, &Delta;
-					</td>
-					<td>&Gamma; &vdash; A &amp; B, &Delta;</td>
-					<td>&vdash; &amp;</td>
-				</tr>
-				<tr>
-					<td>&Gamma;, A &vdash; &Delta;</td>
-					<td>&Gamma;, A &amp; B &vdash; &Delta;</td>
-					<td>&amp;<sub>1</sub> &vdash;</td>
-				</tr>
-				<tr>
-					<td>&Gamma;, B &vdash; &Delta;</td>
-					<td>&Gamma;, A &amp; B &vdash; &Delta;</td>
-					<td>&amp;<sub>2</sub> &vdash;</td>
-				</tr>
-			</tbody>
-		</table>
-	</figure>
-	<p>
-		The additive connectives deal with transactions that can consume or 
-		produce alternative resources rather than the same resource every time.
-	</p>
-	<p>
-		If a transaction is always capable of producing any of A or B, then it can 
-		produce A &amp; B instead. If a transaction can consume an A, then it can 
-		consume any with-sum that has A as an alternative component.
-	</p>
-	<p>
-		&amp; (with) can be produced if <b>any</b> of it's alternative components 
-		can be produced and it can be consumed if <b>one</b> of it's alternative 
-		components can be consumed. The choice of what alternative component to 
-		consume is free for the consumer of the transaction. The producer of the 
-		transaction must be ready to produce whatever is chosen.
-	</p>
-	<p>
-		A language can implement this as a mechanism for lazy evaluation. A 
-		with-sum A &amp; B that evaluates between context states &Gamma; and 
-		&Delta; can be stored as:
-	</p>
-	<p>
-		(&Gamma; &bigotimes; ((&Gamma; &#8888; A &#8523; &Delta;) &bigotimes; 
-		(&Gamma; &#8888; B &#8523; &Delta;)))
-	</p>
-	<p>
-		A primitive operation can be defined to eliminate this by applying either 
-		of the functions to &Gamma; to obtain A or B along with the new context 
-		&Delta;.
-	</p>
-</section>
-<section id="plus">
-	<header>
-		<h3>7. Additive disjunction</h3>
-	</header>
-	<figure>
-		<table class="centered centered-text">
-			<thead class="shaded">
-				<tr>
-					<th>Assumptions</th>
-					<th>Conclusion</th>
-					<th>Rule</th>
-				</tr>
-			</thead>
-			<tbody>
-				<tr>
-					<td>
-						&Gamma;, A &vdash; &Delta;<br>
-						&Gamma;, B &vdash; &Delta;
-					</td>
-					<td>&Gamma;, A &bigoplus; B &vdash; &Delta;</td>
-					<td>&bigoplus; &vdash;</td>
-				</tr>
-				<tr>
-					<td>&Gamma; &vdash; A, &Delta;</td>
-					<td>&Gamma; &vdash; A &bigoplus; B, &Delta;</td>
-					<td>&vdash; &bigoplus;<sub>1</sub></td>
-				</tr>
-				<tr>
-					<td>&Gamma; &vdash; B, &Delta;</td>
-					<td>&Gamma; &vdash; A &bigoplus; B, &Delta;</td>
-					<td>&vdash; &bigoplus;<sub>2</sub></td>
-				</tr>
-			</tbody>
-		</table>
-	</figure>
-	<p>
-		&bigoplus; (<em>plus</em>) reverses the freedom of choice from the 
-		&amp; connective; the consumer must now be able to handle whatever 
-		alternative is received from the producer.
-	</p>
-	<p>
-		The plus-sum corresponds to the tagged union found in many languages 
-		with functional aspects. It is dual to &amp; for the following reasons:
-	</p>
-	<ul>
-		<li>
-			&bigoplus; is consumed by one of multiple possible transactions while
-			&amp; is consumed by one possible transaction.
-		</li>
-		<li>
-			&bigoplus; is produced by one possible transaction while &amp; is 
-			produced by multiple possible transactions.
-		</li>
-	</ul>
-</section>
-<section id="end">
-	<header>
-		<h3>8. Conclusion</h3>
-	</header>
-	<p>
-		These are the simplified interpretations of the main linear logic 
-		connectives:
-	<ul>
-		<li>
-			&bigotimes; (<em>times</em>) - 
-			Multiple resources that cannot be split apart and must be consumed as 
-			a whole.
-		</li>
-		<li>
-			&#8523; (<em>par</em>) -
-			Multiple resources that are always split apart and must be consumed in
-			pieces.
-		</li>
-		<li>
-			&amp; (<em>with</em>) -
-			Multiple potential resources of which a chosen one will be produced
-		</li>
-		<li>
-			&bigoplus; (<em>plus</em>) -
-			Multiple potential resources of which a random one will be consumed
-		</li>
-	</ul>
-</section>
+	<nav class="accented padded shaded">
+		<b>Contents</b>
+		<ol>
+			<li>
+				<a href="#!/documents/blog/linear-logic.html:intro">
+					Introduction
+				</a>
+			</li>
+			<li>
+				<a href="#!/documents/blog/linear-logic.html:cut">
+					Cut
+				</a>
+			</li>
+			<li>
+				<a href="#!/documents/blog/linear-logic.html:lollipop">
+					Linear implication
+				</a>
+			</li>
+			<li>
+				<a href="#!/documents/blog/linear-logic.html:times">
+					Multiplicative conjunction
+				</a>
+			</li>
+			<li>
+				<a href="#!/documents/blog/linear-logic.html:par">
+					Multiplicative disjunction
+				</a>
+			</li>
+			<li>
+				<a href="#!/documents/blog/linear-logic.html:with">
+					Additive conjunction
+				</a>
+			</li>
+			<li>
+				<a href="#!/documents/blog/linear-logic.html:plus">
+					Additive disjunction
+				</a>
+			</li>
+			<li>
+				<a href="#!/documents/blog/linear-logic.html:end">
+					Conclusion
+				</a>
+			</li>
+		</ol>
+	</nav>
+	<section id="intro">
+		<header>
+			<h3>1. Introduction</h3>
+		</header>
+		<p>
+			I possess only an undergraduate computer science degree from a modest 
+			affordable commuter college so forgive me for any inaccuracies of this 
+			subject matter for which I: do not proclaim expertise in, let alone am 
+			even worthy enough to study. This article contains my interpretation of 
+			linear logic and how it could be employed in a programming language.
+		</p>
+		<p>
+			I will skip the history and background theories and jump straight to the 
+			topic. I will not acknowledge other people's interpretations of linear 
+			logic nor will I mention any existing programming languages that seem 
+			to take an interpretation of a fragment of it's semantics.
+		</p>
+		<p>
+			It is said that linear logic involves the notion of &ldquo;use-once&rdquo;
+			variables. Each variable cannot be left unused but it cannot be used more 
+			than once. What would this mean in an actual programming language? What,
+			in a computer program based on linear logic, would correspond to the 
+			&ldquo;use&rdquo; of a &ldquo;linear variable&rdquo;?
+		</p>
+		<p>For an actual computer program, I believe these should be the 
+		prerequisites for a linear variable:</p>
+		<ul>
+			<li>It has a type</li>
+			<li>It has a name</li>
+			<li>It is initialized on declaration</li>
+			<li>It cannot be reassigned</li>
+		</ul>
+		<p>So it is like a variable in a pure functional programming language; what 
+		makes it linear is the restriction on it's use.</p>
+		<p>
+			I define the <em>use</em> of a linear variable as any operation that 
+			performs one (but not both) of the following:
+		</p>
+		<ul>
+			<li>Reads the linear variable's value</li>
+			<li>Computes the address of the linear variable (if it is addressible)</li>
+		</ul>
+		<p>
+			After a linear variable is used, it cannot be used anymore. The value of
+			that variable, however, can be &rdquo;reused&rdquo; by propagating it 
+			through a new linear variable.
+		</p>
+		<p>
+			These simple rules ensure that no value has more than one point of access 
+			and so a linear type system disallows aliasing which promotes optimization
+			at the cost of ease.
+		</p>
+		<p>
+			I will cover in detail my interpretation of the following linear logic 
+			connectives:
+		</p>
+		<figure>
+			<table class="centered centered-text">
+				<thead class="shaded">
+					<tr>
+						<th>Symbol</th>
+						<th>Name</th>
+						<th>Description</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr>
+						<td>&#8888;</td>
+						<td><em>Lollipop</em></td>
+						<td>Linear implication</td>
+					</tr>
+					<tr>
+						<td>&bigotimes;</td>
+						<td><em>Times</em></td>
+						<td>Multiplicative conjunction</td>
+					</tr>
+					<tr>
+						<td>&#8523;</td>
+						<td><em>Par</em></td>
+						<td>Multiplicative disjunction</td>
+					</tr>
+					<tr>
+						<td>&amp;</td>
+						<td><em>With</em></td>
+						<td>Additive conjunction</td>
+					</tr>
+					<tr>
+						<td>&bigoplus;</td>
+						<td><em>Plus</em></td>
+						<td>Additive disjunction</td>
+					</tr>
+				</tbody>
+			</table>
+		</figure>
+		<p>
+			Each section shall start by enumerating the relevant inference rules for 
+			the connective in question. The assumptions and conclusion of each rule 
+			is composed of sequents which are expressions whose primary symbol is 
+			&vdash;.
+		</p>
+		<p>The inference rules have been referenced from the <cite><a 
+		rel="external noopener noreferrer" 
+		href="http://iml.univ-mrs.fr/~lafont/pub/llpages.pdf">Linear Logic Pages, 
+		by Yves Lafont</a></cite></p>
+		<p>
+			In my interpretation, a sequent that is presented in linear logic 
+			represents a possible <em>transaction</em> of resources (including 
+			resources that can operate on other resources).
+		</p>
+		<p>
+			The left-hand side of a sequent represents what the transaction demands and 
+			the right-hand side represents what can be supplied if these demands are 
+			met. The execution of the transaction is an exchange: what is demanded gets
+			traded for what is to be supplied by the end of the transaction.
+		</p>
+		<p>
+			Every single transaction involves two agents that perform the exchange 
+			of resources. At the beginning of a transaction, one agent takes the role 
+			of a producer and the other takes the role of the consumer. During this
+			phase, the producer first gives to the consumer what is demanded. 
+		</p>
+		<p>
+			At the end of a transaction, the original consumer becomes the producer and 
+			the original producer either becomes the consumer or is replaced by a new 
+			consumer. In either case, the new producer/original consumer  gives out 
+			what is owed after originally consuming what was demanded.
+		</p>
+		<p>
+			The beginning of a transaction corresponds to calling a function: the 
+			producer is the function caller that produces arguments for the call and 
+			the consumer is the function callee that consumes those arguments.
+		</p>
+		<p>
+			The end of a transaction corresponds to returning from a function call:
+			the producer is now the currently executing function that is now 
+			terminating and returning it's results; the consumer is either the caller 
+			of the returning function or it is a continuation function.
+		</p>
+	</section>
+	<section id="cut">
+		<header>
+			<h3>2. Cut</h3>
+		</header>
+		<p>
+			The following rule shows how a production of one transaction can be 
+			consumed by another transaction:
+		</p>
+		<figure>
+			<table class="centered centered-text">
+				<thead class="shaded">
+					<tr>
+						<th>Assumptions</th>
+						<th>Conclusion</th>
+						<th>Rule</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr>
+						<td>
+							&Gamma; &vdash; A, &Delta;<br>
+							&Theta;, A &vdash; &Lambda;
+						</td>
+						<td>&Gamma;, &Theta; &vdash; &Delta;, &Lambda;</td>
+						<td>cut</td>
+					</tr>
+			</table>
+		</figure>
+		<p>
+			The cut rule is interesting because it enables consistent ordering of 
+			execution: the transition from &Theta; to &Lambda; cannot happen until 
+			the transition from &Gamma; to &Delta; has occurred. The resource A is the
+			key that gets passed along from one transaction to it's waiting dependent 
+			transaction.
+		</p>
+		<p>
+			This shows that resources do not need to only model data, they can model 
+			data that has undergone a history of state transitions such as a file 
+			descriptor that can be opened or closed or a socket that can be bound,
+			unbound, listening, connected, shutdown, or closed.
+		</p>
+	</section>
+	<section id="lollipop">
+		<header>
+			<h3>3. Linear implication</h3>
+		</header>
+		<figure>
+			<table class="centered centered-text">
+				<thead class="shaded">
+					<tr>
+						<th>Assumptions</th>
+						<th>Conclusion</th>
+						<th>Rule</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr>
+						<td>&Gamma;, A &vdash; B, &Delta;</td>
+						<td>&Gamma; &vdash; A &#8888; B, &Delta;</td>
+						<td>&vdash; &#8888;</td>
+					</tr>
+					<tr>
+						<td>
+							&Gamma; &vdash; A, &Delta;<br>
+							&Theta;, B &vdash; &Lambda;
+						</td>
+						<td>
+							&Gamma;, &Theta;, A &#8888; B &vdash; &Delta;, &Lambda;
+						</td>
+						<td>&#8888; &vdash;</td>
+					</tr>
+				</tbody>
+			</table>
+		</figure>
+		<p>
+			A formula A &#8888; B is like a function type: it consumes an A and 
+			produces a B. Unlike a normal function type, the value of the argument 
+			given to a function of this type during application cannot be accessed 
+			anymore unless that function gives the value of that argument back as 
+			it's result. The presence of A and A &#8888; B reduces to only B.
+		</p>
+		<p>
+			The &vdash; &#8888; rule says that if a transaction can produce a B after 
+			consuming an A, then the transaction can be rewritten to not consume an A 
+			and produce an unexecuted transaction which can produce a B after consuming 
+			an A.
+		</p>
+		<p>
+			The &#8888; &vdash; rule can be simplified to say that if one transaction 
+			produces an A for free and another transaction produces nothing for B, then 
+			we can combine both transactions together with a third transaction that can 
+			produce a B from an A. The three transactions cancel each other out. We are 
+			left with a transaction that consumes nothing and produces nothing.
+		</p>
+	</section>
+	<section id="times">
+		<header>
+			<h3>4. Multiplicative conjunction</h3>
+		</header>
+		<figure>
+			<table class="centered centered-text">
+				<thead class="shaded">
+					<tr>
+						<th>Assumptions</th>
+						<th>Conclusion</th>
+						<th>Rule</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr>
+						<td>
+							&Gamma; &vdash; A, &Delta;<br>
+							&Theta; &vdash; B, &Lambda;
+						</td>
+						<td>
+							&Gamma;, &Theta; &vdash; A &bigotimes; B, &Delta;, &Lambda;
+						</td>
+						<td>&vdash; &bigotimes;</td>
+					</tr>
+					<tr>
+						<td>&Gamma;, A, B &vdash; &Delta;</td>
+						<td>&Gamma;, A &bigotimes; B &vdash; &Delta;</td>
+						<td>&bigotimes; &vdash;</td>
+					</tr>
+				</tbody>
+			</table>
+		</figure>
+		<p>
+			A &bigotimes; B means that from the point of view of a single agent, A and
+			B are both present together and they are strongly bonded. They form a 
+			product which can never exist in a partially constructed state: it either 
+			exists as a whole with each component present or it doesn't exist at all.
+			The times-product cannot be taken apart one-by-one. 
+		</p>
+		<p>
+			In a computer program, the times-product can be a record, tuple, or array. 
+			In linear logic, it is not valid to use a single component of a 
+			times-product without using the rest; all components must be used at once.
+			This has the consequence that components of times-products cannot, in 
+			theory, be updated in-place. To update a times-product requires sending it 
+			to a transaction that consumes it and produces a new times-product 
+			containing the updated components.
+		</p>
+		<p>
+			The &vdash; &bigotimes; rule says if A and B can be produced independently 
+			(using different transactions that can potentially run in parallel without 
+			sharing state), then the product A &bigotimes; B can be produced.
+		</p>
+		<p>
+			The &bigotimes; &vdash; rule says if A and B are demanded in a transaction,
+			then that transaction can be rewritten to demand A &bigotimes; B. This 
+			means that all resources on the left-hand side of the sequent implicitly
+			form a times-product. It also means that any transaction can only demand 
+			one resource; if it has several components, each component must have been
+			produced by a separate independent transaction. This guarantees that the 
+			order of execution of the transactions that produce what is demanded by
+			the current transaction does not affect the final outcome. In this respect,
+			&bigotimes; guarantees safe concurrency.
+		</p>
+		<p>
+			Notice how two transactions are required to produce a times-product but 
+			only one transaction is required to consume a times-product. This is 
+			because a times-product, <b>after it is already made</b>, is treated as one 
+			resource which can be passed into and out of transactions. <b>Before it is
+			made</b>, each component must be produced which requires a transaction.
+		</p>
+	</section>
+	<section id="par">
+		<header>
+			<h3>5. Multiplicative disjunction</h3>
+		</header>
+		<figure>
+			<table class="centered centered-text">
+				<thead class="shaded">
+					<tr>
+						<th>Assumptions</th>
+						<th>Conclusion</th>
+						<th>Rule</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr>
+						<td>
+							&Gamma;, A &vdash; &Delta;<br>
+							&Theta;, B &vdash; &Lambda;
+						</td>
+						<td>
+							&Gamma;, &Theta;, A &#8523; B &vdash; &Delta;, &Lambda;
+						</td>
+						<td>
+							&#8523; &vdash;
+						</td>
+					</tr>
+					<tr>
+						<td>&Gamma; &vdash; A, B, &Delta;</td>
+						<td>&Gamma; &vdash; A &#8523; B, &Delta;</td>
+						<td>&vdash; &#8523;</td>
+					</tr>
+				</tbody>
+			</table>
+		</figure>
+		<p>
+			If &bigotimes; means multiple resources treated as a single resource, then
+			the simplest definition of &#8523; (<em>par</em>) is: multiple resources
+			<b>not</b> treated as a single resource.
+		</p>
+		<p>
+			The resource A &#8523; B can be introduced in the &#8523; &vdash; rule if 
+			A and B are to be consumed separately: meaning that each component is 
+			consumed asynchronously and concurrently with the rest.
+		</p>
+		<p>
+			In the &vdash; &#8523; rule, any transaction that produces an A and B can 
+			be rewritten to produce A &#8523; B instead. Therefore the entire 
+			right-hand side of a sequent is an implicit par-product. Considered with
+			the &bigotimes; &vdash; rule, every transaction takes the implicit form:
+		</p>
+		<p>
+			A<sub>1</sub> &bigotimes; ... A<sub>n</sub> &vdash; B<sub>1</sub> &#8523; ... 
+			B<sub>n</sub>
+		</p>
+		<p>
+			This means that a transaction cannot begin until the evaluation of it's 
+			inputs have converged and synchronized together. Also the outputs of 
+			a terminated transaction can diverge and be consumed asynchronously.
+		</p>
+		<p>&#8523; is dual to &bigotimes; for the following reasons:</p>
+		<ul>
+			<li>
+				&#8523; is consumed by multiple transaction while &bigotimes; is 
+				consumed by a single transaction.
+			</li>
+			<li>
+				&#8523; is produced by a single transaction while &bigotimes; is 
+				produced by multiple transactions.
+			</li>
+		</ul>
+		<p class="shaded padded">
+			<b>The shape of a transaction then takes the form of an hourglass or 
+			wormhole. Inputs and outputs go into or out of a funnel. The multiplicative 
+			aspect of times and par deal with the multiplicity of resources in space 
+			and the multiplicity of their respective exchanges in time.</b>
+		</p>
+	</section>
+	<section id="with">
+		<header>
+			<h3>6. Additive conjunction</h3>
+		</header>
+		<figure>
+			<table class="centered centered-text">
+				<thead class="shaded">
+					<tr>
+						<th>Assumptions</th>
+						<th>Conclusion</th>
+						<th>Rule</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr>
+						<td>
+							&Gamma; &vdash; A, &Delta;<br>
+							&Gamma; &vdash; B, &Delta;
+						</td>
+						<td>&Gamma; &vdash; A &amp; B, &Delta;</td>
+						<td>&vdash; &amp;</td>
+					</tr>
+					<tr>
+						<td>&Gamma;, A &vdash; &Delta;</td>
+						<td>&Gamma;, A &amp; B &vdash; &Delta;</td>
+						<td>&amp;<sub>1</sub> &vdash;</td>
+					</tr>
+					<tr>
+						<td>&Gamma;, B &vdash; &Delta;</td>
+						<td>&Gamma;, A &amp; B &vdash; &Delta;</td>
+						<td>&amp;<sub>2</sub> &vdash;</td>
+					</tr>
+				</tbody>
+			</table>
+		</figure>
+		<p>
+			The additive connectives deal with transactions that can consume or 
+			produce alternative resources rather than the same resource every time.
+		</p>
+		<p>
+			If a transaction is always capable of producing any of A or B, then it can 
+			produce A &amp; B instead. If a transaction can consume an A, then it can 
+			consume any with-sum that has A as an alternative component.
+		</p>
+		<p>
+			&amp; (with) can be produced if <b>any</b> of it's alternative components 
+			can be produced and it can be consumed if <b>one</b> of it's alternative 
+			components can be consumed. The choice of what alternative component to 
+			consume is free for the consumer of the transaction. The producer of the 
+			transaction must be ready to produce whatever is chosen.
+		</p>
+		<p>
+			A language can implement this as a mechanism for lazy evaluation. A 
+			with-sum A &amp; B that evaluates between context states &Gamma; and 
+			&Delta; can be stored as:
+		</p>
+		<p>
+			(&Gamma; &bigotimes; ((&Gamma; &#8888; A &#8523; &Delta;) &bigotimes; 
+			(&Gamma; &#8888; B &#8523; &Delta;)))
+		</p>
+		<p>
+			A primitive operation can be defined to eliminate this by applying either 
+			of the functions to &Gamma; to obtain A or B along with the new context 
+			&Delta;.
+		</p>
+	</section>
+	<section id="plus">
+		<header>
+			<h3>7. Additive disjunction</h3>
+		</header>
+		<figure>
+			<table class="centered centered-text">
+				<thead class="shaded">
+					<tr>
+						<th>Assumptions</th>
+						<th>Conclusion</th>
+						<th>Rule</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr>
+						<td>
+							&Gamma;, A &vdash; &Delta;<br>
+							&Gamma;, B &vdash; &Delta;
+						</td>
+						<td>&Gamma;, A &bigoplus; B &vdash; &Delta;</td>
+						<td>&bigoplus; &vdash;</td>
+					</tr>
+					<tr>
+						<td>&Gamma; &vdash; A, &Delta;</td>
+						<td>&Gamma; &vdash; A &bigoplus; B, &Delta;</td>
+						<td>&vdash; &bigoplus;<sub>1</sub></td>
+					</tr>
+					<tr>
+						<td>&Gamma; &vdash; B, &Delta;</td>
+						<td>&Gamma; &vdash; A &bigoplus; B, &Delta;</td>
+						<td>&vdash; &bigoplus;<sub>2</sub></td>
+					</tr>
+				</tbody>
+			</table>
+		</figure>
+		<p>
+			&bigoplus; (<em>plus</em>) reverses the freedom of choice from the 
+			&amp; connective; the consumer must now be able to handle whatever 
+			alternative is received from the producer.
+		</p>
+		<p>
+			The plus-sum corresponds to the tagged union found in many languages 
+			with functional aspects. It is dual to &amp; for the following reasons:
+		</p>
+		<ul>
+			<li>
+				&bigoplus; is consumed by one of multiple possible transactions while
+				&amp; is consumed by one possible transaction.
+			</li>
+			<li>
+				&bigoplus; is produced by one possible transaction while &amp; is 
+				produced by multiple possible transactions.
+			</li>
+		</ul>
+	</section>
+	<section id="end">
+		<header>
+			<h3>8. Conclusion</h3>
+		</header>
+		<p>
+			These are the simplified interpretations of the main linear logic 
+			connectives:
+		<ul>
+			<li>
+				&bigotimes; (<em>times</em>) - 
+				Multiple resources that cannot be split apart and must be consumed as 
+				a whole.
+			</li>
+			<li>
+				&#8523; (<em>par</em>) -
+				Multiple resources that are always split apart and must be consumed in
+				pieces.
+			</li>
+			<li>
+				&amp; (<em>with</em>) -
+				Multiple potential resources of which a chosen one will be produced
+			</li>
+			<li>
+				&bigoplus; (<em>plus</em>) -
+				Multiple potential resources of which a random one will be consumed
+			</li>
+		</ul>
+	</section>
+</article>
+

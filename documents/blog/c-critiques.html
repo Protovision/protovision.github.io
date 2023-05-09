@@ -1,556 +1,559 @@
-<header class="top-border">
-	<h2>C Critiques</h2>
-	by Mark Swoope<br>
-	<time datetime="2022-10-11">2022-10-11</time>
-</header>
-<p>
-	There are many online posts that are criticisms of the C language, this is yet 
-	another one. This lighter post serves as leisure for me while I rest from 
-	my attempt to study type theory and lambda calculi.
-</p>
-<p>
-	The C language, despite all it's criticism is still in the top 3 used 
-	languages today, it even beats C++ and JavaScript according to the TIOBE 
-	index. New languages made today look like C with the goal of being a better 
-	C or C++.
-</p>
-<p>
-	As ugly and unergonomic certain common patterns can be when implementing 
-	them in C, this language's loyalty lies in the affirmed value of doing
-	things manually and maintaining significant control over the generated 
-	machine code: this control puts the responsibility of both speed and 
-	correctness in the hands of the programmer. Programmers who feel themselves
-	to be competent do not want to be told what is safe/unsafe and they do not
-	want to be coerced into using common idioms. For them, a language is not 
-	an assistive tool for proving algorithmic correctness; for them, a language
-	is an abbreviation of machine code.
-</p>
-<p>
-	C's value lies in it's anti-academic, straight-forward approach to 
-	programming. It does not burden uninitiated coders with the mental overhead
-	of higher-order and algebraic types. It provides minimal abstractions 
-	for low-level imperative programming. 
-</p>
-<p>
-	With that said, the language has significantly aged and therefore it is 
-	burdened with design decisions that, even if they were a good idea at the 
-	time, have now become obsolete. As way back as 2003, Dennis Ritchie, the 
-	creator of C, recognized problems in his language as he wrote 
-	<cite>
+<article>
+	<header class="top-border">
+		<h2>C Critiques</h2>
+		by Mark Swoope<br>
+		<time datetime="2022-10-11">2022-10-11</time>
+	</header>
+	<p>
+		There are many online posts that are criticisms of the C language, this is yet 
+		another one. This lighter post serves as leisure for me while I rest from 
+		my attempt to study type theory and lambda calculi.
+	</p>
+	<p>
+		The C language, despite all it's criticism is still in the top 3 used 
+		languages today, it even beats C++ and JavaScript according to the TIOBE 
+		index. New languages made today look like C with the goal of being a better 
+		C or C++.
+	</p>
+	<p>
+		As ugly and unergonomic certain common patterns can be when implementing 
+		them in C, this language's loyalty lies in the affirmed value of doing
+		things manually and maintaining significant control over the generated 
+		machine code: this control puts the responsibility of both speed and 
+		correctness in the hands of the programmer. Programmers who feel themselves
+		to be competent do not want to be told what is safe/unsafe and they do not
+		want to be coerced into using common idioms. For them, a language is not 
+		an assistive tool for proving algorithmic correctness; for them, a language
+		is an abbreviation of machine code.
+	</p>
+	<p>
+		C's value lies in it's anti-academic, straight-forward approach to 
+		programming. It does not burden uninitiated coders with the mental overhead
+		of higher-order and algebraic types. It provides minimal abstractions 
+		for low-level imperative programming. 
+	</p>
+	<p>
+		With that said, the language has significantly aged and therefore it is 
+		burdened with design decisions that, even if they were a good idea at the 
+		time, have now become obsolete. As way back as 2003, Dennis Ritchie, the 
+		creator of C, recognized problems in his language as he wrote 
+		<cite>
+			<a
+				rel="external noopener noreferrer"
+				href="https://www.bell-labs.com/usr/dmr/www/chist.html">
+				The Development of the C Language.
+			</a>
+		</cite>
+		These problems he recognized were:
+	</p>
+	<ol>
+		<li>
+			The bitwise operators having lower precedence than the comparison 
+			operators due to the fact that the short-circuiting logical operators
+			were introduced late to the language
+		</li>
+		<li>
+			<q>
+				the incomplete integration of the syntax of the preprocessor with
+				the rest of the language
+			</q>
+		</li>
+		<li>
+			<q>the relationship between arrays and pointers</q>, referring 
+			perhaps to the confusion regarding the implicit conversion rules 
+			between arrays and pointers
+		</li>
+		<li>
+			<q>the way in which declaration syntax mimics expression syntax</q>, 
+			referring perhaps to the comma as both a declaration separator and an
+			expression operator
+		</li>
+		<li>
+			the parentheses required to distinguish between pointers to functions 
+			and pointers returned from functions due to C's <q>inside-out</q> syntax
+			style
+		</li>
+		<li>
+			Null-terminated strings that make <q>certain string operations more 
+			expensive</q> than having length-prefixed strings
+		</li>
+		<li>
+			the ability for pointers to possibly alias array elements, making 
+			optimization harder
+		</li>
+		<li>
+			poor modular support
+		</li>
+		<li>
+			dynamic memory allocation being a library routine rather than a language 
+			primitive as well as the burden of manual memory management
+		</li>
+	</ol>
+	<p>
+		Before I add my own critiques, I would like to first comment on his 
+		critiques of his own language.
+	</p>
+	<h3>Bitwise operator precedence</h3>
+	<p>
+		I have recently been experimenting with a programming style in C where I 
+		try to avoid using the logical operators for the sake of avoiding hidden
+		control flow. Therefore the first critique of the bitwise operator 
+		precedence is not something that bothers me, indeed I prefer the bitwise 
+		operators having their current precedence since I use them as primary 
+		operators for multi-predicate conditional expressions. Because they do not
+		short-circuit and generate less machine code, they are faster than their 
+		logical counterparts and preferrable especially when short-circuiting is 
+		not required. The bitwise operators also self-discipline the programmer 
+		into correctly only using boolean subexpressions within conditional contexts
+		rather than lazily depending on implicit conversions just so that one can
+		avoid typing <code>== 0</code>.
+	</p>
+	<h3>Poor integration of the preprocessor</h3>
+	<p>
+		The preprocessor is very brutal. It's text-based and has zero awareness of 
+		the language syntax or it's type system and that makes it dangerous. C 
+		lacks real dependent types and polymorphism yet the preprocessor doesn't aid 
+		much if at all in getting closer to manually rolling your own. There are a 
+		number of <q>C metaprogramming libraries</q> that are composed of unreadable,
+		magical preprocessor hacks that requires using C with an ugly alien syntax
+		that does not seem like a worthwhile tradeoff versus manually specifying 
+		a virtual method table at the beginning of your structs.
+	</p>
+	<p>
+		What is also annoying is the existence of <q>header-only libraries</q> 
+		that drastically increase compilation time and unnecessarily expose 
+		implementation details in a file that is supposed to only outline an
+		interface. These are created for programmers who are too lazy or incompetent 
+		to learn how to use makefiles and compile separate translation units.
+	</p>
+	<h3>Poor modular support</h3>
+	<p>
+		The preprocessor critique goes hand in hand with C's not so obvious modular
+		support. For me, C's modular support is not bad but it is not obvious as 
+		C uses different terminology. In C, a module is called a <q>translation 
+		unit</q>; to import a module, you must use the preprocessor to include 
+		that module's interface declarations and then you must use the compiler 
+		with that module's implementation source file; to export a variable or 
+		function from a module, you declare it at file scope (optionally as 
+		<code>extern</code> to be explicit); to make a file-scope variable or 
+		function private in a module, you declare it with <code>static</code>. 
+	</p>
+	<p>
+		The paths that the compiler searches to find module interfaces (header files) 
+		and modules (source files) can be configured as a compiler option. This all
+		requires reading manuals and is not very obvious but it is learnable. 
+		Module dependencies, however are more involved and require separate tools 
+		such as build system scripting and this a good complaint to have. C does
+		have decent support for modules, what it doesn't have is a standard 
+		module/package manager and I believe this is what people actually want: 
+		they want to be able to open the terminal and type 
+		<code>cpm install isOdd</code> and then type <code>import isOdd;</code> 
+		from their source file. I think a standard package manager for C would be a 
+		tall order for such a small and portable language and the way C libraries 
+		are managed by Linux package managers is sufficient. 
+	</p>
+	<p>
+		Another thing that comes up is C's lack of namespaces. I agree that the 
+		problem that namespaces tries to solve should be addressed in C. If C 
+		would support modules, then modules can also act as their own namespaces 
+		with the ability for modules to be nested; thus the need for namespaces 
+		as a specialized entity would not be required.
+	</p>
+	<h3>C's <q>inside-out</q> syntax</h3>
+	<p>
+		This is a common criticism of C. It's syntax would be much better if types
+		were simply read left-to-right. The existence of
 		<a
 			rel="external noopener noreferrer"
-			href="https://www.bell-labs.com/usr/dmr/www/chist.html">
-			The Development of the C Language.
-		</a>
-	</cite>
-	These problems he recognized were:
-</p>
-<ol>
-	<li>
-		The bitwise operators having lower precedence than the comparison 
-		operators due to the fact that the short-circuiting logical operators
-		were introduced late to the language
-	</li>
-	<li>
-		<q>
-			the incomplete integration of the syntax of the preprocessor with
-			the rest of the language
-		</q>
-	</li>
-	<li>
-		<q>the relationship between arrays and pointers</q>, referring 
-		perhaps to the confusion regarding the implicit conversion rules 
-		between arrays and pointers
-	</li>
-	<li>
-		<q>the way in which declaration syntax mimics expression syntax</q>, 
-		referring perhaps to the comma as both a declaration separator and an
-		expression operator
-	</li>
-	<li>
-		the parentheses required to distinguish between pointers to functions 
-		and pointers returned from functions due to C's <q>inside-out</q> syntax
-		style
-	</li>
-	<li>
-		Null-terminated strings that make <q>certain string operations more 
-		expensive</q> than having length-prefixed strings
-	</li>
-	<li>
-		the ability for pointers to possibly alias array elements, making 
-		optimization harder
-	</li>
-	<li>
-		poor modular support
-	</li>
-	<li>
-		dynamic memory allocation being a library routine rather than a language 
-		primitive as well as the burden of manual memory management
-	</li>
-</ol>
-<p>
-	Before I add my own critiques, I would like to first comment on his 
-	critiques of his own language.
-</p>
-<h3>Bitwise operator precedence</h3>
-<p>
-	I have recently been experimenting with a programming style in C where I 
-	try to avoid using the logical operators for the sake of avoiding hidden
-	control flow. Therefore the first critique of the bitwise operator 
-	precedence is not something that bothers me, indeed I prefer the bitwise 
-	operators having their current precedence since I use them as primary 
-	operators for multi-predicate conditional expressions. Because they do not
-	short-circuit and generate less machine code, they are faster than their 
-	logical counterparts and preferrable especially when short-circuiting is 
-	not required. The bitwise operators also self-discipline the programmer 
-	into correctly only using boolean subexpressions within conditional contexts
-	rather than lazily depending on implicit conversions just so that one can
-	avoid typing <code>== 0</code>.
-</p>
-<h3>Poor integration of the preprocessor</h3>
-<p>
-	The preprocessor is very brutal. It's text-based and has zero awareness of 
-	the language syntax or it's type system and that makes it dangerous. C 
-	lacks real dependent types and polymorphism yet the preprocessor doesn't aid 
-	much if at all in getting closer to manually rolling your own. There are a 
-	number of <q>C metaprogramming libraries</q> that are composed of unreadable,
-	magical preprocessor hacks that requires using C with an ugly alien syntax
-	that does not seem like a worthwhile tradeoff versus manually specifying 
-	a virtual method table at the beginning of your structs.
-</p>
-<p>
-	What is also annoying is the existence of <q>header-only libraries</q> 
-	that drastically increase compilation time and unnecessarily expose 
-	implementation details in a file that is supposed to only outline an
-	interface. These are created for programmers who are too lazy or incompetent 
-	to learn how to use makefiles and compile separate translation units.
-</p>
-<h3>Poor modular support</h3>
-<p>
-	The preprocessor critique goes hand in hand with C's not so obvious modular
-	support. For me, C's modular support is not bad but it is not obvious as 
-	C uses different terminology. In C, a module is called a <q>translation 
-	unit</q>; to import a module, you must use the preprocessor to include 
-	that module's interface declarations and then you must use the compiler 
-	with that module's implementation source file; to export a variable or 
-	function from a module, you declare it at file scope (optionally as 
-	<code>extern</code> to be explicit); to make a file-scope variable or 
-	function private in a module, you declare it with <code>static</code>. 
-</p>
-<p>
-	The paths that the compiler searches to find module interfaces (header files) 
-	and modules (source files) can be configured as a compiler option. This all
-	requires reading manuals and is not very obvious but it is learnable. 
-	Module dependencies, however are more involved and require separate tools 
-	such as build system scripting and this a good complaint to have. C does
-	have decent support for modules, what it doesn't have is a standard 
-	module/package manager and I believe this is what people actually want: 
-	they want to be able to open the terminal and type 
-	<code>cpm install isOdd</code> and then type <code>import isOdd;</code> 
-	from their source file. I think a standard package manager for C would be a 
-	tall order for such a small and portable language and the way C libraries 
-	are managed by Linux package managers is sufficient. 
-</p>
-<p>
-	Another thing that comes up is C's lack of namespaces. I agree that the 
-	problem that namespaces tries to solve should be addressed in C. If C 
-	would support modules, then modules can also act as their own namespaces 
-	with the ability for modules to be nested; thus the need for namespaces 
-	as a specialized entity would not be required.
-</p>
-<h3>C's <q>inside-out</q> syntax</h3>
-<p>
-	This is a common criticism of C. It's syntax would be much better if types
-	were simply read left-to-right. The existence of
-	<a
-		rel="external noopener noreferrer"
-		href="https://cdecl.org">
-		cdecl.org
-	</a> is a case in point. This inside-out syntax makes the interaction of 
-	pointer, array, and function syntax ambiguous for both the human and the 
-	compiler unless a significant number of parentheses are used.
-</p>
-<p>
-	We aleady see C-like languages today where something like 
-</p>
-<figure>
-	<pre class="no-margin code padded">
-		char (*(*x[3])())[5]
-	</pre>
-</figure>
-<p>
-	is expressed as 
-</p>
-<figure>
-	<pre class="no-margin code padded">
-		x : [3]*(() -&gt; *[5]char)
-	</pre>
-</figure>
-<h3>Type placement in declarations</h3>
-<p>
-	It is becoming a minimum requirement of developers for languages to have 
-	type inference based on initializing expressions. C does not have this
-	except through non-standard compiler extensions and because of the type
-	placement in variable declarations, these compiler extensions must make 
-	up a new keyword in place of the missing type that is to be inferred. 
-</p>
-<p>
-	C++ has type inference at the cost of making users type <code>auto</code> 
-	which would not be necessary if C originally made declarations look like
-	<code>x : T = e</code> rather than <code>T x = e</code>. Now C++ users 
-	must type <code>auto x = e</code> rather than simply <code>x = e</code>;
-	this, by the way, makes C++ break full backwards compatability with C by
-	changing the semantics of <code>auto</code>.
-</p>
-<p>
-	Type inference, which is desirable, is the reason that people generally 
-	agree that the type should come after the name, not before it. 
-</p>
-<h3>Null pointers and null-terminated strings</h3>
-<p>
-	There is a growing consensus that both null pointers and null-terminated 
-	byte strings (NTBS) are bad and that Maybe types and length-prefixed byte
-	strings (LPBS) are better alternatives. We can see this consensus in 
-	the design of newer system languages as well as in the updates to the C++
-	standard libraries.
-</p>
-<p>
-	A programmer's virginity to using algebraic data types speaks when he says 
-	that null pointers are not problematic and easy to check for. It only 
-	appears that they are easy to check for in a language that doesn't support 
-	ADTs, type constructors, or automated error handling. On some platforms, 
-	the convention of 0 being an invalid memory address is not followed and 
-	sometimes pointers are not internally represented as simple integers. This
-	is where the C language strays from being <q>close to the metal</q> and more
-	towards being close to some abstract machine that contradicts the actual
-	platform. For cases like this, a maybe/option type is crucial.
-</p>
-<p>
-	Length-prefixed strings are also commonly seen as good and commonly 
-	reinvented in countless C libraries. It is much easier and efficient to 
-	store and read an integer than it is to perform a linear search on an
-	arbitrary length byte array in the 21st century. Dependent types, which
-	generalize length-prefixed strings and arrays, are objectively more 
-	expressive and prone to fewer errors than rudimentary NTBSs.
-</p>
-<h3>Character types</h3>
-<p>
-	<code>char, signed char, unsigned char, wchar_t, char8_t, char16_t, 
-	char32_t</code> is way too much. <code>wchar_t</code> and all it's locale
-	baggage is obsolete and bugworthy. In regards to <code>char</code>, it seems
-	to be a mistake now for C to abstract away so much so as to not even be able 
-	to make the basic assumption that your platform is using unsigned 8-bit 
-	bytes. It is a cruel rule to remember that <code>char</code> is structurally 
-	equivalent to either <code>signed char</code> or <code>unsigned char</code> 
-	but not both, all while being a type that is nominally equal to neither.
-	To figure out exactly what <code>char</code> is, one must check 
-	<code>CHAR_BIT</code> and use preprocessor wingchun to figure out if it's 
-	signed or unsigned. Some people give up and just decide to use the 
-	fixed-width integers from <code>&lt;stdint.h&gt;</code> but this is a 
-	mistake if you are not using the <code>Sint_leastN_t</code> types since 
-	some platforms may, for example, use the same width for all integers. It 
-	is especially a mistake to assume that <code>uint8_t</code> is a synonym for 
-	<code>unsigned char</code> when dealing with memory. And let's not forget 
-	that <code>int</code> can still be 16-bits on some platforms if you care 
-	about making your program cross-platform.
-</p>
-<h3>Numeric types</h3>
-<p>
-	<code>__STDC_ISO_559__</code> which is used to check if floating-point
-	types use IEEE-754 binary format, standardized in '99 yet implemented by
-	zero compilers, has been deprecated in C23 for some reason I do not know.
-	Nothing lost, nothing gained. Not having an easy way to check for 
-	IEEE-754, which 99.9% of computers use but which is not assumable under the 
-	C abstract machine, is one of the many annoying chores of coding 
-	<q>low-level</q> and <q>close to the bare metal</q> in C. Thankfully
-	the drafts of the C spec, which you can find scattered across the poorly
-	formatted standards comitee websites, contain the 30 line preprocessor 
-	code snippets on page 500 something for checking floating-point 
-	implementation for the 1985 international industry standard.
-</p>
-<p>
-	The integer types, which also suffer from abstraction, require you to 
-	know the difference between size, width, and precision before you attempt 
-	to use their operators in a way that may result in UB or IB. Don't forget 
-	to know the difference between modulo and remainder! Also don't forget 
-	that unary negation can overflow! There are so many things that can go 
-	wrong with simple integer operations as detailed in the 
-	<a
-		rel="external noopener noreferrer"
-		href="https://wiki.sei.cmu.edu/confluence/pages/viewpage.action?pageId=87152052">
-		SEI CERT C Coding Standard
-	</a>.
-</p>
-<p>
-	Integers, like the rest of the basic data types, are easy to use incorrectly
-	because you must make extensive use of the preprocessor to figure out their
-	limits and, until recently in C23, you could not even assume that they use 
-	two's complement. It does not help that C is weakly-typed: meaning implicit
-	conversions that cause data-loss all over the place. These implicit 
-	conversions can be sneaking when you are using integer constants. Remember 
-	that an integer constant can have <code>l</code>, <code>ll</code>, 
-	<code>u</code>, and <code>ull</code> postfixes which affects the type of the 
-	constant. Also the <em>usual arithmetic conversions</em> which cause 
-	<em>integer promotion</em>, especially during function calls, are all way 
-	too much to remember and a way too easy source of bugs. I would like to see
-	more system languages where all data lossy conversions are required to be 
-	explicit.
-</p>
-<h3>Expression assignments</h3>
-<p>
-	Assignments that can be used in expressions is agreed to be bad and the 
-	typing that it saves does not make it worth it over the loss of readability
-	in terms of reasoning about the program. To extend this logic, functions 
-	that access global mutable variables should also be avoided if not outright
-	banned. The most vile thing of course is the ability for preprocessor macros 
-	to capture and modify local variables. C is full of hidden mutability.
-</p>
-<h3>malloc and friends</h3>
-<p>
-	Ah, manual memory management, the brogrammer's version of raw dogging it. 
-	Double kudos if they do it in kernel mode.
-</p>
-<p>
-	Honestly, I do not mind manual memory management but <code>malloc</code> as 
-	a library function forces me to separate allocation from initialization 
-	for dynamic objects. It would be nice if <code>malloc</code> was at the 
-	language level so that I can allocate and initialize atomically so as not 
-	to leave the object in an intermediate uninitialized state between 
-	this two-phase creation process. 
-</p>
-<p>
-	The memory allocation functions are also a source of bugs during the common 
-	task in C of reinventing data structures, specifically when you are 
-	implementing a dynamic array and you are expanding it's capacity. You must
-	make sure you do not overflow <code>size_t</code> and you should hope that
-	your compiler's <code>calloc</code> implementation checks for overflows 
-	before multiplying it's two <code>size_t</code> arguments together. 
-</p>
-<p>
-	God forbid that you prefer to use signed integers for indexing rather than
-	<code>size_t</code>, that's more work for you when you have to convert 
-	back and forth between your preferred indexing type and <code>size_t</code>
-	while checking for overflows at each step in order to interact with the 
-	standard library.
-</p>
-<h3>Untagged structs</h3>
-<p>
-	If C supported the transfer of untagged structs, it would be a great step
-	forward in making it easier for functions to return multiple values and 
-	simulate Maybe types.
-</p>
-<p>
-	In C, I would like to write:
-</p>
-<figure>
-	<pre class="no-margin code padded">
-		struct { bool ok; T value; } do_something(...);
-	</pre>
-</figure>
-<p>
-	but no, they make me write:
-</p>
-<figure>
-	<pre class="no-margin code padded">
-			struct do_something_result { bool ok; T value; };<br>
-			struct do_something_result do_something(...);
-	</pre>
-</figure>
-<p>
-	If the former worked, then I would be able to 
-	<code>#define Maybe(T) struct { bool ok; T value; }</code> but C is sadistic
-	in making unnamed structs with equally typed and equally named members 
-	unequal.
-</p>
-<h3>Lack of structured breaks and continues</h3>
-<p>
-	Support for structured breaks and continues, where you can control how many
-	block levels you break out of or repeat within multi-nested blocks, would 
-	completely eliminate the need for people to use goto statements because 
-	goto is only used for 2 reasons: to break out of nested loops or to 
-	jump to the end of a function to perform cleanup.
-</p>
-<p>
-	Supporting structured branching statements would make <code>defer</code>
-	and RAII almost absolutely redundant.
-</p>
-<h3>Unsafety</h3>
-<p>
-	This is a catch-all criticism of C and it is true. There is nothing about
-	C's type system that allows you to create <em>provably correct</em> programs.
-	A few specific unsafe types in C are:
-</p>
-<ul>
-	<li>Non-disjoint unions</li>
-	<li>Unknown length arrays</li>
-	<li>Pointers to void</li>
-</ul>
-<p>
-	Common mistakes that can be made in C that a compiler may permit or not 
-	catch:
-</p>
-<ul>
-	<li>Accessing uninitialized memory</li>
-	<li>Out-of-bounds array access</li>
-	<li>Double frees</li>
-	<li>Improperly type punning</li>
-	<li>Storing mis-aligned data</li>
-	<li>Arithmetic overflows and divide-by-zero</li>
-	<li>Ignoring the return value of a function that can fail</li>
-	<li>Creating a data race, race condition, or deadlock</li>
-</ul>
-<p>
-	It should be possible and is desirable for more system languages in addition
-	to Rust to be developed that can catch these things but also give you the 
-	ability to explicitly and temporarily drop out of safety in a manner that 
-	does not affect the correctness of the rest of the program. 
-</p>
-<p>
-	I think we should have more system languages that have safe and unsafe parts 
-	both available in separate parts where the unsafe parts do not affect the 
-	safe parts. These languages should provide safe data types such as 
-	dependently-typed arrays, disjoint unions, and ownership-tracking 
-	references while the unsafe, zero-overhead versions of these types can
-	be available under special modalities.
-</p>
-<p>
-	It should be a principle of newer system languages to make the safer options
-	the preferable and the default while still making the dangerous option still
-	available. Here's a suggested list:
-</p>
-<ul>
-	<li>Prefer immutable variables over mutable ones</li>
-	<li>Prefer pure functions over impure ones</li>
-	<li>Prefer constant expressions over non-constant expressions</li>
-	<li>Prefer linear references over non-linear ones</li>
-</ul>
-<h3>Rudimentary selection and iteration</h3>
-<p>
-	C's conditional and looping statements are very basic compared to the 
-	ones available in more modern and functional languages. There are two
-	options here: embrace functional control flow or embrace imperative 
-	control flow.
-</p>
-<p>
-	If C wants to be even more imperative yet still structured in it's control
-	flow, then it should drop all it's selection and iteration statements and 
-	replace them with generic blocks with structured branching statements. This
-	will make control flow more explicit and more powerful but still safer than
-	goto statements. 
-</p>
-<p>
-	All functional control flow are expressions and they are expressed in a 
-	stateless manner that appears to happen atomically. There is no 
-	<em>iteration</em> here, that is the wrong way to think about it: rather, 
-	there are operations that concurrently update all elements of a data 
-	structure at once. There are operations that <em>fold</em> data structures
-	into a single datum and there are operations that <em>unfold</em> datum 
-	into a data structure. There is also a <em>filter</em> operation. These 
-	high-level operations are sufficient for most problems but they can make
-	system programmers feel uneasy as to their code-generation and run-time
-	cost. 
-</p>
-<p>
-	An effective system language should find ways of providing both imperative 
-	and functional style control flow in a harmonizing way so that programmers 
-	can always choose how they want to balance power with truth.
-</p>
-<h3>Pointers, restrict, and volatile</h3>
-<p>
-	The ability for pointers to be adjusted and alias array elements is powerful
-	but makes optimization and bug detection hard. C has attempted to ameliorate 
-	this by providing the <code>restrict</code> keyword but nobody is smart 
-	enough to understand how it works and therefore they don't use it. Even if 
-	you do use it properly, you can never be too sure because the compiler 
-	silently produces UB if you don't use it properly.
-</p>
-<p>
-	My understanding of <code>restrict</code> is: a 
-	<code>restrict</code>-qualified pointer to mutable data cannot alias data 
-	with other pointers unless those pointers are expressed in terms of that
-	<code>restrict</code>-qualified pointer. Also the only way a 
-	<code>restrict</code>-qualified pointer can be transferred to an outer block
-	is through the return value of a function.
-</p>
-<p>
-	<code>volatile</code> is another commonly misunderstood feature and you can 
-	find many email rants from Linus Torvalds about this matter.
-	The common misunderstanding is that volatile access equals atomic or 
-	synchronized access but this is not the case as the C abstract machine 
-	follows a single-threaded model. volatile is an anti-optimization hint 
-	that says that the compiler should not optimize-out or reorder accesses to 
-	the volatile memory. Why would you want this? Two reasons: there are 
-	situations where the volatile memory actually forms some sort of 
-	communication channel with another segment of volatile memory that the 
-	compiler has no way of knowing about. 2nd reason is that you want to 
-	self-educate yourself about the assembly code generated by unoptimized 
-	C code.
-</p>
-<p>
-	volatile is more like an anti-optimization hint which says that the 
-	compiler cannot optimize-out reads from this variable, even if it thinks 
-	it knows what the value will be, and that writes on this variable cannot 
-	be reordered, even if it thinks it won't affect other side-effect
-	depending operations.
-</p>
-<p>
-	So my criticism of C from this aspect is that both restrict and volatile act 
-	as hints to the optimizer but their definitions are not so straightforward 
-	and their correct usage is not enforced by the compiler while incorrect 
-	usage silently generates UB. 
-</p>
-<h3>Conclusion</h3>
-<p>
-	As an imperative and low-level language, C is supposed to be unsafe. I do 
-	not wish for C to be more safe despite what I wrote here. I think a better 
-	C should incorporate zero functional features. A better C should:
-</p>
-<ul>
-	<li>
-		Replace all local control flow features with simple structured branching 
-		statements
-	</li>
-	<li>
-		Allow local blocks to accept and return values
-	</li>
-	<li>
-		Remove all implicit conversions
-	</li>
-	<li>
-		Enable type inference
-	</li>
-	<li>
-		Have better modular support 
-	</li>
-	<li>
-		Enable parametric polymorphism 
-	</li>
-	<li>
-		Make constants typeless
-	</li>
-	<li>
-		Have better compile-time type information functions and allow the 
-		preprocessor to access them.
-	</li>
-	<li>
-		Make named data types use nominal type equivalency and make
-		unnamed data types use structural type equivalency. Remove type aliasing 
-		but provide compile-time operators for checking nominal and structural 
-		type equivalency respectively
-	</li>
-	<li>
-		Make pointers restricted by default and have the compiler enforce it
-	</li>
-	<li>
-		Have a dedicated dynamic memory allocating operator like C++'s new and 
-		delete, but make it optional whose support is detectable by the 
-		preprocessor.
-	</li>
-</ul>
-<p>
-	These would help make a better C. Now a safer programming language that is 
-	not a better C would probably be, as much as possible, a pure and total 
-	functional language. A better language that is not a better C nor 
-	strictly a safer language would be better in both imperative and functional 
-	aspects: harmoniously bringing in the best of both worlds.
-</p>
+			href="https://cdecl.org">
+			cdecl.org
+		</a> is a case in point. This inside-out syntax makes the interaction of 
+		pointer, array, and function syntax ambiguous for both the human and the 
+		compiler unless a significant number of parentheses are used.
+	</p>
+	<p>
+		We aleady see C-like languages today where something like 
+	</p>
+	<figure>
+		<pre class="no-margin code padded">
+			char (*(*x[3])())[5]
+		</pre>
+	</figure>
+	<p>
+		is expressed as 
+	</p>
+	<figure>
+		<pre class="no-margin code padded">
+			x : [3]*(() -&gt; *[5]char)
+		</pre>
+	</figure>
+	<h3>Type placement in declarations</h3>
+	<p>
+		It is becoming a minimum requirement of developers for languages to have 
+		type inference based on initializing expressions. C does not have this
+		except through non-standard compiler extensions and because of the type
+		placement in variable declarations, these compiler extensions must make 
+		up a new keyword in place of the missing type that is to be inferred. 
+	</p>
+	<p>
+		C++ has type inference at the cost of making users type <code>auto</code> 
+		which would not be necessary if C originally made declarations look like
+		<code>x : T = e</code> rather than <code>T x = e</code>. Now C++ users 
+		must type <code>auto x = e</code> rather than simply <code>x = e</code>;
+		this, by the way, makes C++ break full backwards compatability with C by
+		changing the semantics of <code>auto</code>.
+	</p>
+	<p>
+		Type inference, which is desirable, is the reason that people generally 
+		agree that the type should come after the name, not before it. 
+	</p>
+	<h3>Null pointers and null-terminated strings</h3>
+	<p>
+		There is a growing consensus that both null pointers and null-terminated 
+		byte strings (NTBS) are bad and that Maybe types and length-prefixed byte
+		strings (LPBS) are better alternatives. We can see this consensus in 
+		the design of newer system languages as well as in the updates to the C++
+		standard libraries.
+	</p>
+	<p>
+		A programmer's virginity to using algebraic data types speaks when he says 
+		that null pointers are not problematic and easy to check for. It only 
+		appears that they are easy to check for in a language that doesn't support 
+		ADTs, type constructors, or automated error handling. On some platforms, 
+		the convention of 0 being an invalid memory address is not followed and 
+		sometimes pointers are not internally represented as simple integers. This
+		is where the C language strays from being <q>close to the metal</q> and more
+		towards being close to some abstract machine that contradicts the actual
+		platform. For cases like this, a maybe/option type is crucial.
+	</p>
+	<p>
+		Length-prefixed strings are also commonly seen as good and commonly 
+		reinvented in countless C libraries. It is much easier and efficient to 
+		store and read an integer than it is to perform a linear search on an
+		arbitrary length byte array in the 21st century. Dependent types, which
+		generalize length-prefixed strings and arrays, are objectively more 
+		expressive and prone to fewer errors than rudimentary NTBSs.
+	</p>
+	<h3>Character types</h3>
+	<p>
+		<code>char, signed char, unsigned char, wchar_t, char8_t, char16_t, 
+		char32_t</code> is way too much. <code>wchar_t</code> and all it's locale
+		baggage is obsolete and bugworthy. In regards to <code>char</code>, it seems
+		to be a mistake now for C to abstract away so much so as to not even be able 
+		to make the basic assumption that your platform is using unsigned 8-bit 
+		bytes. It is a cruel rule to remember that <code>char</code> is structurally 
+		equivalent to either <code>signed char</code> or <code>unsigned char</code> 
+		but not both, all while being a type that is nominally equal to neither.
+		To figure out exactly what <code>char</code> is, one must check 
+		<code>CHAR_BIT</code> and use preprocessor wingchun to figure out if it's 
+		signed or unsigned. Some people give up and just decide to use the 
+		fixed-width integers from <code>&lt;stdint.h&gt;</code> but this is a 
+		mistake if you are not using the <code>Sint_leastN_t</code> types since 
+		some platforms may, for example, use the same width for all integers. It 
+		is especially a mistake to assume that <code>uint8_t</code> is a synonym for 
+		<code>unsigned char</code> when dealing with memory. And let's not forget 
+		that <code>int</code> can still be 16-bits on some platforms if you care 
+		about making your program cross-platform.
+	</p>
+	<h3>Numeric types</h3>
+	<p>
+		<code>__STDC_ISO_559__</code> which is used to check if floating-point
+		types use IEEE-754 binary format, standardized in '99 yet implemented by
+		zero compilers, has been deprecated in C23 for some reason I do not know.
+		Nothing lost, nothing gained. Not having an easy way to check for 
+		IEEE-754, which 99.9% of computers use but which is not assumable under the 
+		C abstract machine, is one of the many annoying chores of coding 
+		<q>low-level</q> and <q>close to the bare metal</q> in C. Thankfully
+		the drafts of the C spec, which you can find scattered across the poorly
+		formatted standards comitee websites, contain the 30 line preprocessor 
+		code snippets on page 500 something for checking floating-point 
+		implementation for the 1985 international industry standard.
+	</p>
+	<p>
+		The integer types, which also suffer from abstraction, require you to 
+		know the difference between size, width, and precision before you attempt 
+		to use their operators in a way that may result in UB or IB. Don't forget 
+		to know the difference between modulo and remainder! Also don't forget 
+		that unary negation can overflow! There are so many things that can go 
+		wrong with simple integer operations as detailed in the 
+		<a
+			rel="external noopener noreferrer"
+			href="https://wiki.sei.cmu.edu/confluence/pages/viewpage.action?pageId=87152052">
+			SEI CERT C Coding Standard
+		</a>.
+	</p>
+	<p>
+		Integers, like the rest of the basic data types, are easy to use incorrectly
+		because you must make extensive use of the preprocessor to figure out their
+		limits and, until recently in C23, you could not even assume that they use 
+		two's complement. It does not help that C is weakly-typed: meaning implicit
+		conversions that cause data-loss all over the place. These implicit 
+		conversions can be sneaking when you are using integer constants. Remember 
+		that an integer constant can have <code>l</code>, <code>ll</code>, 
+		<code>u</code>, and <code>ull</code> postfixes which affects the type of the 
+		constant. Also the <em>usual arithmetic conversions</em> which cause 
+		<em>integer promotion</em>, especially during function calls, are all way 
+		too much to remember and a way too easy source of bugs. I would like to see
+		more system languages where all data lossy conversions are required to be 
+		explicit.
+	</p>
+	<h3>Expression assignments</h3>
+	<p>
+		Assignments that can be used in expressions is agreed to be bad and the 
+		typing that it saves does not make it worth it over the loss of readability
+		in terms of reasoning about the program. To extend this logic, functions 
+		that access global mutable variables should also be avoided if not outright
+		banned. The most vile thing of course is the ability for preprocessor macros 
+		to capture and modify local variables. C is full of hidden mutability.
+	</p>
+	<h3>malloc and friends</h3>
+	<p>
+		Ah, manual memory management, the brogrammer's version of raw dogging it. 
+		Double kudos if they do it in kernel mode.
+	</p>
+	<p>
+		Honestly, I do not mind manual memory management but <code>malloc</code> as 
+		a library function forces me to separate allocation from initialization 
+		for dynamic objects. It would be nice if <code>malloc</code> was at the 
+		language level so that I can allocate and initialize atomically so as not 
+		to leave the object in an intermediate uninitialized state between 
+		this two-phase creation process. 
+	</p>
+	<p>
+		The memory allocation functions are also a source of bugs during the common 
+		task in C of reinventing data structures, specifically when you are 
+		implementing a dynamic array and you are expanding it's capacity. You must
+		make sure you do not overflow <code>size_t</code> and you should hope that
+		your compiler's <code>calloc</code> implementation checks for overflows 
+		before multiplying it's two <code>size_t</code> arguments together. 
+	</p>
+	<p>
+		God forbid that you prefer to use signed integers for indexing rather than
+		<code>size_t</code>, that's more work for you when you have to convert 
+		back and forth between your preferred indexing type and <code>size_t</code>
+		while checking for overflows at each step in order to interact with the 
+		standard library.
+	</p>
+	<h3>Untagged structs</h3>
+	<p>
+		If C supported the transfer of untagged structs, it would be a great step
+		forward in making it easier for functions to return multiple values and 
+		simulate Maybe types.
+	</p>
+	<p>
+		In C, I would like to write:
+	</p>
+	<figure>
+		<pre class="no-margin code padded">
+			struct { bool ok; T value; } do_something(...);
+		</pre>
+	</figure>
+	<p>
+		but no, they make me write:
+	</p>
+	<figure>
+		<pre class="no-margin code padded">
+				struct do_something_result { bool ok; T value; };<br>
+				struct do_something_result do_something(...);
+		</pre>
+	</figure>
+	<p>
+		If the former worked, then I would be able to 
+		<code>#define Maybe(T) struct { bool ok; T value; }</code> but C is sadistic
+		in making unnamed structs with equally typed and equally named members 
+		unequal.
+	</p>
+	<h3>Lack of structured breaks and continues</h3>
+	<p>
+		Support for structured breaks and continues, where you can control how many
+		block levels you break out of or repeat within multi-nested blocks, would 
+		completely eliminate the need for people to use goto statements because 
+		goto is only used for 2 reasons: to break out of nested loops or to 
+		jump to the end of a function to perform cleanup.
+	</p>
+	<p>
+		Supporting structured branching statements would make <code>defer</code>
+		and RAII almost absolutely redundant.
+	</p>
+	<h3>Unsafety</h3>
+	<p>
+		This is a catch-all criticism of C and it is true. There is nothing about
+		C's type system that allows you to create <em>provably correct</em> programs.
+		A few specific unsafe types in C are:
+	</p>
+	<ul>
+		<li>Non-disjoint unions</li>
+		<li>Unknown length arrays</li>
+		<li>Pointers to void</li>
+	</ul>
+	<p>
+		Common mistakes that can be made in C that a compiler may permit or not 
+		catch:
+	</p>
+	<ul>
+		<li>Accessing uninitialized memory</li>
+		<li>Out-of-bounds array access</li>
+		<li>Double frees</li>
+		<li>Improperly type punning</li>
+		<li>Storing mis-aligned data</li>
+		<li>Arithmetic overflows and divide-by-zero</li>
+		<li>Ignoring the return value of a function that can fail</li>
+		<li>Creating a data race, race condition, or deadlock</li>
+	</ul>
+	<p>
+		It should be possible and is desirable for more system languages in addition
+		to Rust to be developed that can catch these things but also give you the 
+		ability to explicitly and temporarily drop out of safety in a manner that 
+		does not affect the correctness of the rest of the program. 
+	</p>
+	<p>
+		I think we should have more system languages that have safe and unsafe parts 
+		both available in separate parts where the unsafe parts do not affect the 
+		safe parts. These languages should provide safe data types such as 
+		dependently-typed arrays, disjoint unions, and ownership-tracking 
+		references while the unsafe, zero-overhead versions of these types can
+		be available under special modalities.
+	</p>
+	<p>
+		It should be a principle of newer system languages to make the safer options
+		the preferable and the default while still making the dangerous option still
+		available. Here's a suggested list:
+	</p>
+	<ul>
+		<li>Prefer immutable variables over mutable ones</li>
+		<li>Prefer pure functions over impure ones</li>
+		<li>Prefer constant expressions over non-constant expressions</li>
+		<li>Prefer linear references over non-linear ones</li>
+	</ul>
+	<h3>Rudimentary selection and iteration</h3>
+	<p>
+		C's conditional and looping statements are very basic compared to the 
+		ones available in more modern and functional languages. There are two
+		options here: embrace functional control flow or embrace imperative 
+		control flow.
+	</p>
+	<p>
+		If C wants to be even more imperative yet still structured in it's control
+		flow, then it should drop all it's selection and iteration statements and 
+		replace them with generic blocks with structured branching statements. This
+		will make control flow more explicit and more powerful but still safer than
+		goto statements. 
+	</p>
+	<p>
+		All functional control flow are expressions and they are expressed in a 
+		stateless manner that appears to happen atomically. There is no 
+		<em>iteration</em> here, that is the wrong way to think about it: rather, 
+		there are operations that concurrently update all elements of a data 
+		structure at once. There are operations that <em>fold</em> data structures
+		into a single datum and there are operations that <em>unfold</em> datum 
+		into a data structure. There is also a <em>filter</em> operation. These 
+		high-level operations are sufficient for most problems but they can make
+		system programmers feel uneasy as to their code-generation and run-time
+		cost. 
+	</p>
+	<p>
+		An effective system language should find ways of providing both imperative 
+		and functional style control flow in a harmonizing way so that programmers 
+		can always choose how they want to balance power with truth.
+	</p>
+	<h3>Pointers, restrict, and volatile</h3>
+	<p>
+		The ability for pointers to be adjusted and alias array elements is powerful
+		but makes optimization and bug detection hard. C has attempted to ameliorate 
+		this by providing the <code>restrict</code> keyword but nobody is smart 
+		enough to understand how it works and therefore they don't use it. Even if 
+		you do use it properly, you can never be too sure because the compiler 
+		silently produces UB if you don't use it properly.
+	</p>
+	<p>
+		My understanding of <code>restrict</code> is: a 
+		<code>restrict</code>-qualified pointer to mutable data cannot alias data 
+		with other pointers unless those pointers are expressed in terms of that
+		<code>restrict</code>-qualified pointer. Also the only way a 
+		<code>restrict</code>-qualified pointer can be transferred to an outer block
+		is through the return value of a function.
+	</p>
+	<p>
+		<code>volatile</code> is another commonly misunderstood feature and you can 
+		find many email rants from Linus Torvalds about this matter.
+		The common misunderstanding is that volatile access equals atomic or 
+		synchronized access but this is not the case as the C abstract machine 
+		follows a single-threaded model. volatile is an anti-optimization hint 
+		that says that the compiler should not optimize-out or reorder accesses to 
+		the volatile memory. Why would you want this? Two reasons: there are 
+		situations where the volatile memory actually forms some sort of 
+		communication channel with another segment of volatile memory that the 
+		compiler has no way of knowing about. 2nd reason is that you want to 
+		self-educate yourself about the assembly code generated by unoptimized 
+		C code.
+	</p>
+	<p>
+		volatile is more like an anti-optimization hint which says that the 
+		compiler cannot optimize-out reads from this variable, even if it thinks 
+		it knows what the value will be, and that writes on this variable cannot 
+		be reordered, even if it thinks it won't affect other side-effect
+		depending operations.
+	</p>
+	<p>
+		So my criticism of C from this aspect is that both restrict and volatile act 
+		as hints to the optimizer but their definitions are not so straightforward 
+		and their correct usage is not enforced by the compiler while incorrect 
+		usage silently generates UB. 
+	</p>
+	<h3>Conclusion</h3>
+	<p>
+		As an imperative and low-level language, C is supposed to be unsafe. I do 
+		not wish for C to be more safe despite what I wrote here. I think a better 
+		C should incorporate zero functional features. A better C should:
+	</p>
+	<ul>
+		<li>
+			Replace all local control flow features with simple structured branching 
+			statements
+		</li>
+		<li>
+			Allow local blocks to accept and return values
+		</li>
+		<li>
+			Remove all implicit conversions
+		</li>
+		<li>
+			Enable type inference
+		</li>
+		<li>
+			Have better modular support 
+		</li>
+		<li>
+			Enable parametric polymorphism 
+		</li>
+		<li>
+			Make constants typeless
+		</li>
+		<li>
+			Have better compile-time type information functions and allow the 
+			preprocessor to access them.
+		</li>
+		<li>
+			Make named data types use nominal type equivalency and make
+			unnamed data types use structural type equivalency. Remove type aliasing 
+			but provide compile-time operators for checking nominal and structural 
+			type equivalency respectively
+		</li>
+		<li>
+			Make pointers restricted by default and have the compiler enforce it
+		</li>
+		<li>
+			Have a dedicated dynamic memory allocating operator like C++'s new and 
+			delete, but make it optional whose support is detectable by the 
+			preprocessor.
+		</li>
+	</ul>
+	<p>
+		These would help make a better C. Now a safer programming language that is 
+		not a better C would probably be, as much as possible, a pure and total 
+		functional language. A better language that is not a better C nor 
+		strictly a safer language would be better in both imperative and functional 
+		aspects: harmoniously bringing in the best of both worlds.
+	</p>
+</article>
+

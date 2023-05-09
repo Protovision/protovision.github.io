@@ -1,42 +1,17 @@
 /* Variables */
 
 :root{
-	--color-dark-red:#800;
-	--color-red:#b00;
-	--color-light-red:#e00;
-	--color-dark-yellow:#880;
-	--color-yellow:#bb0;
-	--color-light-yellow:#ee0;
-	--color-dark-green:#080;
-	--color-green:#0b0;
-	--color-light-green:#0e0;
-	--color-dark-cyan:#088; 
-	--color-cyan:#0bb; 
-	--color-light-cyan:#0ee;
-	--color-dark-blue:#008;
-	--color-blue:#00b;
-	--color-light-blue:#00e;
-	--color-dark-pink:#808;
-	--color-pink:#b0b;
-	--color-light-pink:#e0e;
-	--color-black:#111;
-	--color-dark-gray:#222;
-	--color-medium-dark-gray:#333;
-	--color-medium-light-gray:#ccc;
-	--color-light-gray:#ddd;
-	--color-white:#eee;
-	--color-dark-accent:var(--color-dark-cyan);
-	--color-accent:var(--color-cyan);
-	--color-light-accent:var(--color-light-cyan);
-	--font-family-text:'Swoope-Edited Inter','Swoope-Edited STIX Two Math',sans-serif;
-	--font-family-code:'Swoope-Edited Azeret Mono',monospace;
+	color-scheme:light dark;
+	--font-family-text:system-ui,math,sans-serif;/*'Swoope-Edited STIX Two Math';*/
+	--font-family-quote:ui-serif,serif;
+	--font-family-code:ui-monospace,monospace;
 	--font-weight-regular:400;
 	--font-weight-semibold:500;
-	--font-weight-bold:600;
-	--font-display:optional;}
+	--font-weight-bold:600;}
 
 /* Fonts */
 
+/*
 @font-face{
 	font-family:'Swoope-Edited Inter';
 	font-style:normal;
@@ -67,6 +42,7 @@
 	font-weight:400;
 	font-display:block;
 	src:url('fonts/stix-two-math/stix-two-math-normal-400.woff2') format('woff2');}
+*/
 
 /* Reset */
 
@@ -92,7 +68,6 @@ ul{
 table{
 	border-collapse:collapse;
 	max-width:100%;}
-
 
 /* Typography */
 
@@ -294,28 +269,28 @@ main{padding:0.75em;}
 		min-height:auto;}
 	#main-nav,#main-footer{display:none;}}
 
-
 /* Styling */
 
 ::selection{
-	background:var(--color-light-yellow);}
+	background:Mark;
+	color:MarkText;}
 mark{
 	text-decoration:none;
-	background-color:var(--color-light-yellow);}
+	background-color:Mark;
+	color:MarkText;}
 body{
-	background-color:var(--color-white);
-	color:var(--color-black);
+	background-color:Canvas;
+	color:CanvasText;
 	font-family:var(--font-family-text);
 	print-color-adjust:exact!important;}
 .code,code,samp,kbd{
-	font-family:var(--font-family-code);
-	background-color:var(--color-light-gray);}
-main{
-	border-top:0.5em solid var(--color-dark-accent);}
+	font-family:var(--font-family-code);}
 a{
-	color:var(--color-dark-accent);}
+	color:LinkText;}
 a:active{
-	color:var(--color-accent);}
+	color:ActiveText;}
+q,blockquote{
+	font-family:var(--font-family-quote);}
 .code,code{
 	padding:0 0.25em;}
 .code{
@@ -343,13 +318,12 @@ a:active{
 .middled-text{
 	vertical-align:middle;}
 .accented{
-	border-left:0.375em solid var(--color-dark-accent);}
+	border-left:0.375em solid AccentColor;}
 .margined{
 	margin:0.75em;}	
 .padded{
 	padding:0.75em;}
-.shaded{
-	background-color:var(--color-light-gray);}
+.shaded{}
 .single-spaced{
 	line-height:1.0;}
 .one-and-half-spaced{
@@ -371,34 +345,6 @@ a:active{
 	opacity:1;
 	visibility:visible;
 	transition:visibility 0s linear 0s,opacity 0.2s linear;}
-@media screen and (min-width:52em){
-	body{
-		background-color:var(--color-medium-light-gray);}
-	main{
-		background-color:var(--color-white);}}
-@media screen and (prefers-color-scheme:dark){
-	::selection{
-		background:var(--color-yellow);
-		color:var(--color-black);}
-	mark{
-		background-color:var(--color-yellow);
-		color:var(--color-black);}
-	body{
-		background-color:var(--color-dark-gray);
-		color:var(--color-white);}
-	main{
-		border-top-color:var(--color-light-accent);}
-	a{
-		color:var(--color-light-accent);}
-	a:active{
-		color:var(--color-accent);}
-	.shaded,.code,code,samp,kbd{
-		background-color:var(--color-medium-dark-gray);}
-	.accented{
-		border-left-color:var(--color-light-accent);}}
-@media screen and (prefers-color-scheme:dark) and (min-width:52em){
-	body{background-color:var(--color-black);}
-	main{background-color:var(--color-dark-gray);}}
 @media print{
 	main{
 		border-top:none;}

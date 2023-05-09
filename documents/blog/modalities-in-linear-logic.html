@@ -1,298 +1,301 @@
-<header class="top-border">
-	<h2>Modalities in Linear Logic</h2>
-	by Mark Swoope<br>
-	<time datetime="2022-10-17">2022-10-17</time>
-</header>
-<p>
-	Here I interpret the two-sided sequent calculus rules for the modalities 
-	present in linear logic. Please see my 
-	<a href="#!/documents/blog/linear-logic.html">
-		previous post on linear logic
-	</a> for an interpretation of the binary connectives.
-</p>
-<p>
-	The modalities are initiated by the unary exponential connectives of linear 
-	logic in order to facilitate the use of non-linear terms. I do not think 
-	that these exponentials permit the arbitrary conversion of a linear term 
-	into a non-linear one. The exponential rules, taken from 
-	<a 
-		rel="external noopener noreferrer"
-		href="https://plato.stanford.edu/entries/logic-linear/#SeqCal">
-		the Linear Logic entry from the Stanford Encyclopedia of Philosophy
-	</a> are as follows:
-</p>
-<figure>
-	<table class="centered centered-text">
-		<thead class="shaded">
-			<tr>
-				<th>Assumption</th>
-				<th>Conclusion</th>
-				<th>Rule</th>
-			</tr>
-		</thead>
-		<tbody>
-			<tr>
-				<td>
-					&Delta; &vdash; &Gamma;
-				</td>
-				<td>
-					&Delta;, ! &Beta; &vdash; &Gamma;
-				</td>
-				<td>
-					! W
-				</td>
-			</tr>
-			<tr>
-				<td>
-					&Delta; &vdash; &Gamma;
-				</td>
-				<td>
-					&Delta; &vdash; ? &Beta;, &Gamma;
-				</td>
-				<td>
-					? W
-				</td>
-			</tr>
-			<tr>
-				<td>
-					&Delta;, ! &Beta;, ! &Beta; &vdash; &Gamma;
-				</td>
-				<td>
-					&Delta;, ! &Beta; &vdash; &Gamma;
-				</td>
-				<td>
-					! C
-				</td>
-			</tr>
-			<tr>
-				<td>
-					&Delta; &vdash; ? &Beta;, ? &Beta;, &Gamma;
-				</td>
-				<td>
-					&Delta; &vdash; ? &Beta;, &Gamma;
-				</td>
-				<td>
-					? C
-				</td>
-			</tr>
-			<tr>
-				<td>
-					&Delta;, &Beta; &vdash; &Gamma;
-				</td>
-				<td>
-					&Delta;, ! &Beta; &vdash; &Gamma;
-				</td>
-				<td>
-					! D
-				</td>
-			</tr>
-			<tr>
-				<td>
-					&Delta; &vdash; &Beta;, &Gamma;
-				</td>
-				<td>
-					&Delta; &vdash; ? &Beta;, &Gamma;
-				</td>
-				<td>
-					? D
-				</td>
-			</tr>
-			<tr>
-				<td>
-					! &Delta; &vdash; &Beta;, ? &Gamma;
-				</td>
-				<td>
-					! &Delta; &vdash; ! &Beta;, ? &Gamma;
-				</td>
-				<td>
-					! P
-				</td>
-			</tr>
-			<tr>
-				<td>
-					! &Delta;, &Beta; &vdash; ? &Gamma;
-				</td>
-				<td>
-					! &Delta;, ? &Beta; &vdash; ? &Gamma;
-				</td>
-				<td>
-					? P
-				</td>
-			</tr>
-		</tbody>
-	</table>
-</figure>
-<p>
-	The ! and ? exponentials are known as <em>of course</em> and
-	<em>why not</em>, respectively. Girard briefly gives the meaning of these
-	on page 12 of 
-	<cite>
-		<a
-			rel="external noreferrer noopener"
-			href="https://girard.perso.math.cnrs.fr/Synsem.pdf">Linear Logic: It's Syntax and Semantics</a>
-	</cite>:
-</p>
-<blockquote class="accented padded shaded">
-	<em>exponentials</em> : ! and ? are modalities : this means that 
-	!<var>A</var> is simultaneously defined on all formulas : the 
-	<em>of course</em> rule mentions a context with ?&Gamma;, which means that 
-	?&Gamma; (or !&Gamma;<sup>&bot;</sup>) is known. !<var>A</var> indicates the 
-	possibility of using <var>A</var> <em>ad libitum</em> ; it only indicates 
-	a <em>potentiality</em>, in the same way that a piece of paper on the slot
-	of a coping machine <em>can</em> be copied... but nobody would identify a 
-	copying machine with all the copies it produces ! The rules for the dual
-	(<em>why not</em>) are precisely the three basic ways of 
-	<em>actualizing</em> this potentiality : erasing (<em>weakening</em>), 
-	making a single copy (<em>dereliction</em>), duplicate ... the machine 
-	(<em>contraction</em>).
-</blockquote>
-<p>
-	On page 14 of Girard's 1986
-	<cite>
-		<a
-			rel="external noreferrer noopener"
-			href="https://girard.perso.math.cnrs.fr/linear.pdf">Linear Logic</a>
-	</cite> he explains:
-</p>
-<blockquote class="accented padded shaded">
-	The exponentials ! and ? correspond to the idea of <em>storage</em>:
+<article>
+	<header class="top-border">
+		<h2>Modalities in Linear Logic</h2>
+		by Mark Swoope<br>
+		<time datetime="2022-10-17">2022-10-17</time>
+	</header>
+	<p>
+		Here I interpret the two-sided sequent calculus rules for the modalities 
+		present in linear logic. Please see my 
+		<a href="#!/documents/blog/linear-logic.html">
+			previous post on linear logic
+		</a> for an interpretation of the binary connectives.
+	</p>
+	<p>
+		The modalities are initiated by the unary exponential connectives of linear 
+		logic in order to facilitate the use of non-linear terms. I do not think 
+		that these exponentials permit the arbitrary conversion of a linear term 
+		into a non-linear one. The exponential rules, taken from 
+		<a 
+			rel="external noopener noreferrer"
+			href="https://plato.stanford.edu/entries/logic-linear/#SeqCal">
+			the Linear Logic entry from the Stanford Encyclopedia of Philosophy
+		</a> are as follows:
+	</p>
+	<figure>
+		<table class="centered centered-text">
+			<thead class="shaded">
+				<tr>
+					<th>Assumption</th>
+					<th>Conclusion</th>
+					<th>Rule</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr>
+					<td>
+						&Delta; &vdash; &Gamma;
+					</td>
+					<td>
+						&Delta;, ! &Beta; &vdash; &Gamma;
+					</td>
+					<td>
+						! W
+					</td>
+				</tr>
+				<tr>
+					<td>
+						&Delta; &vdash; &Gamma;
+					</td>
+					<td>
+						&Delta; &vdash; ? &Beta;, &Gamma;
+					</td>
+					<td>
+						? W
+					</td>
+				</tr>
+				<tr>
+					<td>
+						&Delta;, ! &Beta;, ! &Beta; &vdash; &Gamma;
+					</td>
+					<td>
+						&Delta;, ! &Beta; &vdash; &Gamma;
+					</td>
+					<td>
+						! C
+					</td>
+				</tr>
+				<tr>
+					<td>
+						&Delta; &vdash; ? &Beta;, ? &Beta;, &Gamma;
+					</td>
+					<td>
+						&Delta; &vdash; ? &Beta;, &Gamma;
+					</td>
+					<td>
+						? C
+					</td>
+				</tr>
+				<tr>
+					<td>
+						&Delta;, &Beta; &vdash; &Gamma;
+					</td>
+					<td>
+						&Delta;, ! &Beta; &vdash; &Gamma;
+					</td>
+					<td>
+						! D
+					</td>
+				</tr>
+				<tr>
+					<td>
+						&Delta; &vdash; &Beta;, &Gamma;
+					</td>
+					<td>
+						&Delta; &vdash; ? &Beta;, &Gamma;
+					</td>
+					<td>
+						? D
+					</td>
+				</tr>
+				<tr>
+					<td>
+						! &Delta; &vdash; &Beta;, ? &Gamma;
+					</td>
+					<td>
+						! &Delta; &vdash; ! &Beta;, ? &Gamma;
+					</td>
+					<td>
+						! P
+					</td>
+				</tr>
+				<tr>
+					<td>
+						! &Delta;, &Beta; &vdash; ? &Gamma;
+					</td>
+					<td>
+						! &Delta;, ? &Beta; &vdash; ? &Gamma;
+					</td>
+					<td>
+						? P
+					</td>
+				</tr>
+			</tbody>
+		</table>
+	</figure>
+	<p>
+		The ! and ? exponentials are known as <em>of course</em> and
+		<em>why not</em>, respectively. Girard briefly gives the meaning of these
+		on page 12 of 
+		<cite>
+			<a
+				rel="external noreferrer noopener"
+				href="https://girard.perso.math.cnrs.fr/Synsem.pdf">Linear Logic: It's Syntax and Semantics</a>
+		</cite>:
+	</p>
+	<blockquote class="accented padded shaded">
+		<em>exponentials</em> : ! and ? are modalities : this means that 
+		!<var>A</var> is simultaneously defined on all formulas : the 
+		<em>of course</em> rule mentions a context with ?&Gamma;, which means that 
+		?&Gamma; (or !&Gamma;<sup>&bot;</sup>) is known. !<var>A</var> indicates the 
+		possibility of using <var>A</var> <em>ad libitum</em> ; it only indicates 
+		a <em>potentiality</em>, in the same way that a piece of paper on the slot
+		of a coping machine <em>can</em> be copied... but nobody would identify a 
+		copying machine with all the copies it produces ! The rules for the dual
+		(<em>why not</em>) are precisely the three basic ways of 
+		<em>actualizing</em> this potentiality : erasing (<em>weakening</em>), 
+		making a single copy (<em>dereliction</em>), duplicate ... the machine 
+		(<em>contraction</em>).
+	</blockquote>
+	<p>
+		On page 14 of Girard's 1986
+		<cite>
+			<a
+				rel="external noreferrer noopener"
+				href="https://girard.perso.math.cnrs.fr/linear.pdf">Linear Logic</a>
+		</cite> he explains:
+	</p>
+	<blockquote class="accented padded shaded">
+		The exponentials ! and ? correspond to the idea of <em>storage</em>:
+		<ul>
+			<li>
+				an answer of type !<var>A</var> corresponds to the idea of 
+				<em>writing</em> an answer of type <var>A</var> in some stable register
+				so that it can be used <em>ad nauseam</em>.
+			</li>
+			<li>
+				a question of type !<var>A</var> corresponds to serveral questions of 
+				type <var>A</var>, 'several' being extremely unspecified (0 times: 
+				rules (<em>W</em>?), 1 time: rule (<em>D</em>?), etc.), i.e., is an
+				iterated <em>reading</em>.
+			</li>
+		</ul>
+	</blockquote>
+	<p>
+		Here I believe <em>answer</em> means what is produced by a producer of a 
+		transaction and <em>question</em> means what is consumed by a consumer 
+		of a transaction.
+	</p>
+	<p>
+		Remember my interpretation of linear operations from my other post linked 
+		at the top of this article: every sequent represents a transaction which is 
+		analogous to a procedure call in a stack machine where the caller pushes 
+		arguments to the callee, the callee pops those arguments and pushes 
+		the results, and the caller pops the results.
+	</p>
+	<p>
+		When the caller pushes in arguments and the callee pops them out, the caller
+		is initially the producer and the callee is initially the consumer. When
+		the callee pushes in the results and the caller pops out those results, 
+		the callee finally becomes the producer and the caller finally becomes the 
+		consumer.
+	</p>
+	<p>
+		Every linear binary connective has an interpretation from the point of 
+		view of the current producer and current consumer during the two phases of 
+		a transaction. 
+	</p>
+	<p>
+		From the point of view of the consumer:
+	</p>
 	<ul>
-		<li>
-			an answer of type !<var>A</var> corresponds to the idea of 
-			<em>writing</em> an answer of type <var>A</var> in some stable register
-			so that it can be used <em>ad nauseam</em>.
-		</li>
-		<li>
-			a question of type !<var>A</var> corresponds to serveral questions of 
-			type <var>A</var>, 'several' being extremely unspecified (0 times: 
-			rules (<em>W</em>?), 1 time: rule (<em>D</em>?), etc.), i.e., is an
-			iterated <em>reading</em>.
-		</li>
+		<li>&bigotimes;: Multiple resources that must be consumed together</li>
+		<li>&#8523;: Multiple resources that must be consumed separately</li>
+		<li>&amp;: The choice of a resource to consume from a set of options</li>
+		<li>&bigoplus;: A random resource to consume from a set of possibilities</li>
 	</ul>
-</blockquote>
-<p>
-	Here I believe <em>answer</em> means what is produced by a producer of a 
-	transaction and <em>question</em> means what is consumed by a consumer 
-	of a transaction.
-</p>
-<p>
-	Remember my interpretation of linear operations from my other post linked 
-	at the top of this article: every sequent represents a transaction which is 
-	analogous to a procedure call in a stack machine where the caller pushes 
-	arguments to the callee, the callee pops those arguments and pushes 
-	the results, and the caller pops the results.
-</p>
-<p>
-	When the caller pushes in arguments and the callee pops them out, the caller
-	is initially the producer and the callee is initially the consumer. When
-	the callee pushes in the results and the caller pops out those results, 
-	the callee finally becomes the producer and the caller finally becomes the 
-	consumer.
-</p>
-<p>
-	Every linear binary connective has an interpretation from the point of 
-	view of the current producer and current consumer during the two phases of 
-	a transaction. 
-</p>
-<p>
-	From the point of view of the consumer:
-</p>
-<ul>
-	<li>&bigotimes;: Multiple resources that must be consumed together</li>
-	<li>&#8523;: Multiple resources that must be consumed separately</li>
-	<li>&amp;: The choice of a resource to consume from a set of options</li>
-	<li>&bigoplus;: A random resource to consume from a set of possibilities</li>
-</ul>
-<p>
-	From the point of view of the producer:
-</p>
-<ul>
-	<li>&bigotimes;: Multiple resources that must be produced separately</li>
-	<li>&#8523;: Multiple resources that must be produced together</li>
-	<li>&amp;: A random resource to produce from a set of possibilities</li>
-	<li>&bigoplus;: The choice of a resource to produce from a set of options</li>
-</ul>
-<p>
-	Here are my quick interpretations of ! (<em>of course</em>) and ? 
-	(<em>why not</em>) from the viewpoints of the consumer and producer,
-	respectively:
-</p>
-<p>
-	For the consumer, a ! term is a resuable voucher to consume a resource.
-	For the producer, a ! term is a recurring order to produce a resource.
-	For both the consumer and producer, a ? term is zero or more occurrences of 
-	a resource.
-</p>
-<p>
-	While the modalities specify a non-linear potentiality or actuality to their 
-	resource, the modalities themselves are also non-linear. For a consumer, 
-	a ! term represents a free service for anyone to use and spread the word of. 
-	This free service cannot be shut down by a consumer, but a consumer can 
-	choose to ignore it or not use it anymore.
-</p>
-<p>
-	For a producer, a ! term represents a pledge to permanently provide a 
-	service for free to anyone. Once this pledge has been announced, the 
-	producer should try to uphold it.
-</p>
-<p>
-	Now the ? terms represent zero or more products produced from the use of 
-	a free service. This number can be zero in the case where 
-	the producer of the free service fails to fulfill an order or fails to 
-	keep the service running.
-</p>
-<p>
-	The W rules (<em>weakening</em>) establish that a free service can be 
-	ignored by a consumer (! W) and that a producer can produce a free 
-	complementary product (? W) which can also be ignored.
-</p>
-<p>
-	The C rules (<em>contraction</em>) establish that a free service can be 
-	used more than once by a consumer (! C) and that a producer can produce 
-	multiple free complementary products.
-</p>
-<p>
-	The D rules (<em>dereliction</em>) establish that a consumer that needs 
-	a single product can instead be given access to a service that provides 
-	that product for free (! D) and that a producer that produces a single 
-	product can delegate a free service to produce it instead.
-</p>
-<p>
-	Finally, the P rules (<em>promotion</em>) establish that if a producer can
-	make a single product solely from what is provided by a free service, then
-	it can produce a new free service for that product (! P). For ? P:
-	if a free service together with a single resource can produce zero
-	or more of a product, then having zero or more than one of that resource 
-	doesn't change the truth of the statement.
-</p>
-<p>
-	An important thing to note is that ?<var>A</var> can be turned into 
-	?<var>A</var>?<var>A</var>. This can be interpreted as meaning that we have
-	a resource <var>A</var> which can be copied freely, but my interpretation 
-	permits ?<var>A</var> to include zero occurrences of <var>A</var>. So 
-	there is a real number of <var>A</var> that was produced whose instances can
-	be distributed over infinitely many ?<var>A</var>, many of which can be zero.
-</p>
-<p>
-	To go away from the <q>free service</q> analogy and more towards Girard's 
-	<q>stable register</q> or stable memory analogy: !<var>A</var> can be a 
-	freely copyable memory reference to a memory-mapped pipe for transferring 
-	data of type <var>A</var>: for the consumer, any number of <var>A</var>s can
-	be read from this pipe; for the producer, any number of <var>A</var>s can be 
-	written to this pipe. ?<var>A</var> can represent an unknown-length buffer of 
-	<var>A</var>s that was read from or written to the pipe.
-</p>
-<p>
-	While ! and ? can be applied to a non-exhaustive resource, I think it can
-	also be applied to an exhaustive resource whose use can be more than one 
-	but less than infinity or even zero. The modalities seem to deal with an
-	ungauranteed, uncertain, and/or unlimited number of resources. And so the 
-	intuition that the modalities deal with stable registers/memory, while 
-	true in that context, can be generalized as qualifiers that deal with 
-	any kind of I/O stream that at any time can be busy or empty.
-</p>
-<p>
-	Later on, I would like to explore how the modalities can be used to express
-	the interaction between linear and non-linear types, especially in regards
-	to memory safety.
-</p>
+	<p>
+		From the point of view of the producer:
+	</p>
+	<ul>
+		<li>&bigotimes;: Multiple resources that must be produced separately</li>
+		<li>&#8523;: Multiple resources that must be produced together</li>
+		<li>&amp;: A random resource to produce from a set of possibilities</li>
+		<li>&bigoplus;: The choice of a resource to produce from a set of options</li>
+	</ul>
+	<p>
+		Here are my quick interpretations of ! (<em>of course</em>) and ? 
+		(<em>why not</em>) from the viewpoints of the consumer and producer,
+		respectively:
+	</p>
+	<p>
+		For the consumer, a ! term is a resuable voucher to consume a resource.
+		For the producer, a ! term is a recurring order to produce a resource.
+		For both the consumer and producer, a ? term is zero or more occurrences of 
+		a resource.
+	</p>
+	<p>
+		While the modalities specify a non-linear potentiality or actuality to their 
+		resource, the modalities themselves are also non-linear. For a consumer, 
+		a ! term represents a free service for anyone to use and spread the word of. 
+		This free service cannot be shut down by a consumer, but a consumer can 
+		choose to ignore it or not use it anymore.
+	</p>
+	<p>
+		For a producer, a ! term represents a pledge to permanently provide a 
+		service for free to anyone. Once this pledge has been announced, the 
+		producer should try to uphold it.
+	</p>
+	<p>
+		Now the ? terms represent zero or more products produced from the use of 
+		a free service. This number can be zero in the case where 
+		the producer of the free service fails to fulfill an order or fails to 
+		keep the service running.
+	</p>
+	<p>
+		The W rules (<em>weakening</em>) establish that a free service can be 
+		ignored by a consumer (! W) and that a producer can produce a free 
+		complementary product (? W) which can also be ignored.
+	</p>
+	<p>
+		The C rules (<em>contraction</em>) establish that a free service can be 
+		used more than once by a consumer (! C) and that a producer can produce 
+		multiple free complementary products.
+	</p>
+	<p>
+		The D rules (<em>dereliction</em>) establish that a consumer that needs 
+		a single product can instead be given access to a service that provides 
+		that product for free (! D) and that a producer that produces a single 
+		product can delegate a free service to produce it instead.
+	</p>
+	<p>
+		Finally, the P rules (<em>promotion</em>) establish that if a producer can
+		make a single product solely from what is provided by a free service, then
+		it can produce a new free service for that product (! P). For ? P:
+		if a free service together with a single resource can produce zero
+		or more of a product, then having zero or more than one of that resource 
+		doesn't change the truth of the statement.
+	</p>
+	<p>
+		An important thing to note is that ?<var>A</var> can be turned into 
+		?<var>A</var>?<var>A</var>. This can be interpreted as meaning that we have
+		a resource <var>A</var> which can be copied freely, but my interpretation 
+		permits ?<var>A</var> to include zero occurrences of <var>A</var>. So 
+		there is a real number of <var>A</var> that was produced whose instances can
+		be distributed over infinitely many ?<var>A</var>, many of which can be zero.
+	</p>
+	<p>
+		To go away from the <q>free service</q> analogy and more towards Girard's 
+		<q>stable register</q> or stable memory analogy: !<var>A</var> can be a 
+		freely copyable memory reference to a memory-mapped pipe for transferring 
+		data of type <var>A</var>: for the consumer, any number of <var>A</var>s can
+		be read from this pipe; for the producer, any number of <var>A</var>s can be 
+		written to this pipe. ?<var>A</var> can represent an unknown-length buffer of 
+		<var>A</var>s that was read from or written to the pipe.
+	</p>
+	<p>
+		While ! and ? can be applied to a non-exhaustive resource, I think it can
+		also be applied to an exhaustive resource whose use can be more than one 
+		but less than infinity or even zero. The modalities seem to deal with an
+		ungauranteed, uncertain, and/or unlimited number of resources. And so the 
+		intuition that the modalities deal with stable registers/memory, while 
+		true in that context, can be generalized as qualifiers that deal with 
+		any kind of I/O stream that at any time can be busy or empty.
+	</p>
+	<p>
+		Later on, I would like to explore how the modalities can be used to express
+		the interaction between linear and non-linear types, especially in regards
+		to memory safety.
+	</p>
+</article>
+

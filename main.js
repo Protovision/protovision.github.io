@@ -40,9 +40,9 @@
 				throw(Error(
 					'Error ' + response . status + ': ' + response . statusText));};
 			const fragment = (document . createDocumentFragment)();
-			const content = (document . createElement)('article');
-			content . innerHTML = await((response . text)());
-			(fragment . appendChild)(content);
+			const div = (document . createElement)('div');
+			div . innerHTML = await((response . text)());
+			(fragment . appendChild)(div);
 			return(fragment);};
 		const parseUrl = (url) => {
 			if(! url){

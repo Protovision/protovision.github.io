@@ -1,406 +1,409 @@
-<header class="top-border">
-	<h2>Quantifiers</h2>
-	by Mark Swoope<br>
-	<time datetime="2022-09-29">2022-09-29</time>
-</header>
-<p>
-	Here I explore for myself how polymorphism and it's main implementations can 
-	be encoded by the logical quantifiers. I am sure this has already been 
-	exhaustively explicated by others who have higher professional backgrounds.
-</p>
-<p>
-	There are many ways programming languages enable polymorphism. The two main
-	ways are:
-</p>
-<ul>
-	<li>
-		Generating a different instance of the algorithm for each type that may
-		be used in the polymorphism. This is primarily how
+<article>
+	<header class="top-border">
+		<h2>Quantifiers</h2>
+		by Mark Swoope<br>
+		<time datetime="2022-09-29">2022-09-29</time>
+	</header>
+	<p>
+		Here I explore for myself how polymorphism and it's main implementations can 
+		be encoded by the logical quantifiers. I am sure this has already been 
+		exhaustively explicated by others who have higher professional backgrounds.
+	</p>
+	<p>
+		There are many ways programming languages enable polymorphism. The two main
+		ways are:
+	</p>
+	<ul>
+		<li>
+			Generating a different instance of the algorithm for each type that may
+			be used in the polymorphism. This is primarily how
+			<a
+				rel="external noopener noreferrer"
+				href="https://en.wikipedia.org/wiki/Parametric_polymorphism">
+				Parametric Polymorphism
+			</a>
+			is implemented.
+		</li>
+		<li>
+			Creating an opaque boxed type and generating a different instance of an 
+			interface (a product of functions) for it for each unboxed type that may be 
+			used in the polymorphism. This is primarily how
+			<a 
+				rel="external noopener noreferrer"
+				href="https://en.wikipedia.org/wiki/Subtyping">
+				Subtype Polymorphism
+			</a>
+			is implemented.
+		</li>
+	</ul>
+	<p>
+		The field of computing is filled with many ambiguous, interchangeable, and 
+		sometimes conflicting terminology and both parametric polymorphism and 
+		subtype polymorphism are large categories with several implementations but 
+		I shall use them to refer specifically to the above mentioned 
+		implementations.
+	</p>
+	<p>
+		People generally prefer parametric polymorphism because it has no run-time
+		overhead. It's disadvantages are often overlooked:
+	</p>
+	<ul>
+		<li>Longer compilation times</li>
+		<li>Longer compilation error messages</li>
+		<li>The inability to export the algorithm to a static or shared library</li>
+	</ul>
+	<p>
+		Subtype polymorphism has the opposite advantages and disadvantages; I have 
+		come to appreciate it for it's crucial role in the 
+		<abbr>
+			<a 
+				rel="external noopener noreferrer" 
+				href="https://en.cppreference.com/w/cpp/language/pimpl">
+				pImpl
+			</a>
+		</abbr>(<q>Pointer to implementation</q>) technique which produces a stable 
+		<abbr>
+			<a
+				rel="external noopener noreferrer"
+				href="https://en.wikipedia.org/wiki/Application_binary_interface">
+				ABI
+			</a>
+		</abbr> (Application Binary Interface) and has the important advantage over 
+		parametric polymorphism of being exportable to shared libraries and outside 
+		languages.
+	</p>
+	<p>
+		If a programming language should consider itself general-purpose, then it 
+		should support polymorphism. It should be of practical importance if both 
+		mentioned implementations of polymorphism are present in the language.
+	</p>
+	<p>
+		I believe there is a correspondence between parametric polymorphism and 
 		<a
 			rel="external noopener noreferrer"
-			href="https://en.wikipedia.org/wiki/Parametric_polymorphism">
-			Parametric Polymorphism
+			href="https://en.wikipedia.org/wiki/Universal_quantification">
+			Universal Quantification
 		</a>
-		is implemented.
-	</li>
-	<li>
-		Creating an opaque boxed type and generating a different instance of an 
-		interface (a product of functions) for it for each unboxed type that may be 
-		used in the polymorphism. This is primarily how
-		<a 
-			rel="external noopener noreferrer"
-			href="https://en.wikipedia.org/wiki/Subtyping">
-			Subtype Polymorphism
-		</a>
-		is implemented.
-	</li>
-</ul>
-<p>
-	The field of computing is filled with many ambiguous, interchangeable, and 
-	sometimes conflicting terminology and both parametric polymorphism and 
-	subtype polymorphism are large categories with several implementations but 
-	I shall use them to refer specifically to the above mentioned 
-	implementations.
-</p>
-<p>
-	People generally prefer parametric polymorphism because it has no run-time
-	overhead. It's disadvantages are often overlooked:
-</p>
-<ul>
-	<li>Longer compilation times</li>
-	<li>Longer compilation error messages</li>
-	<li>The inability to export the algorithm to a static or shared library</li>
-</ul>
-<p>
-	Subtype polymorphism has the opposite advantages and disadvantages; I have 
-	come to appreciate it for it's crucial role in the 
-	<abbr>
-		<a 
-			rel="external noopener noreferrer" 
-			href="https://en.cppreference.com/w/cpp/language/pimpl">
-			pImpl
-		</a>
-	</abbr>(<q>Pointer to implementation</q>) technique which produces a stable 
-	<abbr>
+		and there is a correspondence between subtype polymorphism and
 		<a
 			rel="external noopener noreferrer"
-			href="https://en.wikipedia.org/wiki/Application_binary_interface">
-			ABI
+			href="https://en.wikipedia.org/wiki/Existential_quantification">
+			Existential Quantification
 		</a>
-	</abbr> (Application Binary Interface) and has the important advantage over 
-	parametric polymorphism of being exportable to shared libraries and outside 
-	languages.
-</p>
-<p>
-	If a programming language should consider itself general-purpose, then it 
-	should support polymorphism. It should be of practical importance if both 
-	mentioned implementations of polymorphism are present in the language.
-</p>
-<p>
-	I believe there is a correspondence between parametric polymorphism and 
-	<a
-		rel="external noopener noreferrer"
-		href="https://en.wikipedia.org/wiki/Universal_quantification">
-		Universal Quantification
-	</a>
-	and there is a correspondence between subtype polymorphism and
-	<a
-		rel="external noopener noreferrer"
-		href="https://en.wikipedia.org/wiki/Existential_quantification">
-		Existential Quantification
-	</a>
-</p>
-<p>
-	Here is an existing correspondence between logic quantifiers and the 
-	dependent types:
-</p>
-<figure>
-	<table class="centered double-spaced">
-		<thead class="shaded">
-			<tr>
-				<th>Quantifiers (Logic)</th>
-				<th>Dependent types (Type theory)</th>
-			</tr>
-		</thead>
-		<tbody>
-			<tr>
-				<td>&forall;x:T,&phi;x</td>
-				<td>&Pi;<sub>x:T</sub>&phi;(x)</td>
-			</tr>
-			<tr>
-				<td>&exist;x:T,&phi;x</td>
-				<td>&Sigma;<sub>x:T</sub>&phi;(x)</td>
-			</tr>
-		</tbody>
-	</table>
-</figure>
-<p>
-	When I looked into this current correspondence and into what dependent types
-	are, there was bittersweetness. Dependent types, I have learned, simply 
-	bind terms to types with the bound terms accessible during runtime. For 
-	mainstream imperative languages, the only built-in type that can be 
-	constructed from a term is the fixed-length array. Therefore, dependent 
-	types in an imperative language would only be useful for encoding 
-	types that are structurally equivalent to length-prefixed arrays of a 
-	non-polymorphic element type. This is half-useful but it encodes neither 
-	parametric polymorphism nor opaque data with dynamic dispatch.
-</p>
-<p>
-	Of course, there is no requirement that &forall; and &exist; need to encode 
-	only dependent types. In
-	<a
-		rel="external noopener noreferrer"
-		href="https://en.wikipedia.org/wiki/System_F">
-		System F
-	</a>, &forall; is used make terms depend on types: the expression
-	&Lambda;&alpha;.&lambda;x<sup>&alpha;</sup>.x
-	has type &forall;&alpha;.&alpha;&rarr;&alpha;. 
-</p>
-<p>
-	This is useful for encoding parametric polymorphism but with a strict 
-	requirement not present in mainstream languages that use features which 
-	they call <q>templates</q> or <q>generics</q>: the restriction with &Lambda;
-	terms is that the body must be valid for any substitution of the bound 
-	type variable. If the body uses an operator on a term that binds the type
-	variable that is not supported by all types, then the &Lambda; term is not 
-	well-typed.
-</p>
-<p>
-	This practically means that &Lambda; terms can only express algorithms which 
-	do nothing to the type variable except store and initialize instances of it. 
-	Arithmetic, comparisons, indirection, and calling it like a function object 
-	are not operations that are universal on all types and therefore cannot be 
-	used. 
-</p>
-<p>
-	<a
-		rel="external noopener noreferrer"
-		href="https://en.wikipedia.org/wiki/Type_class">
-		Type classes
-	</a>, I have read, address this issue by refining type variables to 
-	support certain operations required by the type class. Haskell has this
-	feature and C++ seems to have it in the form of <q>concepts</q>; other 
-	languages may call type classes <q>traits</q>. 
-</p>
-<p>
-	In
-	<a
-		rel="external noopener noreferrer"
-		href="https://en.wikipedia.org/wiki/Lambda_calculus">
-		lambda calculus
-	</a>, a &lambda; term does not have it's variable annotated and so it can 
-	have any value.
-</p>
-<p>
-	In
-	<a
-		rel="external noopener noreferrer"
-		href="https://en.wikipedia.org/wiki/Simply_typed_lambda_calculus">
-		simply-typed lambda calulus
-	</a>, a &lambda; term has it's variable annotated with a type which places 
-	a constraint on the possible values of that variable.
-</p>
-<p>
-	There should be a type class annotated to the type variables of &Lambda; 
-	terms in System F in order to place a constraint on the possible types that 
-	a &Lambda; term can work with.
-</p>
-<p>
-	A term such as &Lambda;&alpha;:P.&lambda;x<sup>&alpha;</sup>.x+x would be 
-	the polymorphic function that adds a term to itself with the type of that 
-	term required to be a member of the type class P which supports using the 
-	+ operator.
-</p>
-<p>
-	&Lambda; terms refined with type classes can be used to encode polymorphic 
-	functions, but they cannot be used to encode type constructors or dependent
-	types. This is because &Lambda; from System F is fundamentally only capable 
-	of making terms depend on types. Type constructors are types that depend on 
-	types and dependent types are types that depend on terms. But this problem 
-	is for another article where I will explore the 
-	<a
-		rel="external noopener noreferrer"
-		href="https://en.wikipedia.org/wiki/Lambda_cube">
-		Lambda cube
-	</a>. For now, the encoding of parametric polymorphism as System F &Lambda;
-	terms with type class annotated type variables is sufficient.
-</p>
-<p>
-	A further question is, how exactly should type classes be represented and 
-	how should new ones be constructed in a language?
-</p>
-<p>
-	A type class can be implemented by making them similar to the concept of 
-	an abstract class taken from object-oriented programming. An abstract class
-	is a type that specifies operations that instances of it should support. 
-	A term of an abstract class type cannot be directly constructed but a type
-	that implements the operations specified by an abstract class type becomes 
-	a subtype of that abstract class type. A term of such a type would then be 
-	allowed to have a function accepting the supertype be applied to it.
-	The calculus would then need a way to formalize subtyping. 
-</p>
-<p>
-	If subtyping is formalized, then what would be the difference between
-	&Lambda;&alpha;:P.&lambda;x<sup>&alpha;</sup>.x+x and 
-	&lambda;x:P.x+x ? And if type classes are to be implemented by 
-	subtyping with overhead-bearing mechanisms such as 
-	<a
-		rel="external noopener noreferrer"
-		href="https://en.wikipedia.org/wiki/Virtual_method_table">
-		virtual method tables
-	</a> then how do we also encode zero-overhead polymorphic functions that 
-	are implemented with 
-	<a
-		rel="external noopener noreferrer"
-		href="https://en.wikipedia.org/wiki/Monomorphization">
-		monomorphization
-	</a>?
-</p>
-<p>
-	Stepping back, the dependent product type (&Pi; type) and the dependent 
-	sum type (&Sigma; type) can be reinterpreted to operate on the type level 
-	like how &Lambda; does in System F.
-</p>
-<p>
-	The 
-	<a
-		rel="external noopener noreferrer"
-		href="https://ncatlab.org/nlab/show/dependent+product+type">
-		&Pi; type
-	</a> is the type of a function whose return type depends on the value of it's
-	argument. The
-	<a
-		rel="external noopener noreferrer"
-		href="https://ncatlab.org/nlab/show/dependent+sum+type">
-		&Sigma; type
-	</a> is the type of a pair where the second component's type depends on the 
-	value of the first component. 
-</p>
-<p>
-	In a programming language like C, where the type of an array depends on the
-	number of elements it stores, the &Pi; type can be the type of a safer
-	<a
-		rel="external noopener noreferrer"
-		href="https://en.cppreference.com/w/c/memory/malloc">
-		malloc
-	</a> function. malloc would have the type: 
-	&Pi;n:<code>size_t</code>.*(&wedge;<sup>n</sup><code>char</code>). where 
-	*(&wedge;<sup>n</sup>char) represents a pointer to an n-repeated product of 
-	char. So the &Pi; type represents the ability to build a dependently-typed 
-	term from any value of a particular type.
-</p>
-<p>
-	The &Sigma; type represents the actual presence of a dependently-typed term
-	which was already built by a &Pi;-typed term. Unlike the &Pi; type, you do
-	not provide any value to instantiate a dependent type, the value is already 
-	encoded with the dependently-typed term that already exists. The 
-	length-prefixed array existing as 
-	(n:<code>size_t</code>, p:*(&wedge;<sup>n</sup><code>char</code>)</code>) 
-	is an example of the dependent sum.
-</p>
-<p>
-	&Sigma; is the dependent type version of the existential quantifier. There
-	is a paper 
-	<cite>
-		<a 
+	</p>
+	<p>
+		Here is an existing correspondence between logic quantifiers and the 
+		dependent types:
+	</p>
+	<figure>
+		<table class="centered double-spaced">
+			<thead class="shaded">
+				<tr>
+					<th>Quantifiers (Logic)</th>
+					<th>Dependent types (Type theory)</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr>
+					<td>&forall;x:T,&phi;x</td>
+					<td>&Pi;<sub>x:T</sub>&phi;(x)</td>
+				</tr>
+				<tr>
+					<td>&exist;x:T,&phi;x</td>
+					<td>&Sigma;<sub>x:T</sub>&phi;(x)</td>
+				</tr>
+			</tbody>
+		</table>
+	</figure>
+	<p>
+		When I looked into this current correspondence and into what dependent types
+		are, there was bittersweetness. Dependent types, I have learned, simply 
+		bind terms to types with the bound terms accessible during runtime. For 
+		mainstream imperative languages, the only built-in type that can be 
+		constructed from a term is the fixed-length array. Therefore, dependent 
+		types in an imperative language would only be useful for encoding 
+		types that are structurally equivalent to length-prefixed arrays of a 
+		non-polymorphic element type. This is half-useful but it encodes neither 
+		parametric polymorphism nor opaque data with dynamic dispatch.
+	</p>
+	<p>
+		Of course, there is no requirement that &forall; and &exist; need to encode 
+		only dependent types. In
+		<a
 			rel="external noopener noreferrer"
-			href="https://homepages.inf.ed.ac.uk/gdp/publications/Abstract_existential.pdf">
-			Abstract Types Have Existential Type
-		</a>, by Mitchell and Plotkin
-	</cite>, where they give an encoding for the type 
-	&exist;X.X&wedge;M where X is an opaque type and M is a product of functions
-	that each involve X as an argument or result. The entire type represents 
-	a <q>package</q> of X together with the operations for manipulating it.
-</p>
-<p>
-	In this interpretation, the mechanism for introducing a &exist; type looks 
-	like the definition of an object-oriented class. Their paper shows an 
-	example of defining the complex number as an abstract data type:
-</p>
-<figure>
-	<pre class="no-margin padded shaded">
-		<!--<b>abstype</b> complex <b>with</b><br>
-		&emsp;create: real &rarr; real &rarr; complex,<br>
-		&emsp;plus: complex &rarr; complex,<br>
-		&emsp;re: complex &rarr; real,<br>
-		&emsp;im: complex &rarr; real<br>-->
-		<b>pack</b> real&wedge;real <b>with</b><br>
-		&emsp;&lambda;x:real.&lambda;y:real.&lt;x,y&gt;,<br>
-		&emsp;&lambda;z:real&wedge;real.&lambda;w:real&wedge;real.&lt;fst(z)+fst(w),snd(z)+snd(w)&gt;,<br>
-		&emsp;&lambda;z:real&wedge;real.fst(z),<br>
-		&emsp;&lambda;z:real&wedge;real.snd(z)<br>
-		<b>to</b> &exist;t.[(real&rarr;real&rarr;t)&wedge;(t&rarr;t&rarr;t)&wedge;(t&rarr;real)&wedge;(t&rarr;real)]
-	</pre>
-</figure>
-<p>
-	(I have slightly altered this syntax to make the <b>pack</b> definition have 
-	consistent syntax with the <b>abstype</b> declaration in the paper). This 
-	expression seems verbose but everything is actually required to avoid 
-	ambiguity.
-</p>
-<p>
-	The <b>pack</b> expression gives the full definition of a data type and 
-	the functions for working with it. The result of a <b>pack</b> expression 
-	is a term that includes the signature of those functions expressed in terms
-	of the main data type that has been made opaque. Notice that the resulting 
-	type of the pack expression is expressed within the expression itself, this
-	is required to avoid ambiguity. 
-</p>
-<p>
-	In order to eliminate &exist;, an <b>abstype</b> expression is required 
-	which <q>unpacks</q> the opaque data type and it's functions from the 
-	&exist; package:
-</p>
-<figure>
-	<pre class="no-margin padded shaded">
-		<b>abstype</b> complex <b>with</b><br>
-		&emsp;create: real &rarr; real &rarr; complex,<br>
-		&emsp;plus: complex &rarr; complex &rarr; complex,<br>
-		&emsp;re: complex &rarr; real,<br>
-		&emsp;im: complex &rarr; real<br>
-		<b>is</b> X
-	</pre>
-</figure>
-<p>
-	Here X is an &exist; term. <b>abstype</b> unpacks the unknown type and it's 
-	operations while binding names to them but it does not and cannot reveal 
-	their definitions.
-</p>
-<p>
-	This table summarizes the &forall;, &exist;, &Pi;, and &Sigma; types. 
-	A language should use all of these types to encode polymorphic and dependent
-	types. The only thing missing is type constructors which represents the 
-	last dimension of the lambda cube. 
-</p>
-<figure>
-	<table class="centered">
-		<thead class="shaded">	
-			<tr>
-				<th>Type</th>
-				<th>Binds</th>
-				<th>Represents</th>
-			</tr>
-		</thead>
-		<tbody>
-			<tr>
-				<td>&forall;</td>
-				<td>Types to terms</td>
-				<td>Polymorphic functions</td>
-			</tr>
-			<tr>
-				<td>&exist;</td>
-				<td>Types to terms</td>
-				<td>Polymorphic data</td>
-			</tr>
-			<tr>
-				<td>&Pi;</td>
-				<td>Terms to types</td>
-				<td>Dependent functions</td>
-			</tr>
-			<tr>
-				<td>&Sigma;</td>
-				<td>Terms to types</td>
-				<td>Dependent data</td>
-			</tr>
-		</tbody>
-	</table>
-</figure>
-<p>
-	A language that implements polymorphic types, dependent types, and type 
-	constructors should have no need for a macro system which languages 
-	usually introduce to make up for a missing dimension in the cube. 
-</p>
-<p>
-	I will have to see later if subtyping, which is not part of the cube, can
-	be introduced, perhaps as a 4th dimension, without interfering with the 
-	rest of the dimensions.
-</p>
-<p>
-	I think subtyping can be left out and only serves as a source of unneeded 
-	complexity and confusion when combined with the notion of abstract 
-	data types which are already encoded by &exist;. Subtyping can perhaps 
-	help if it can alleviate the requirement to annotate each abstract type 
-	with the interfaces that it implements. Or maybe this is not possible since
-	it is required by all the static languages like C++ and Rust while it is not 
-	required by the dynamic languages like Go and Haskell.
-</p>
+			href="https://en.wikipedia.org/wiki/System_F">
+			System F
+		</a>, &forall; is used make terms depend on types: the expression
+		&Lambda;&alpha;.&lambda;x<sup>&alpha;</sup>.x
+		has type &forall;&alpha;.&alpha;&rarr;&alpha;. 
+	</p>
+	<p>
+		This is useful for encoding parametric polymorphism but with a strict 
+		requirement not present in mainstream languages that use features which 
+		they call <q>templates</q> or <q>generics</q>: the restriction with &Lambda;
+		terms is that the body must be valid for any substitution of the bound 
+		type variable. If the body uses an operator on a term that binds the type
+		variable that is not supported by all types, then the &Lambda; term is not 
+		well-typed.
+	</p>
+	<p>
+		This practically means that &Lambda; terms can only express algorithms which 
+		do nothing to the type variable except store and initialize instances of it. 
+		Arithmetic, comparisons, indirection, and calling it like a function object 
+		are not operations that are universal on all types and therefore cannot be 
+		used. 
+	</p>
+	<p>
+		<a
+			rel="external noopener noreferrer"
+			href="https://en.wikipedia.org/wiki/Type_class">
+			Type classes
+		</a>, I have read, address this issue by refining type variables to 
+		support certain operations required by the type class. Haskell has this
+		feature and C++ seems to have it in the form of <q>concepts</q>; other 
+		languages may call type classes <q>traits</q>. 
+	</p>
+	<p>
+		In
+		<a
+			rel="external noopener noreferrer"
+			href="https://en.wikipedia.org/wiki/Lambda_calculus">
+			lambda calculus
+		</a>, a &lambda; term does not have it's variable annotated and so it can 
+		have any value.
+	</p>
+	<p>
+		In
+		<a
+			rel="external noopener noreferrer"
+			href="https://en.wikipedia.org/wiki/Simply_typed_lambda_calculus">
+			simply-typed lambda calulus
+		</a>, a &lambda; term has it's variable annotated with a type which places 
+		a constraint on the possible values of that variable.
+	</p>
+	<p>
+		There should be a type class annotated to the type variables of &Lambda; 
+		terms in System F in order to place a constraint on the possible types that 
+		a &Lambda; term can work with.
+	</p>
+	<p>
+		A term such as &Lambda;&alpha;:P.&lambda;x<sup>&alpha;</sup>.x+x would be 
+		the polymorphic function that adds a term to itself with the type of that 
+		term required to be a member of the type class P which supports using the 
+		+ operator.
+	</p>
+	<p>
+		&Lambda; terms refined with type classes can be used to encode polymorphic 
+		functions, but they cannot be used to encode type constructors or dependent
+		types. This is because &Lambda; from System F is fundamentally only capable 
+		of making terms depend on types. Type constructors are types that depend on 
+		types and dependent types are types that depend on terms. But this problem 
+		is for another article where I will explore the 
+		<a
+			rel="external noopener noreferrer"
+			href="https://en.wikipedia.org/wiki/Lambda_cube">
+			Lambda cube
+		</a>. For now, the encoding of parametric polymorphism as System F &Lambda;
+		terms with type class annotated type variables is sufficient.
+	</p>
+	<p>
+		A further question is, how exactly should type classes be represented and 
+		how should new ones be constructed in a language?
+	</p>
+	<p>
+		A type class can be implemented by making them similar to the concept of 
+		an abstract class taken from object-oriented programming. An abstract class
+		is a type that specifies operations that instances of it should support. 
+		A term of an abstract class type cannot be directly constructed but a type
+		that implements the operations specified by an abstract class type becomes 
+		a subtype of that abstract class type. A term of such a type would then be 
+		allowed to have a function accepting the supertype be applied to it.
+		The calculus would then need a way to formalize subtyping. 
+	</p>
+	<p>
+		If subtyping is formalized, then what would be the difference between
+		&Lambda;&alpha;:P.&lambda;x<sup>&alpha;</sup>.x+x and 
+		&lambda;x:P.x+x ? And if type classes are to be implemented by 
+		subtyping with overhead-bearing mechanisms such as 
+		<a
+			rel="external noopener noreferrer"
+			href="https://en.wikipedia.org/wiki/Virtual_method_table">
+			virtual method tables
+		</a> then how do we also encode zero-overhead polymorphic functions that 
+		are implemented with 
+		<a
+			rel="external noopener noreferrer"
+			href="https://en.wikipedia.org/wiki/Monomorphization">
+			monomorphization
+		</a>?
+	</p>
+	<p>
+		Stepping back, the dependent product type (&Pi; type) and the dependent 
+		sum type (&Sigma; type) can be reinterpreted to operate on the type level 
+		like how &Lambda; does in System F.
+	</p>
+	<p>
+		The 
+		<a
+			rel="external noopener noreferrer"
+			href="https://ncatlab.org/nlab/show/dependent+product+type">
+			&Pi; type
+		</a> is the type of a function whose return type depends on the value of it's
+		argument. The
+		<a
+			rel="external noopener noreferrer"
+			href="https://ncatlab.org/nlab/show/dependent+sum+type">
+			&Sigma; type
+		</a> is the type of a pair where the second component's type depends on the 
+		value of the first component. 
+	</p>
+	<p>
+		In a programming language like C, where the type of an array depends on the
+		number of elements it stores, the &Pi; type can be the type of a safer
+		<a
+			rel="external noopener noreferrer"
+			href="https://en.cppreference.com/w/c/memory/malloc">
+			malloc
+		</a> function. malloc would have the type: 
+		&Pi;n:<code>size_t</code>.*(&wedge;<sup>n</sup><code>char</code>). where 
+		*(&wedge;<sup>n</sup>char) represents a pointer to an n-repeated product of 
+		char. So the &Pi; type represents the ability to build a dependently-typed 
+		term from any value of a particular type.
+	</p>
+	<p>
+		The &Sigma; type represents the actual presence of a dependently-typed term
+		which was already built by a &Pi;-typed term. Unlike the &Pi; type, you do
+		not provide any value to instantiate a dependent type, the value is already 
+		encoded with the dependently-typed term that already exists. The 
+		length-prefixed array existing as 
+		(n:<code>size_t</code>, p:*(&wedge;<sup>n</sup><code>char</code>)</code>) 
+		is an example of the dependent sum.
+	</p>
+	<p>
+		&Sigma; is the dependent type version of the existential quantifier. There
+		is a paper 
+		<cite>
+			<a 
+				rel="external noopener noreferrer"
+				href="https://homepages.inf.ed.ac.uk/gdp/publications/Abstract_existential.pdf">
+				Abstract Types Have Existential Type
+			</a>, by Mitchell and Plotkin
+		</cite>, where they give an encoding for the type 
+		&exist;X.X&wedge;M where X is an opaque type and M is a product of functions
+		that each involve X as an argument or result. The entire type represents 
+		a <q>package</q> of X together with the operations for manipulating it.
+	</p>
+	<p>
+		In this interpretation, the mechanism for introducing a &exist; type looks 
+		like the definition of an object-oriented class. Their paper shows an 
+		example of defining the complex number as an abstract data type:
+	</p>
+	<figure>
+		<pre class="no-margin padded shaded">
+			<!--<b>abstype</b> complex <b>with</b><br>
+			&emsp;create: real &rarr; real &rarr; complex,<br>
+			&emsp;plus: complex &rarr; complex,<br>
+			&emsp;re: complex &rarr; real,<br>
+			&emsp;im: complex &rarr; real<br>-->
+			<b>pack</b> real&wedge;real <b>with</b><br>
+			&emsp;&lambda;x:real.&lambda;y:real.&lt;x,y&gt;,<br>
+			&emsp;&lambda;z:real&wedge;real.&lambda;w:real&wedge;real.&lt;fst(z)+fst(w),snd(z)+snd(w)&gt;,<br>
+			&emsp;&lambda;z:real&wedge;real.fst(z),<br>
+			&emsp;&lambda;z:real&wedge;real.snd(z)<br>
+			<b>to</b> &exist;t.[(real&rarr;real&rarr;t)&wedge;(t&rarr;t&rarr;t)&wedge;(t&rarr;real)&wedge;(t&rarr;real)]
+		</pre>
+	</figure>
+	<p>
+		(I have slightly altered this syntax to make the <b>pack</b> definition have 
+		consistent syntax with the <b>abstype</b> declaration in the paper). This 
+		expression seems verbose but everything is actually required to avoid 
+		ambiguity.
+	</p>
+	<p>
+		The <b>pack</b> expression gives the full definition of a data type and 
+		the functions for working with it. The result of a <b>pack</b> expression 
+		is a term that includes the signature of those functions expressed in terms
+		of the main data type that has been made opaque. Notice that the resulting 
+		type of the pack expression is expressed within the expression itself, this
+		is required to avoid ambiguity. 
+	</p>
+	<p>
+		In order to eliminate &exist;, an <b>abstype</b> expression is required 
+		which <q>unpacks</q> the opaque data type and it's functions from the 
+		&exist; package:
+	</p>
+	<figure>
+		<pre class="no-margin padded shaded">
+			<b>abstype</b> complex <b>with</b><br>
+			&emsp;create: real &rarr; real &rarr; complex,<br>
+			&emsp;plus: complex &rarr; complex &rarr; complex,<br>
+			&emsp;re: complex &rarr; real,<br>
+			&emsp;im: complex &rarr; real<br>
+			<b>is</b> X
+		</pre>
+	</figure>
+	<p>
+		Here X is an &exist; term. <b>abstype</b> unpacks the unknown type and it's 
+		operations while binding names to them but it does not and cannot reveal 
+		their definitions.
+	</p>
+	<p>
+		This table summarizes the &forall;, &exist;, &Pi;, and &Sigma; types. 
+		A language should use all of these types to encode polymorphic and dependent
+		types. The only thing missing is type constructors which represents the 
+		last dimension of the lambda cube. 
+	</p>
+	<figure>
+		<table class="centered">
+			<thead class="shaded">	
+				<tr>
+					<th>Type</th>
+					<th>Binds</th>
+					<th>Represents</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr>
+					<td>&forall;</td>
+					<td>Types to terms</td>
+					<td>Polymorphic functions</td>
+				</tr>
+				<tr>
+					<td>&exist;</td>
+					<td>Types to terms</td>
+					<td>Polymorphic data</td>
+				</tr>
+				<tr>
+					<td>&Pi;</td>
+					<td>Terms to types</td>
+					<td>Dependent functions</td>
+				</tr>
+				<tr>
+					<td>&Sigma;</td>
+					<td>Terms to types</td>
+					<td>Dependent data</td>
+				</tr>
+			</tbody>
+		</table>
+	</figure>
+	<p>
+		A language that implements polymorphic types, dependent types, and type 
+		constructors should have no need for a macro system which languages 
+		usually introduce to make up for a missing dimension in the cube. 
+	</p>
+	<p>
+		I will have to see later if subtyping, which is not part of the cube, can
+		be introduced, perhaps as a 4th dimension, without interfering with the 
+		rest of the dimensions.
+	</p>
+	<p>
+		I think subtyping can be left out and only serves as a source of unneeded 
+		complexity and confusion when combined with the notion of abstract 
+		data types which are already encoded by &exist;. Subtyping can perhaps 
+		help if it can alleviate the requirement to annotate each abstract type 
+		with the interfaces that it implements. Or maybe this is not possible since
+		it is required by all the static languages like C++ and Rust while it is not 
+		required by the dynamic languages like Go and Haskell.
+	</p>
+</article>
+

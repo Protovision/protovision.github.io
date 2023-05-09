@@ -1,239 +1,241 @@
-<header class="top-border">
-	<h2>Module Types</h2>
-	by Mark Swoope
-	<br>
-	<time datetime="2023-04-11">2023-04-11</time>
-</header>
-<nav class="accented padded shaded">
-	<b>Contents</b>
-	<ol>
-		<li>
-			<a href="#!/documents/blog/module-types.html:intro">
-				Introduction
-			</a>
-		</li>
-		<li>
-			<a href="#!/documents/blog/module-types.html:import">
-				Import expressions
-			</a>
-		</li>
-		<li>
-			<a href="#!/documents/blog/module-types.html:module">
-				Module expressions
-			</a>
-		</li>
-		<li>
-			<a href="#!/documents/blog/module-types.html:details">
-				Implementation details
-			</a>
-		</li>
-		<li>
-			<a href="#!/documents/blog/module-types.html:rules">
-				Summary of module typing rules
-			</a>
-		</li>
-	</ol>
-</nav>
-<section id="intro">
-	<header>
-		<h3>1. Introduction</h3>
+<article>
+	<header class="top-border">
+		<h2>Module Types</h2>
+		by Mark Swoope
+		<br>
+		<time datetime="2023-04-11">2023-04-11</time>
 	</header>
-	<p>
-		Here, I develop my own understanding of modules and how they can be 
-		represented in a typed programming language.
-	</p>
-	<p>
-		Like many things in computer science, modules do not have a unifying 
-		definition across programming languages. There is this vague idea that 
-		a module is a unit of functions, data, and types and that any of these 
-		components can be imported into or exported out of the containing module.
-	</p>
-	<p>
-		I shall start with this idea and solidify it. A module existing within 
-		a running program is, at the very least, a product of data and functions 
-		(references to functions). In this respect, it is not different from an
-		ordinary product or tuple.
-	</p>
-	<p>
-		Programming languages usually do not allow product types to contain 
-		declarations of anything other than data whose visibility is always public
-		from outside terms of that product.
-	</p>
-	<p>
-		Modules are distinguished from products because modules may contain 
-		declarations of data, functions, types, and even other modules. Each member 
-		can be internal to the module or exported for other modules to import.
-	</p>
-	<p>
-		What makes a module different from an object-oriented class is unclear until
-		the details of a module is clarified and compared with a particular model 
-		of the class from a particular programming language.
-	</p>
-	<p>
-		When explaining modules it must always be clear from this point on if we 
-		are talking about module types or module terms. Like any other kind of term,
-		a module term exists as an instance of it's assigned module type. I can 
-		think of two ways a module term can be introduced: through a direct 
-		definition or through an import expression.
-	</p>
-</section>
-<section id="import">
-	<header>
-		<h3>2. Import expressions</h3>
-	</header>
-	<p>
-		An import expression can look like <code>import s : M</code> where 
-		<code>M</code> is the module type and <code>s</code> is a string specifying
-		the name or path of a module that exists somewhere in the host system. The 
-		module type must be specified since the definition of the module is usually 
-		unknown to the user and is never known by the compiler. 
-	</p>
-	<p>
-		The result of an import expression is a module term or a compilation failure
-		only if the string <code>s</code> is a constant expression: the import 
-		expression becomes comparable to static linking. If <code>s</code> is not 
-		a constant expression, then, if the language supports it, the import 
-		expression becomes comparable to dynamic linking. 
-	</p>
-	<p>
-		So the type of result of <code>import s : M</code> is <code>M</code> or 
-		<code>M &vee; &bot;</code> depending on if <code>s</code> is constant. If 
-		the dynamic import fails, then the actual result becomes &bot; which causes 
-		program termination.
-	</p>
-</section>
-<section id="module">
-	<header>
-		<h3>3. Module expressions</h3>
-	</header>
-	<p>
-		A module term has member terms publicly accessible via member access operator 
-		or superscript. Each publicly accessible member term of a module term is 
-		expressed in the module type which expresses only what that module has 
-		exported. Module types have member types which the types of the member terms 
-		of the module term may depend on, but these members types are already fully 
-		defined. In a type system of nominal-equivalence, this is an important detail 
-		but we shall not worry about this in this article and replace module member 
-		types with their full definitions wherever they occur in the type of a module 
-		member term.
-	</p>
-	<p>
-		This means that the type of a module is nothing more than a product type, 
-		composed of the types of it's exported member terms. 
-	</p>
-	<p>
-		Aside from import, a language must allow a module term to be introduced 
-		by directly defining one: this can be called a module expression. A module 
-		term can be expressed as a product of terms where <em>some</em> of those 
-		terms can be annotated with <code>export</code>. The type of a module 
-		expression becomes the product of the types of terms that have been exported. 
-		The non-exported terms are stored with the resulting module term but are 
-		not exposed in the module type. Here is an example of a module term:
-		<code>module (w : T = e , x : U = f , export y : V = g , export z : W = h)</code>, 
-		the type of this module term is <code>(V , W)</code>.
-	</p>
-</section>
-<section id="details">
-	<header>
-		<h3>4. Implementation details</h3>
-	</header>
-	<p>
-		I find that my definitions of import expression and module expressions compose
-		fairly well together. Module equality would be defined how product equality 
-		is defined which depends on function equality for function members. 
-		Function equality is undecidable if the definition of either function is 
-		unknown, most languages compare the the addresses of functions for equality
-		and perhaps this may be good enough for practical purposes.
-	</p>
-	<p>
-		Even though module terms are used like product terms, perhaps they need to 
-		be annotated to indicate if the term is the result of a static module or 
-		dynamically imported module so that the implementation can resolve how to 
-		actually perform member access. 
-	</p>
-	<p>
-		A module term imported using a dynamic string can be implemented as a pair 
-		of a handle and the product of data and functions of the module. The handle 
-		is acquired from the linux library call <code>dlopen</code>, the product of 
-		member terms is acquired from a call to <code>dlsym</code> for each exported 
-		member expressed in the specified module type. When a dynamic module term is 
-		eliminated, the handle must be disposed of using <code>dlclose</code>.
-	</p>
-	<p>
-		Module terms that are dynamic and require cleanup must be of a linear type
-		to enforce the cleanup phase. Of course none of this is a problem if 
-		dynamically imported modules are not allowed by the language.
-	</p>
-</section>
-<section id="rules">
-	<head>
-		<h3>5. Summary of module typing rules</h3>
-	</head>
-	<figure>
-	<table class="centered centered-text">
-		<thead class="shaded">
-			<tr>
-				<th>Assumptions</th>
-				<th>Conclusion</th>
-				<th>Rule</th>
-			</tr>
-		</thead>
-		<tbody>
-			<tr>
-				<td>s : string</td>
-				<td>import (s : module T) : module T</td>
-				<td>import</td>
-			</tr>
-			<tr>
-				<td>x : T , y : U</td>
-				<td>module (export x , y) : module T</td>
-				<td>module export left</td>
-			</tr>
-			<tr>
-				<td>x : T , y : U</td>
-				<td>module (x , export y) : module U</td>
-				<td>module export right</td>
-			</tr>
-			<tr>
-				<td>x : module (T , U)</td>
-				<td>fst x : T</td>
-				<td>fst module</td>
-			</tr>
-			<tr>
-				<td>x : module (T , U)</td>
-				<td>snd x : U</td>
-				<td>snd module</td>
-			</tr>
-		</tbody>
-	</table>
-	</figure>
-	<p>
-		In these typing rules, the lexeme <em>module</em> is used as both a term 
-		and type constructor. Even though module terms are used like product terms 
-		(both having fst and snd operations), their type must include a module 
-		qualifier so that the implementation can properly resolve member lookup.
-	</p>
-	<p>
-		There can also be a dynamic module type whose terms are introduced from
-		import expressions using non-constant-evaluated strings.
-	</p>
-	<p>
-		One thing I did not talk about was scoping, briefly I will say that 
-		function terms defined inside a module expression have an immediate 
-		enclosing scope that contains the members of the module term being 
-		expressed. The member function terms have access to them as if they were 
-		free variables to those functions: this implies that the module is 
-		now a record: a product of named members.
-	</p>
-	<p>
-		As for initialization, the module expression is an expression of a term 
-		and so the values of any member data of the module term can be expressed 
-		directly. If module code needs to executed for initialization, then 
-		this comes down to a matter of convention of the entry point function 
-		name and whether or not that entry point function is exposed in the 
-		module type (it shouldn't be exposed). A lot of other details involved 
-		in module initialization and module equality depend on whether or not 
-		modules can contain, depend on, or produce effects or mutable state.
-		A good language will need to isolate these things.
-	</p>
-</section>
+	<nav class="accented padded shaded">
+		<b>Contents</b>
+		<ol>
+			<li>
+				<a href="#!/documents/blog/module-types.html:intro">
+					Introduction
+				</a>
+			</li>
+			<li>
+				<a href="#!/documents/blog/module-types.html:import">
+					Import expressions
+				</a>
+			</li>
+			<li>
+				<a href="#!/documents/blog/module-types.html:module">
+					Module expressions
+				</a>
+			</li>
+			<li>
+				<a href="#!/documents/blog/module-types.html:details">
+					Implementation details
+				</a>
+			</li>
+			<li>
+				<a href="#!/documents/blog/module-types.html:rules">
+					Summary of module typing rules
+				</a>
+			</li>
+		</ol>
+	</nav>
+	<section id="intro">
+		<header>
+			<h3>1. Introduction</h3>
+		</header>
+		<p>
+			Here, I develop my own understanding of modules and how they can be 
+			represented in a typed programming language.
+		</p>
+		<p>
+			Like many things in computer science, modules do not have a unifying 
+			definition across programming languages. There is this vague idea that 
+			a module is a unit of functions, data, and types and that any of these 
+			components can be imported into or exported out of the containing module.
+		</p>
+		<p>
+			I shall start with this idea and solidify it. A module existing within 
+			a running program is, at the very least, a product of data and functions 
+			(references to functions). In this respect, it is not different from an
+			ordinary product or tuple.
+		</p>
+		<p>
+			Programming languages usually do not allow product types to contain 
+			declarations of anything other than data whose visibility is always public
+			from outside terms of that product.
+		</p>
+		<p>
+			Modules are distinguished from products because modules may contain 
+			declarations of data, functions, types, and even other modules. Each member 
+			can be internal to the module or exported for other modules to import.
+		</p>
+		<p>
+			What makes a module different from an object-oriented class is unclear until
+			the details of a module is clarified and compared with a particular model 
+			of the class from a particular programming language.
+		</p>
+		<p>
+			When explaining modules it must always be clear from this point on if we 
+			are talking about module types or module terms. Like any other kind of term,
+			a module term exists as an instance of it's assigned module type. I can 
+			think of two ways a module term can be introduced: through a direct 
+			definition or through an import expression.
+		</p>
+	</section>
+	<section id="import">
+		<header>
+			<h3>2. Import expressions</h3>
+		</header>
+		<p>
+			An import expression can look like <code>import s : M</code> where 
+			<code>M</code> is the module type and <code>s</code> is a string specifying
+			the name or path of a module that exists somewhere in the host system. The 
+			module type must be specified since the definition of the module is usually 
+			unknown to the user and is never known by the compiler. 
+		</p>
+		<p>
+			The result of an import expression is a module term or a compilation failure
+			only if the string <code>s</code> is a constant expression: the import 
+			expression becomes comparable to static linking. If <code>s</code> is not 
+			a constant expression, then, if the language supports it, the import 
+			expression becomes comparable to dynamic linking. 
+		</p>
+		<p>
+			So the type of result of <code>import s : M</code> is <code>M</code> or 
+			<code>M &vee; &bot;</code> depending on if <code>s</code> is constant. If 
+			the dynamic import fails, then the actual result becomes &bot; which causes 
+			program termination.
+		</p>
+	</section>
+	<section id="module">
+		<header>
+			<h3>3. Module expressions</h3>
+		</header>
+		<p>
+			A module term has member terms publicly accessible via member access operator 
+			or superscript. Each publicly accessible member term of a module term is 
+			expressed in the module type which expresses only what that module has 
+			exported. Module types have member types which the types of the member terms 
+			of the module term may depend on, but these members types are already fully 
+			defined. In a type system of nominal-equivalence, this is an important detail 
+			but we shall not worry about this in this article and replace module member 
+			types with their full definitions wherever they occur in the type of a module 
+			member term.
+		</p>
+		<p>
+			This means that the type of a module is nothing more than a product type, 
+			composed of the types of it's exported member terms. 
+		</p>
+		<p>
+			Aside from import, a language must allow a module term to be introduced 
+			by directly defining one: this can be called a module expression. A module 
+			term can be expressed as a product of terms where <em>some</em> of those 
+			terms can be annotated with <code>export</code>. The type of a module 
+			expression becomes the product of the types of terms that have been exported. 
+			The non-exported terms are stored with the resulting module term but are 
+			not exposed in the module type. Here is an example of a module term:
+			<code>module (w : T = e , x : U = f , export y : V = g , export z : W = h)</code>, 
+			the type of this module term is <code>(V , W)</code>.
+		</p>
+	</section>
+	<section id="details">
+		<header>
+			<h3>4. Implementation details</h3>
+		</header>
+		<p>
+			I find that my definitions of import expression and module expressions compose
+			fairly well together. Module equality would be defined how product equality 
+			is defined which depends on function equality for function members. 
+			Function equality is undecidable if the definition of either function is 
+			unknown, most languages compare the the addresses of functions for equality
+			and perhaps this may be good enough for practical purposes.
+		</p>
+		<p>
+			Even though module terms are used like product terms, perhaps they need to 
+			be annotated to indicate if the term is the result of a static module or 
+			dynamically imported module so that the implementation can resolve how to 
+			actually perform member access. 
+		</p>
+		<p>
+			A module term imported using a dynamic string can be implemented as a pair 
+			of a handle and the product of data and functions of the module. The handle 
+			is acquired from the linux library call <code>dlopen</code>, the product of 
+			member terms is acquired from a call to <code>dlsym</code> for each exported 
+			member expressed in the specified module type. When a dynamic module term is 
+			eliminated, the handle must be disposed of using <code>dlclose</code>.
+		</p>
+		<p>
+			Module terms that are dynamic and require cleanup must be of a linear type
+			to enforce the cleanup phase. Of course none of this is a problem if 
+			dynamically imported modules are not allowed by the language.
+		</p>
+	</section>
+	<section id="rules">
+		<head>
+			<h3>5. Summary of module typing rules</h3>
+		</head>
+		<figure>
+		<table class="centered centered-text">
+			<thead class="shaded">
+				<tr>
+					<th>Assumptions</th>
+					<th>Conclusion</th>
+					<th>Rule</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr>
+					<td>s : string</td>
+					<td>import (s : module T) : module T</td>
+					<td>import</td>
+				</tr>
+				<tr>
+					<td>x : T , y : U</td>
+					<td>module (export x , y) : module T</td>
+					<td>module export left</td>
+				</tr>
+				<tr>
+					<td>x : T , y : U</td>
+					<td>module (x , export y) : module U</td>
+					<td>module export right</td>
+				</tr>
+				<tr>
+					<td>x : module (T , U)</td>
+					<td>fst x : T</td>
+					<td>fst module</td>
+				</tr>
+				<tr>
+					<td>x : module (T , U)</td>
+					<td>snd x : U</td>
+					<td>snd module</td>
+				</tr>
+			</tbody>
+		</table>
+		</figure>
+		<p>
+			In these typing rules, the lexeme <em>module</em> is used as both a term 
+			and type constructor. Even though module terms are used like product terms 
+			(both having fst and snd operations), their type must include a module 
+			qualifier so that the implementation can properly resolve member lookup.
+		</p>
+		<p>
+			There can also be a dynamic module type whose terms are introduced from
+			import expressions using non-constant-evaluated strings.
+		</p>
+		<p>
+			One thing I did not talk about was scoping, briefly I will say that 
+			function terms defined inside a module expression have an immediate 
+			enclosing scope that contains the members of the module term being 
+			expressed. The member function terms have access to them as if they were 
+			free variables to those functions: this implies that the module is 
+			now a record: a product of named members.
+		</p>
+		<p>
+			As for initialization, the module expression is an expression of a term 
+			and so the values of any member data of the module term can be expressed 
+			directly. If module code needs to executed for initialization, then 
+			this comes down to a matter of convention of the entry point function 
+			name and whether or not that entry point function is exposed in the 
+			module type (it shouldn't be exposed). A lot of other details involved 
+			in module initialization and module equality depend on whether or not 
+			modules can contain, depend on, or produce effects or mutable state.
+			A good language will need to isolate these things.
+		</p>
+	</section>
+</article>
