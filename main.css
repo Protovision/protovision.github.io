@@ -287,8 +287,6 @@ body{
 	font-family:var(--font-family-code);}
 a{
 	color:LinkText;}
-a:active{
-	color:ActiveText;}
 q,blockquote{
 	font-family:var(--font-family-quote);}
 .code,code{

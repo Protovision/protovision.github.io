@@ -30,37 +30,37 @@
 			<tbody>
 				<tr>
 					<td>0</td>
-					<td>Function</td>
+					<td><a href="https://en.wikipedia.org/wiki/Simply_typed_lambda_calculus">Function</a></td>
 					<td>T &rarr; U</td>
 					<td>&lambda; x : T . e</td>
 				</tr>
 				<tr>
 					<td>1</td>
-					<td>Dependent function</td>
+					<td><a href="https://en.wikipedia.org/wiki/Dependent_type#%CE%A0_type">Dependent function</a></td>
 					<td>x : T &rarr; U</td>
 					<td>&lambda; x : T . e</td>
 				</tr>
 				<tr>
 					<td>1</td>
-					<td>Dependent pair</td>
+					<td><a href="https://en.wikipedia.org/wiki/Dependent_type#%CE%A3_type">Dependent pair</a></td>
 					<td>x : T &wedge; U</td>
 					<td>x : T , e</td>
 				</tr>
 				<tr>
 					<td>2</td>
-					<td>Polymorphic function</td>
+					<td><a href="https://en.wikipedia.org/wiki/System_F">Polymorphic function</a></td>
 					<td>&forall; t : K . T</td>
 					<td>&lambda; t : K . e</td>
 				</tr>
 				<tr>
 					<td>2</td>
-					<td>Polymorphic pair</td>
+					<td><a href="https://en.wikipedia.org/wiki/Type_system#Existential_types">Polymorphic pair</td>
 					<td>&exist; t : K . T</td>
 					<td>t : K , e</td>
 				</tr>
 				<tr>
 					<td>3</td>
-					<td>Type constructor</td>
+					<td><a href="https://en.wikipedia.org/wiki/Type_constructor">Type constructor</a></td>
 					<td>K &rarr; L</td>
 					<td>&lambda; t : K . T</td>
 				</tr>
@@ -100,13 +100,13 @@
 			A (dependent) function's term variable shall always be of a concrete type
 		</li>
 		<li>
-			A polymorphic function's type variable shall always be a concrete type
+			A polymorphic function's type variable shall always be a concrete type. 
+			This restriction is known as <a href="https://en.wikipedia.org/wiki/Parametric_polymorphism#Rank-1_(predicative)_polymorphism"><i>predicative polymorphism</i></a>.
 		</li>
 		<li>
-			A polymorphic pair's type variable shall always be a concrete type whose 
-			structure does not vary for all concrete types, additionally the 
-			type-dependent term in that pair shall itself be a pair that stores a 
-			term of that type variable
+			A polymorphic pair's type variable shall always be a concrete type, 
+			additionally the type-dependent term in that pair shall itself be a pair
+			that stores a term of that type variable. 
 		</li>
 	</ul>
 	<p>
@@ -175,6 +175,27 @@
 	</ul>
 	<p>
 		Most languages except the academic ones do not really support dependent 
-		types.
+		types. The industry languages that appear to support dependent types only
+		do so if the term to depend on is a constant. 
 	</p>
+	<p>
+		I believe the following terms are related:
+	</p>
+	<ul>
+		<li>Predicativity</li>
+		<li><a href="https://en.wikipedia.org/wiki/Total_functional_programming">Total</a></li>
+		<li><a href="https://en.wikipedia.org/wiki/Stratification_(mathematics)">Stratification</a></li>
+		<li><a href="https://en.wikipedia.org/wiki/Normal_form_(abstract_rewriting)">Strong normalization</a></li>
+		<li><a href="https://en.wikipedia.org/wiki/Primitive_recursive_function">Primitive recursion</a></li>
+	</ul>
+	<p>
+		And these should be the qualities of pure functions and pure functional 
+		types. Countering these related terms are these other related terms which
+		should be the qualities of imperative and impure code/data:
+	</p>
+	<ul>
+		<li><a href="https://en.wikipedia.org/wiki/Impredicativity">Impredicativity</a></li>
+		<li><a href="https://en.wikipedia.org/wiki/Turing_completeness">Turing completeness</a></li>
+		<li><a href="https://en.wikipedia.org/wiki/General_recursive_function">General recursion</a></li>
+	</ul>
 </article>
