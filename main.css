@@ -1,48 +1,9 @@
 /* Variables */
 
 :root{
-	color-scheme:light dark;
-	--font-family-text:system-ui,math,sans-serif;/*'Swoope-Edited STIX Two Math';*/
+	--font-family-text:system-ui,math,sans-serif;
 	--font-family-quote:ui-serif,serif;
-	--font-family-code:ui-monospace,monospace;
-	--font-weight-regular:400;
-	--font-weight-semibold:500;
-	--font-weight-bold:600;}
-
-/* Fonts */
-
-/*
-@font-face{
-	font-family:'Swoope-Edited Inter';
-	font-style:normal;
-	font-weight:100 900;
-	font-display:var(--font-display);
-	src:url('fonts/inter/inter-normal-100-900.woff2') format('woff2');}
-@font-face{
-	font-family:'Swoope-Edited Inter';
-	font-style:italic;
-	font-weight:100 900;
-	font-display:var(--font-display);
-	src:url('fonts/inter/inter-italic-100-900.woff2') format('woff2');}
-@font-face{
-	font-family:'Swoope-Edited Azeret Mono';
-	font-style:normal;
-	font-weight:100 900;
-	font-display:var(--font-display);
-	src:url('fonts/azeret-mono/azeret-mono-normal-100-900.woff2') format('woff2');}
-@font-face{
-	font-family:'Swoope-Edited Azeret Mono';
-	font-style:italic;
-	font-weight:100 900;
-	font-display:var(--font-display);
-	src:url('fonts/azeret-mono/azeret-mono-italic-100-900.woff2') format('woff2');}
-@font-face{
-	font-family:'Swoope-Edited STIX Two Math';
-	font-style:normal;
-	font-weight:400;
-	font-display:block;
-	src:url('fonts/stix-two-math/stix-two-math-normal-400.woff2') format('woff2');}
-*/
+	--font-family-code:ui-monospace,monospace;}
 
 /* Reset */
 
@@ -83,7 +44,7 @@ figure{
 	break-inside:avoid;}
 body{
 	line-height:1.5;
-	font-weight:var(--font-weight-regular);}
+	font-weight:normal;}
 address,
 article,
 aside,
@@ -119,8 +80,7 @@ h4,
 h5,
 h6,
 th,
-:is(h1,h2,h3,h4,h5,h6,th) :is(dt,figcaption,a,b,strong,time,summary){
-	font-weight:var(--font-weight-bold);}
+:is(h1,h2,h3,h4,h5,h6,th) :is(dt,figcaption,a,b,strong,time,summary),
 dt,
 figcaption,
 a,
@@ -128,7 +88,7 @@ b,
 strong,
 time,
 summary{
-	font-weight:var(--font-weight-semibold);}
+	font-weight:bold;}
 dt,
 abbr,
 cite,
@@ -138,10 +98,6 @@ i,
 q,
 var{
 	font-style:italic;}
-code,
-kbd,
-samp{
-	font-family:monospace;}
 blockquote,
 dd{
 	padding-left:0.75em;}
@@ -269,29 +225,73 @@ main{padding:0.75em;}
 		min-height:auto;}
 	#main-nav,#main-footer{display:none;}}
 
-/* Styling */
+/* Colors */
+
+body{
+	background-color:#fff;
+	color:#000;}
+a{
+	color:#00f;}
+a:active{
+	color:#0f0;}
+
+@media (prefers-color-scheme:dark){
+	body{
+		background-color:#000;
+		color:#fff;}
+	a{
+		color:#07f;}
+	a:active{
+		color:#7f0;}}
 
 ::selection{
-	background:Mark;
-	color:MarkText;}
+	background:#ff0;
+	color:#000;}
 mark{
-	text-decoration:none;
-	background-color:Mark;
-	color:MarkText;}
+	background-color:#ff0;
+	color:#000;}
+
+@supports (color-scheme:light dark) and
+	(background-color:Canvas) and
+	(color:CanvasText) and
+	(background:Highlight) and
+	(color:HighlightText) and
+	(background-color:Mark) and
+	(color:MarkText) and
+	(color:LinkText) and
+	(color:ActiveText){
+	:root{
+		color-scheme:light dark;}
+	body{
+		background-color:Canvas;
+		color:CanvasText;}
+	::selection{
+		background:Highlight;
+		color:HightlightText;}
+	mark{
+		background-color:Mark;
+		color:MarkText;}
+	a{
+		color:LinkText;}
+	a:active{
+		color:ActiveText;}}
+
+/* Styling */
+
 body{
-	background-color:Canvas;
-	color:CanvasText;
 	font-family:var(--font-family-text);
 	print-color-adjust:exact!important;}
-.code,code,samp,kbd{
-	font-family:var(--font-family-code);}
-a{
-	color:LinkText;}
-q,blockquote{
+mark{
+	text-decoration:none;}
+blockquote,
+q{
 	font-family:var(--font-family-quote);}
-.code,code{
-	padding:0 0.25em;}
-.code{
+.code,
+code,
+kbd,
+samp{
+	font-family:var(--font-family-code);
+	padding:0 0.25em;
 	line-height:1.25;}
 .max-width{
 	width:100%;}
@@ -316,7 +316,7 @@ q,blockquote{
 .middled-text{
 	vertical-align:middle;}
 .accented{
-	border-left:0.375em solid LinkText;}
+	border-left:0.375em solid;}
 .margined{
 	margin:0.75em;}	
 .padded{
