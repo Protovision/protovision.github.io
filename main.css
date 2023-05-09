@@ -172,6 +172,8 @@ main{padding:0.75em;}
 .always-break-after{
 	break-after:always;}
 .tabular{table-layout:fixed;}
+.tabular>*{
+	margin-bottom:0.5em;}
 .horizontal.words{
 	display:flex;
 	flex-wrap:wrap;
@@ -197,10 +199,15 @@ main{padding:0.75em;}
 		max-width:100%;
 		overflow-x:auto;}
 	.tabular>*{
-		display:table-row;}
+		display:table-row;
+		margin-bottom:0;}
 	.tabular>*>*{
 		display:table-cell;
-		padding:0 0.75em;}}
+		padding:0 0.75em;}
+	.tabular>*>*:first-child{
+		padding-left:0;}
+	.tabular>*>*:last-child{
+		padding-right:0;}}
 @media screen and (min-width:52em){
 	html{margin-left:calc(100vw - 100%);}
 	body{padding:1em 0;}
@@ -297,6 +304,8 @@ samp{
 	width:100%;}
 .no-margin{
 	margin:0;}
+.no-padding{
+	padding:0;}
 .top-border{
 	border-top:1px solid;}
 .bottom-border{
