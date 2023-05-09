@@ -291,6 +291,10 @@ mark{
 blockquote,
 q{
 	font-family:var(--font-family-quote);}
+aside{
+	border-left:1px dashed;}
+pre{
+	border:1px solid;}
 .code,
 code,
 kbd,
