@@ -296,6 +296,7 @@ code,
 kbd,
 samp,
 time{
+	font-weight:bold;
 	font-family:var(--font-family-code);}
 .code{
 	line-height:1.25;}
