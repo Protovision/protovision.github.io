@@ -197,17 +197,11 @@
 	<p>
 		Let's show how this data algebra can be translated to C++. The C++ class:
 	</p>
-	<figure>
-		<pre class="no-margin padded code">#&nbsp;include&lt;cstddef&gt;<br>#&nbsp;include&lt;span&gt;<br>using&nbsp;namespace&nbsp;std;<br><br>template&lt;typename&nbsp;Type&gt;<br>struct&nbsp;Writer{<br>&nbsp;&nbsp;virtual&nbsp;ptrdiff_t&nbsp;write(span&lt;Type&gt;&nbsp;buffer)&nbsp;noexcept&nbsp;=&nbsp;0;<br>&nbsp;&nbsp;virtual&nbsp;~&nbsp;Writer()&nbsp;=&nbsp;default;};<br></pre>
-	</figure>
+	<pre class="no-margin padded code">#&nbsp;include&lt;cstddef&gt;<br>#&nbsp;include&lt;span&gt;<br>using&nbsp;namespace&nbsp;std;<br><br>template&lt;typename&nbsp;Type&gt;<br>struct&nbsp;Writer{<br>&nbsp;&nbsp;virtual&nbsp;ptrdiff_t&nbsp;write(span&lt;Type&gt;&nbsp;buffer)&nbsp;noexcept&nbsp;=&nbsp;0;<br>&nbsp;&nbsp;virtual&nbsp;~&nbsp;Writer()&nbsp;=&nbsp;default;};</pre>
 	<p>
 		Assuming a normal type system, this class can be a translation from the expression:
 	</p>
-	<figure>
-		<pre class="no-margin shaded padded">
-			&forall; T . &exist; A . A &wedge; (A &wedge; &Sigma;<sub>n:size_t</sub> T<sup>n</sup> &rarr; ptrdiff_t) &wedge; (A &rarr; 1)
-		</pre>
-	</figure>
+	<p>&forall; T . &exist; A . A &wedge; (A &wedge; &Sigma;<sub>n:size_t</sub> T<sup>n</sup> &rarr; ptrdiff_t) &wedge; (A &rarr; 1)</p>
 	<p>
 		This abstract type is paramatized for any type (but not really, additional type checking with templates should be used to check if Type is movable and destructible.) and provides an interface for sending out an array of that type.
 	</p>
@@ -221,9 +215,7 @@
 	<p>
 		In C, the implementation would be:
 	</p>
-	<figure>
-		<pre class="no-margin padded code">#&nbsp;include&lt;stddef.h&gt;<br>#&nbsp;define&nbsp;writer(type)&nbsp;\<br>&nbsp;&nbsp;type&nbsp;##&nbsp;_writer<br>#&nbsp;define&nbsp;instantiate_writer(type)&nbsp;\<br>&nbsp;&nbsp;typedef&nbsp;struct{&nbsp;\<br>&nbsp;&nbsp;&nbsp;&nbsp;void(*&nbsp;state);&nbsp;\<br>&nbsp;&nbsp;&nbsp;&nbsp;ptrdiff_t(&nbsp;\<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(*&nbsp;write)(&nbsp;\<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;void(*&nbsp;restrict&nbsp;state)&nbsp;,&nbsp;\<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;size_t(length)&nbsp;,&nbsp;\<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;type(*&nbsp;restrict&nbsp;buffer)));&nbsp;\<br>&nbsp;&nbsp;&nbsp;&nbsp;void(&nbsp;\<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(*&nbsp;close)(&nbsp;\<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;void(*&nbsp;restrict&nbsp;state)));}&nbsp;\<br>&nbsp;&nbsp;(writer(type));<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<br></pre>
-	</figure>
+	<pre class="no-margin padded code">#&nbsp;include&lt;stddef.h&gt;<br>#&nbsp;define&nbsp;writer(type)&nbsp;\<br>&nbsp;&nbsp;type&nbsp;##&nbsp;_writer<br>#&nbsp;define&nbsp;instantiate_writer(type)&nbsp;\<br>&nbsp;&nbsp;typedef&nbsp;struct{&nbsp;\<br>&nbsp;&nbsp;&nbsp;&nbsp;void(*&nbsp;state);&nbsp;\<br>&nbsp;&nbsp;&nbsp;&nbsp;ptrdiff_t(&nbsp;\<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(*&nbsp;write)(&nbsp;\<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;void(*&nbsp;restrict&nbsp;state)&nbsp;,&nbsp;\<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;size_t(length)&nbsp;,&nbsp;\<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;type(*&nbsp;restrict&nbsp;buffer)));&nbsp;\<br>&nbsp;&nbsp;&nbsp;&nbsp;void(&nbsp;\<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(*&nbsp;close)(&nbsp;\<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;void(*&nbsp;restrict&nbsp;state)));}&nbsp;\<br>&nbsp;&nbsp;(writer(type));</pre>
 	<p>
 		In C, parametric polymorphism is accomplished with macros but with the 
 		disadvantage that instantiation must be performed manually. Dynamic dispatch

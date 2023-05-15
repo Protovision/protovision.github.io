@@ -21,7 +21,7 @@
 			mainFooter . style . visibility = 'hidden';
 			(mainSection . classList . add)('loading');
 			(mainSection . classList . remove)('loaded');
-			await(wait(opacityTransitionTime));};
+			/*await(wait(opacityTransitionTime));*/};
 		const displayContent = async (content , hash) => {
 			if(mainSection . lastChild){
 				(mainSection . replaceChild)(
