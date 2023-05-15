@@ -1,6 +1,5 @@
 (() => {
 	(window . addEventListener)('DOMContentLoaded' , async (event) => {
-		document . body . style . opacity = 1;
 		const mainSection = (document . getElementById)('main-section');
 		const mainFooter = (document . getElementById)('main-footer');
 		const mainFooterScrollTop = (document . getElementById)('main-footer-scroll-top');
@@ -14,14 +13,11 @@
 			(p . appendChild)(strong);
 			(fragment . appendChild)(p);
 			return(fragment);};
-		const wait = (ms) => {
-			return new Promise(resolve => setTimeout(resolve , ms));};
 		const clearContent = async () => {
 			scrollTo(0 , 0);
 			mainFooter . style . visibility = 'hidden';
 			(mainSection . classList . add)('loading');
-			(mainSection . classList . remove)('loaded');
-			/*await(wait(opacityTransitionTime));*/};
+			(mainSection . classList . remove)('loaded');};
 		const displayContent = async (content , hash) => {
 			if(mainSection . lastChild){
 				(mainSection . replaceChild)(
