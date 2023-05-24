@@ -106,7 +106,7 @@ blockquote{
 /* Padding */
 
 body{
-	padding:1rem;}
+	padding:1.5rem;}
 blockquote,
 pre{
 	padding:0 1rem;}
@@ -224,36 +224,6 @@ mark{
 		background-color:Mark;
 		color:MarkText;}}
 
-/* Desktop */
-
-@media screen and (min-width:51rem){
-	html{
-		margin-left:calc(100vw - 100%);}
-	body{
-		padding:0;}
-	main{
-		margin:1rem auto;
-		padding:3rem;
-		max-width:51rem;
-		min-height:calc(100vh - 2rem);}}
-
-/* Print */
-
-@media print{
-	@page{
-			margin:3rem;}
-		body,
-		main{
-			margin:0;
-			border:0;
-			padding:0;
-			background-color:transparent;
-			color:#000;}
-		main{
-			max-width:auto;
-			min-height:auto;}
-		#main-nav,#main-footer{display:none;}}
-
 /* Special styling */
 
 body>main>header{
@@ -279,7 +249,7 @@ body>main>footer{
 	margin-top:0;}
 .tabular>*:last-child{
 	margin-bottom:0;}
-@media all and (min-width:45rem){
+@media all and (min-width:51rem){
 	.horizontal{
 		display:flex;
 		flex-wrap:wrap;
@@ -311,4 +281,34 @@ body>main>footer{
 	opacity:1;
 	visibility:visible;
 	/*transition:visibility 0s linear 0s,opacity 0.2s linear;*/}
-		
+	
+/* Desktop */
+
+@media screen and (min-width:51rem){
+	html{
+		margin-left:calc(100vw - 100%);}
+	body{
+		padding:0;}
+	main{
+		margin:0.75rem auto;
+		padding:3rem;
+		max-width:51rem;
+		min-height:calc(100vh - 2rem);}}
+
+/* Print */
+
+@media print{
+	@page{
+			margin:3rem;}
+		body,
+		main{
+			margin:0;
+			border:0;
+			padding:0;
+			background-color:transparent;
+			color:#000;}
+		main{
+			max-width:auto;
+			min-height:auto;}
+		#main-nav,#main-footer{display:none;}}
+

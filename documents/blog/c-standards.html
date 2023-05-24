@@ -1,0 +1,80 @@
+<article>
+	<hgroup>
+		<h2>C Standards</h2>
+		<p><time datetime="2023-05-23">2023-05-23</time></p>
+	</hgroup>
+	<p>There are currently three major C standards: C89, C99, and C11.</p>
+	<p>
+		Each standard's compiler support is inversely proportional to it's age.
+	</p>
+	<p>
+		I believe C99 is suitable as a compiler implementation language and
+		translation target language. 
+	</p>
+	<p>
+		Features which I use from C99:
+	</p>
+	<ul>
+		<li>Boolean type</li>
+		<li><code>long long</code> integer types</li>
+		<li>Compound literals</li>
+		<li><code>__func__</code></li>
+		<li>Inline functions</li>
+		<li>Intermixed declarations and statements</li>
+		<li>Restricted pointers</li>
+		<li>Variadic macros</li>
+	</ul>
+	<p>
+		Features which I use from C11:
+	</p>
+	<ul>
+		<li>Anonymous structures and unions</li>
+		<li>Generic expressions</li>
+	</ul>
+	<p>
+		I can live without those C11 features. I have also heard that C11 threads, 
+		which would have been a major reason to use C11 for many people, is 
+		not widely supported because of it's poor design. 
+	</p>
+	<p>
+		The most important features I use are the <code>long long</code> integer 
+		types (which is not supported by C89) because they have a minimum
+		precision of 64 bits: a precision that modern programming languages 
+		should support.
+	</p>
+	<p>
+		Unicode support in C11 is still bad. A character constant with the 
+		<code>u8</code> prefix is a UTF-8 code unit, but the type is 
+		<code>char</code> whose signedness varies by implementation and thus it's 
+		value may be negative: a value that does not semantically map to any valid 
+		unicode code unit. C23 corrects this by requiring it to be unsigned. 
+	</p>
+	<p>
+		The <code>u</code> and <code>U</code> prefixes, which denote 16 and 32 
+		bit character widths respectively, does not enforce that unicode be 
+		their particular encoding: making them as useless as <code>wchar_t</code>. 
+		This is also now corrected in C23 to require them to use UTF-16 and 
+		UTF-32, respectively.
+	</p>
+	<p>
+		Many bitwise and arithmetic operations with certain operands are 
+		undefined or implementation-defined because signed integer representations 
+		are not necessarily using two's complement. C23 makes two's complement 
+		mandatory now.
+	</p>
+	<p>
+		C23 features which I plan to use:
+	</p>
+	<ul>
+		<li>Attributes</li>
+		<li>Binary integer literals</li>
+		<li>Empty initializers</li>
+		<li>UTF-8 literals</li>
+		<li>Boolean constant keywords</li>
+		<li>Macro constants for the width of integer types</li>
+		<li>Null pointer type</li>
+	</ul>
+	<p>
+		Unfortunately, I cannot use C23 because it is not widely supported yet.
+	</p>
+</article>
