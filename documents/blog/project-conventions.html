@@ -73,25 +73,7 @@
 			Makefile can subsequently include. It is simple enough and works well for 
 			my purposes. This configuration file should have the following variables:
 		</p>
-		<ul>
-			<li><code>prefix = /usr/local</code></li>
-			<li><code>exec_prefix = $(prefix)</code></li>
-			<li><code>bindir = $(exec_prefix)/bin</code></li>
-			<li><code>datarootdir = $(prefix)/share</code></li>
-			<li><code>includedir = $(prefix)/include</code></li>
-			<li><code>docdir = $(datarootdir)/doc</code></li>
-			<li><code>libdir = $(exec_prefix)/lib</code></li>
-			<li><code>srcdir = .</code></li>
-			<li><code>AR = ar</code></li>
-			<li><code>CC = cc</code></li>
-			<li><code>INSTALL = install</code></li>
-			<li><code>INSTALL_DATA = $(INSTALL) -m 644</code></li>
-			<li><code>INSTALL_PROGRAM = $(INSTALL)</code></li>
-			<li><code>CFLAGS = </code></li>
-			<li><code>CPPFLAGS = </code></li>
-			<li><code>LDFLAGS = </code></li>
-			<li><code>LDLIBS = </code></li>
-		</ul>
+		<pre class="no-margin code padded">#&nbsp;Optionally&nbsp;edit&nbsp;before&nbsp;running&nbsp;Make<br>prefix&nbsp;=&nbsp;/usr/local<br>exec_prefix&nbsp;=&nbsp;$(prefix)<br>bindir&nbsp;=&nbsp;$(exec_prefix)/bin<br>datarootdir&nbsp;=&nbsp;$(prefix)/share<br>includedir&nbsp;=&nbsp;$(prefix)/include<br>docdir&nbsp;=&nbsp;$(datarootdir)/doc/fera<br>libdir&nbsp;=&nbsp;$(exec_prefix)/lib<br>srcdir&nbsp;=&nbsp;.<br>AR&nbsp;=&nbsp;ar<br>CC&nbsp;=&nbsp;cc<br>INSTALL&nbsp;=&nbsp;install<br>INSTALL_DATA&nbsp;=&nbsp;$(INSTALL)&nbsp;-m&nbsp;644<br>INSTALL_PROGRAM&nbsp;=&nbsp;$(INSTALL)<br>CFLAGS&nbsp;=&nbsp;<br>CPPFLAGS&nbsp;=&nbsp;<br>LDFLAGS&nbsp;=&nbsp;<br>LDLIBS&nbsp;=&nbsp;</pre>
 		<p>
 			And the Makefile will perform it's operations in terms of these variables.
 		</p>

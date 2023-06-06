@@ -1,0 +1,42 @@
+<article>
+	<hgroup>
+		<h2>C Compiler Flags</h2>
+		<p><time datetime="2023-06-06">2023-06-06</time></p>
+	</hgroup>
+	<p>
+		I've been using the following flags for the C preprocessor and compiler 
+		that I'm using.
+	</p>
+	<pre class="no-margin code padded">CPPFLAGS&nbsp;=&nbsp;\<br>&nbsp;&nbsp;-ftrack-macro-expansion=0&nbsp;\<br>&nbsp;&nbsp;-fno-extended-identifiers&nbsp;\<br>&nbsp;&nbsp;-fexec-charset=ASCII&nbsp;\<br>&nbsp;&nbsp;-finput-charset=ASCII<br>CFLAGS&nbsp;=&nbsp;\<br>&nbsp;&nbsp;-std=c99&nbsp;\<br>&nbsp;&nbsp;-fno-asm&nbsp;\<br>&nbsp;&nbsp;-fno-builtin&nbsp;\<br>&nbsp;&nbsp;-fhosted&nbsp;\<br>&nbsp;&nbsp;-fsigned-bitfields&nbsp;\<br>&nbsp;&nbsp;-fmessage-length=80&nbsp;\<br>&nbsp;&nbsp;-fdiagnostics-show-location=once&nbsp;\<br>&nbsp;&nbsp;-fdiagnostics-color=never&nbsp;\<br>&nbsp;&nbsp;-fdiagnostics-urls=never&nbsp;\<br>&nbsp;&nbsp;-fno-diagnostics-show-caret&nbsp;\<br>&nbsp;&nbsp;-fno-diagnostics-show-labels&nbsp;\<br>&nbsp;&nbsp;-fno-diagnostics-show-line-numbers&nbsp;\<br>&nbsp;&nbsp;-fdiagnostics-path-format=none&nbsp;\<br>&nbsp;&nbsp;-fmax-errors=1&nbsp;\<br>&nbsp;&nbsp;-Wfatal-errors&nbsp;\<br>&nbsp;&nbsp;-Wpedantic&nbsp;\<br>&nbsp;&nbsp;-Wchar-subscripts&nbsp;\<br>&nbsp;&nbsp;-Wdouble-promotion&nbsp;\<br>&nbsp;&nbsp;-Wduplicate-decl-specifier&nbsp;\<br>&nbsp;&nbsp;-Winit-self&nbsp;\<br>&nbsp;&nbsp;-Wimplicit&nbsp;\<br>&nbsp;&nbsp;-Wignored-qualifiers&nbsp;\<br>&nbsp;&nbsp;-Wmain&nbsp;\<br>&nbsp;&nbsp;-Wmissing-attributes&nbsp;\<br>&nbsp;&nbsp;-Wmissing-include-dirs&nbsp;\<br>&nbsp;&nbsp;-Wmultistatement-macros&nbsp;\<br>&nbsp;&nbsp;-Wparentheses&nbsp;\<br>&nbsp;&nbsp;-Wsequence-point&nbsp;\<br>&nbsp;&nbsp;-Wreturn-local-addr&nbsp;\<br>&nbsp;&nbsp;-Wshift-count-negative&nbsp;\<br>&nbsp;&nbsp;-Wshift-count-overflow&nbsp;\<br>&nbsp;&nbsp;-Wshift-negative-value&nbsp;\<br>&nbsp;&nbsp;-Wshift-overflow=2&nbsp;\<br>&nbsp;&nbsp;-Wswitch-default&nbsp;\<br>&nbsp;&nbsp;-Wswitch-enum&nbsp;\<br>&nbsp;&nbsp;-Wswitch-bool&nbsp;\<br>&nbsp;&nbsp;-Wswitch-outside-range&nbsp;\<br>&nbsp;&nbsp;-Wswitch-unreachable&nbsp;\<br>&nbsp;&nbsp;-Wunused-but-set-parameter&nbsp;\<br>&nbsp;&nbsp;-Wunused-but-set-variable&nbsp;\<br>&nbsp;&nbsp;-Wunused-function&nbsp;\<br>&nbsp;&nbsp;-Wunused-function&nbsp;\<br>&nbsp;&nbsp;-Wunused-label&nbsp;\<br>&nbsp;&nbsp;-Wunused-local-typedefs&nbsp;\<br>&nbsp;&nbsp;-Wunused-parameter&nbsp;\<br>&nbsp;&nbsp;-Wunused-variable&nbsp;\<br>&nbsp;&nbsp;-Wunused-const-variable=2&nbsp;\<br>&nbsp;&nbsp;-Wunused-value&nbsp;\<br>&nbsp;&nbsp;-Wuninitialized&nbsp;\<br>&nbsp;&nbsp;-Wmaybe-uninitialized&nbsp;\<br>&nbsp;&nbsp;-Wstrict-aliasing=3&nbsp;\<br>&nbsp;&nbsp;-Wstrict-overflow=5&nbsp;\<br>&nbsp;&nbsp;-Walloc-zero&nbsp;\<br>&nbsp;&nbsp;-Walloc-size-larger-than=32767&nbsp;\<br>&nbsp;&nbsp;-Walloca<br>&nbsp;&nbsp;-Warith-conversion&nbsp;\<br>&nbsp;&nbsp;-Warray-bounds&nbsp;\<br>&nbsp;&nbsp;-Warray-parameter=2&nbsp;\<br>&nbsp;&nbsp;-Wbool-compare&nbsp;\<br>&nbsp;&nbsp;-Wbool-operation&nbsp;\<br>&nbsp;&nbsp;-Wduplicated-branches&nbsp;\<br>&nbsp;&nbsp;-Wduplicated-cond&nbsp;\<br>&nbsp;&nbsp;-Wdiscarded-qualifiers&nbsp;\<br>&nbsp;&nbsp;-Wdiscarded-array-qualifiers&nbsp;\<br>&nbsp;&nbsp;-Wincompatible-pointer-types&nbsp;\<br>&nbsp;&nbsp;-Wint-conversion&nbsp;\<br>&nbsp;&nbsp;-Wzero-length-bounds&nbsp;\<br>&nbsp;&nbsp;-Wdiv-by-zero&nbsp;\<br>&nbsp;&nbsp;-Wtautological-compare&nbsp;\<br>&nbsp;&nbsp;-Wfloat-equal&nbsp;\<br>&nbsp;&nbsp;-Wtraditional-conversion&nbsp;\<br>&nbsp;&nbsp;-Wshadow=global&nbsp;\<br>&nbsp;&nbsp;-Wshadow=local&nbsp;\<br>&nbsp;&nbsp;-Wshadow=compatible-local&nbsp;\<br>&nbsp;&nbsp;-Wlarger-than=32767&nbsp;\<br>&nbsp;&nbsp;-Wframe-larger-than=65535&nbsp;\<br>&nbsp;&nbsp;-Wstack-usage=65535&nbsp;\<br>&nbsp;&nbsp;-Wpointer-arith&nbsp;\<br>&nbsp;&nbsp;-Wpointer-compare&nbsp;\<br>&nbsp;&nbsp;-Wtype-limits&nbsp;\<br>&nbsp;&nbsp;-Wcomment&nbsp;\<br>&nbsp;&nbsp;-Wtrigraphs&nbsp;\<br>&nbsp;&nbsp;-Wundef&nbsp;\<br>&nbsp;&nbsp;-Wexpansion-to-defined&nbsp;\<br>&nbsp;&nbsp;-Wendif-labels&nbsp;\<br>&nbsp;&nbsp;-Wbad-function-cast&nbsp;\<br>&nbsp;&nbsp;-Wcast-qual&nbsp;\<br>&nbsp;&nbsp;-Wcast-align=strict&nbsp;\<br>&nbsp;&nbsp;-Wcast-function-type&nbsp;\<br>&nbsp;&nbsp;-Wwrite-strings&nbsp;\<br>&nbsp;&nbsp;-Wclobbered&nbsp;\<br>&nbsp;&nbsp;-Wconversion&nbsp;\<br>&nbsp;&nbsp;-Wdangling-else&nbsp;\<br>&nbsp;&nbsp;-Wdangling-pointer=2&nbsp;\<br>&nbsp;&nbsp;-Wdate-time&nbsp;\<br>&nbsp;&nbsp;-Wempty-body&nbsp;\<br>&nbsp;&nbsp;-Wenum-compare&nbsp;\<br>&nbsp;&nbsp;-Wenum-conversion&nbsp;\<br>&nbsp;&nbsp;-Wjump-misses-init&nbsp;\<br>&nbsp;&nbsp;-Wsign-compare&nbsp;\<br>&nbsp;&nbsp;-Wsign-conversion&nbsp;\<br>&nbsp;&nbsp;-Wfloat-conversion&nbsp;\<br>&nbsp;&nbsp;-Wsizeof-array-div&nbsp;\<br>&nbsp;&nbsp;-Wsizeof-pointer-div&nbsp;\<br>&nbsp;&nbsp;-Wsizeof-array-argument&nbsp;\<br>&nbsp;&nbsp;-Waddress&nbsp;\<br>&nbsp;&nbsp;-Waddress-of-packed-member&nbsp;\<br>&nbsp;&nbsp;-Wlogical-op&nbsp;\<br>&nbsp;&nbsp;-Wlogical-not-parentheses&nbsp;\<br>&nbsp;&nbsp;-Wbuiltin-declaration-mismatch&nbsp;\<br>&nbsp;&nbsp;-Wbuiltin-macro-redefined&nbsp;\<br>&nbsp;&nbsp;-Wstrict-prototypes&nbsp;\<br>&nbsp;&nbsp;-Wold-style-declaration&nbsp;\<br>&nbsp;&nbsp;-Wold-style-definition&nbsp;\<br>&nbsp;&nbsp;-Wmissing-parameter-type&nbsp;\<br>&nbsp;&nbsp;-Wmissing-field-initializers&nbsp;\<br>&nbsp;&nbsp;-Wmultichar&nbsp;\<br>&nbsp;&nbsp;-Wnormalized=nfkc&nbsp;\<br>&nbsp;&nbsp;-Wattribute-warning&nbsp;\<br>&nbsp;&nbsp;-Wdeprecated&nbsp;\<br>&nbsp;&nbsp;-Wdeprecated-declarations&nbsp;\<br>&nbsp;&nbsp;-Woverflow&nbsp;\<br>&nbsp;&nbsp;-Wodr&nbsp;\<br>&nbsp;&nbsp;-Woverride-init&nbsp;\<br>&nbsp;&nbsp;-Wredundant-decls&nbsp;\<br>&nbsp;&nbsp;-Wrestrict&nbsp;\<br>&nbsp;&nbsp;-Wint-in-bool-context&nbsp;\<br>&nbsp;&nbsp;-Wint-to-pointer-cast&nbsp;\<br>&nbsp;&nbsp;-Wpointer-to-int-cast&nbsp;\<br>&nbsp;&nbsp;-Wvla&nbsp;\<br>&nbsp;&nbsp;-Wvla-larger-than=32767&nbsp;\<br>&nbsp;&nbsp;-Wvla-parameter&nbsp;\<br>&nbsp;&nbsp;-Wvolatile-register-var&nbsp;\<br>&nbsp;&nbsp;-Wpointer-sign&nbsp;\<br>&nbsp;&nbsp;-Woverlength-strings&nbsp;\<br>&nbsp;&nbsp;-fstrict-overflow&nbsp;\<br>&nbsp;&nbsp;-ftrapv&nbsp;\<br>&nbsp;&nbsp;-fstrict-aliasing</pre>
+	<p>
+		What this does is:
+	</p>
+	<ul>
+		<li>Make the preprocessor not track macro expansions</li>
+		<li>Only allow ASCII letters, digits, and underscores in identifiers</li>
+		<li>Restrict character and string literals to ASCII</li>
+		<li>Restrict source code to ASCII</li>
+		<li>Use strict C99</li>
+		<li>Simplify the formatting of compiler output</li>
+		<li>Enable UB/IB arithmetic warnings</li>
+		<li>Enable implicit conversion warnings</li>
+		<li>Enable unused declaration/expression warnings</li>
+		<li>Enable a lot of other specific warnings</li>
+		<li>Make all warnings into errors</li>
+		<li>Stop compiling after the first error</li>
+		<li>Restrict object size to 32 KB (The minimum range of <code>ptrdiff_t</code>)</li>
+		<li>Restrict stack usage to 64 KB (The minimum range of <code>size_t</code>)</li>
+		<li>Assume strict aliasing rules</li>
+		<li>Do not assume signed arithmetic wraps around on overflow</li>
+		<li>Trap on signed arithmetic overflow</li>
+	</ul>
+	<p>
+		While debugging and fixing compilation errors, I will set 
+		<code>-ftrack-macro-expansions</code> to non-zero, and use <code>-g</code>.
+	</p>
+	<p>
+		I will update this list later to include specific optimization flags that 
+		I decide to use.
+	</p>
+</article>
+
