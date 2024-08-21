@@ -63,9 +63,9 @@ sup{top:-0.5em;}
 /* Line heights */
 
 body{
-	line-height:1.5;}
+	line-height:1.5rem;}
 pre{
-	line-height:1.25;}
+	line-height:1.25rem;}
 
 /* Margins */
 
@@ -83,25 +83,25 @@ h6,
 hgroup,
 main,
 nav,
-section{
-	margin:1rem 0;}
+section,
 blockquote,
 dl,
 figure,
+figcaption,
 hr,
 menu,
 ol,
 p,
 pre,
 ul{
-	margin:1rem 0;}
+	margin:0 0 1rem 0;}
 table{
-	margin:1rem auto;}
+	margin:0 auto 1rem auto;}
 
 /* Borders */
 
 blockquote{
-	border-left:4px solid;}
+	border-left:1px dashed;}
 
 /* Padding */
 
@@ -169,10 +169,33 @@ ins{
 	text-decoration:overline solid 1px;}
 u{
 	text-decoration:underline wavy 1px;}
-a:hover{
-	text-decoration:underline solid 1px;}
-a:active{
+
+/* Interactive elements */
+
+a,
+input,
+select{
+	border-bottom:2px solid;
 	text-decoration:none;}
+a:hover,
+input:hover,
+select:hover,
+a:focus,
+input:focus,
+select:focus{
+	border-top:2px solid;
+	border-bottom:2px solid;}
+a:active,
+input:active,
+select:active{
+	border-bottom:0;
+	border-top:2px solid;}
+input,
+select{
+	margin:0.25rem 0;
+	padding:0 0.25rem;
+	appearance:textfield;
+	vertical-align:center;}
 
 /* Backgrounds and colors */
 
@@ -180,45 +203,82 @@ body{
 	background-color:#eee;
 	color:#111;}
 hr{
-	height:4px;
 	background-color:#111;}
-a{
-	color:#07b;}
-a:active{
-	color:#0b7;}
+a,
+input,
+select,
+a:hover,
+input:hover,
+select:hover,
+a:focus,
+input:focus,
+select:focus{
+	border-color:#07b;
+	color:#111;
+	background-color:#eee;}
+a:active,
+input:active,
+select:active{
+	border-color:#0b7;}
 ::selection,
 mark{
-	background-color:#ff0;}
+	background-color:#ff0;
+	color:#111;}
 @media (prefers-color-scheme:dark){
 	body{
 		background-color:#111;
 		color:#eee;}
 	hr{
 		background-color:#eee;}
-	a{
-		color:#09d;}
-	a:active{
-		color:#0d9;}
+	a,
+	input,
+	select,
+	a:hover,
+	input:hover,
+	select:hover,
+	a:focus,
+	input:focus,
+	select:focus{
+		border-color:#09d;
+		color:#eee;
+		background-color:#111;}
+	a:active,
+	input:active,
+	select:active{
+		border-color:#0d9;}
 	::selection,
 	mark{
+		background-color:#ff0;
 		color:#111;}}
 @supports (color-scheme:light dark) and
 	(background-color:Canvas) and
 	(color:CanvasText) and
 	(background-color:Mark) and
 	(color:MarkText) and
-	(color:LinkText) and
-	(color:ActiveText){
+	(border-color:LinkText) and
+	(border-color:ActiveText){
 	body{
 		color-scheme:light dark;
 		background-color:Canvas;
 		color:CanvasText;}
 	hr{
 		background-color:CanvasText;}
-	a{
-		color:LinkText;}
-	a:active{
-		color:ActiveText;}
+	a,
+	input,
+	select,
+	a:hover,
+	input:hover,
+	select:hover,
+	a:focus,
+	input:focus,
+	select:focus{
+		border-color:LinkText;
+		color:CanvasText;
+		background-color:Canvas;}
+	a:active,
+	input:active,
+	select:active{
+		border-color:ActiveText;}
 	::selection,
 	mark{
 		background-color:Mark;
@@ -227,10 +287,9 @@ mark{
 /* Special styling */
 
 body>main>header{
-	border-top:2px solid;
-	border-bottom:2px solid;}
+	border-bottom:1px dashed;}
 body>main>footer{
-	border-top:2px solid;}
+	border-top:1px dashed;}
 .math{
 	font-family:math,sans-serif;}
 .no-margins{
@@ -284,31 +343,31 @@ body>main>footer{
 	
 /* Desktop */
 
-@media screen and (min-width:51rem){
+@media screen and (min-width:81ch){
 	html{
 		margin-left:calc(100vw - 100%);}
 	body{
 		padding:0;}
 	main{
-		margin:0.75rem auto;
-		padding:3rem;
-		max-width:51rem;
-		min-height:calc(100vh - 2rem);}}
+		margin:0.5ch auto;
+		padding:3ch;
+		max-width:77ch;
+		min-height:calc(100vh - 2ch);}}
 
 /* Print */
 
 @media print{
 	@page{
-			margin:3rem;}
-		body,
-		main{
+		margin:0.5in;}
+	body,
+	main{
 			margin:0;
 			border:0;
 			padding:0;
 			background-color:transparent;
 			color:#000;}
-		main{
-			max-width:auto;
-			min-height:auto;}
-		#main-nav,#main-footer{display:none;}}
+	main{
+		max-width:auto;
+		min-height:auto;}
+	#main-nav,#main-footer{display:none;}}
 
