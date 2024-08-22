@@ -170,32 +170,15 @@ ins{
 u{
 	text-decoration:underline wavy 1px;}
 
-/* Interactive elements */
+/* Links */
 
-a,
-input,
-select{
-	border-bottom:2px solid;
-	text-decoration:none;}
-a:hover,
-input:hover,
-select:hover,
-a:focus,
-input:focus,
-select:focus{
-	border-top:2px solid;
-	border-bottom:2px solid;}
-a:active,
-input:active,
-select:active{
-	border-bottom:0;
-	border-top:2px solid;}
-input,
-select{
-	margin:0.25rem 0;
-	padding:0 0.25rem;
-	appearance:textfield;
-	vertical-align:center;}
+a{
+	text-decoration:underline solid 0.125rem;
+	text-decoration-skip-ink:none;}
+a:hover,a:focus{
+	text-decoration-thickness:0.25rem;}
+a:active{
+	text-decoration:overline solid 0.25rem;}
 
 /* Backgrounds and colors */
 
@@ -204,22 +187,12 @@ body{
 	color:#111;}
 hr{
 	background-color:#111;}
-a,
-input,
-select,
-a:hover,
-input:hover,
-select:hover,
-a:focus,
-input:focus,
-select:focus{
-	border-color:#07b;
+a{
 	color:#111;
-	background-color:#eee;}
-a:active,
-input:active,
-select:active{
-	border-color:#0b7;}
+	background-color:#eee;
+	text-decoration-color:#07b;}
+a:active{
+	text-decoration-color:#0b7;}
 ::selection,
 mark{
 	background-color:#ff0;
@@ -230,6 +203,13 @@ mark{
 		color:#eee;}
 	hr{
 		background-color:#eee;}
+	a{
+		color:#eee;
+		background-color:#111;
+		text-decoration-color:#09d;}
+	a:active{
+		text-decoration-color:#0d9;}
+	/*
 	a,
 	input,
 	select,
@@ -245,40 +225,31 @@ mark{
 	a:active,
 	input:active,
 	select:active{
-		border-color:#0d9;}
+		border-color:#0d9;}*/
 	::selection,
 	mark{
 		background-color:#ff0;
 		color:#111;}}
+		
 @supports (color-scheme:light dark) and
 	(background-color:Canvas) and
 	(color:CanvasText) and
 	(background-color:Mark) and
 	(color:MarkText) and
-	(border-color:LinkText) and
-	(border-color:ActiveText){
+	(text-decoration-color:LinkText) and
+	(text-decoration-color:ActiveText){
 	body{
 		color-scheme:light dark;
 		background-color:Canvas;
 		color:CanvasText;}
 	hr{
 		background-color:CanvasText;}
-	a,
-	input,
-	select,
-	a:hover,
-	input:hover,
-	select:hover,
-	a:focus,
-	input:focus,
-	select:focus{
-		border-color:LinkText;
+	a{
 		color:CanvasText;
-		background-color:Canvas;}
-	a:active,
-	input:active,
-	select:active{
-		border-color:ActiveText;}
+		background-color:Canvas;
+		text-decoration-color:LinkText;}
+	a:active{
+		text-decoration-color:ActiveText;}
 	::selection,
 	mark{
 		background-color:Mark;
