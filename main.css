@@ -164,25 +164,23 @@ var{
 	font-style:italic;}
 del,
 s{
-	text-decoration:line-through solid 1px;}
+	text-decoration:line-through solid 0.125rem;}
 ins{
-	text-decoration:overline solid 1px;}
+	text-decoration:overline solid 0.125rem;}
 u{
-	text-decoration:underline wavy 1px;}
+	text-decoration:underline wavy 0.125rem;}
 
 /* Links */
 
 a{
 	text-decoration:underline solid 0.125rem;
-	-webkit-text-decoration:underline solid 0.125rem;
-	text-decoration-skip-ink:none;
-	-webkit-text-decoration-skip-ink:none;}
-a:hover,a:focus{
-	text-decoration-thickness:0.25rem;
-	-webkit-text-decoration-thickness:0.25rem;}
+	text-decoration-skip-ink:none;}
+a:hover,
+a:focus,
 a:active{
-	text-decoration:overline solid 0.25rem;
-	-webkit-text-decoration:overline solid 0.25rem;}
+	text-decoration-thickness:0.25rem;}
+a:active{
+	text-decoration-line:overline;}
 
 /* Backgrounds and colors */
 
@@ -192,17 +190,14 @@ body{
 hr{
 	background-color:#000;}
 a{
-	color:#000;
-	background-color:#fff;
-	text-decoration-color:#00f!important;
-	-webkit-text-decoration-color:#00f!important;}
+	color:#00f;
+	background-color:inherit;}
 a:active{
-	text-decoration-color:#0f0!important;
-	-webkit-text-decoration-color:#0f0!important;}
+	color:#0f0;}
 ::selection,
 mark{
-	background-color:#ff0!important;
-	color:#000!important;}
+	background-color:#ff0;
+	color:#000;}
 @media (prefers-color-scheme:dark){
 	body{
 		background-color:#000;
@@ -210,25 +205,20 @@ mark{
 	hr{
 		background-color:#fff;}
 	a{
-		color:#fff;
-		background-color:#000;
-		text-decoration-color:#07f!important;
-		-webkit-text-decoration-color:#07f!important;}
+		color:#37f;
+		background-color:inherit;}
 	a:active{
-		text-decoration-color:#0f7!important;
-		-webkit-text-decoration-color:#0f7!important;}
+		color:#3f7;}
 	::selection,
 	mark{
-		background-color:#ff0!important;
-		color:#000!important;}}
-/*		
+		background-color:#ff0;
+		color:#000;}}
+/*
 @supports (color-scheme:light dark) and
 	(background-color:Canvas) and
 	(color:CanvasText) and
 	(background-color:Mark) and
-	(color:MarkText) and
-	(text-decoration-color:LinkText) and
-	(text-decoration-color:ActiveText){
+	(color:MarkText){
 	body{
 		color-scheme:light dark;
 		background-color:Canvas;
@@ -236,17 +226,15 @@ mark{
 	hr{
 		background-color:CanvasText;}
 	a{
-		color:CanvasText;
-		background-color:Canvas;
-		text-decoration-color:LinkText;}
+		color:LinkText;
+		background-color:Canvas;}
 	a:active{
-		text-decoration-color:ActiveText;}
+		color:ActiveText;}
 	::selection,
 	mark{
 		background-color:Mark;
 		color:MarkText;}}
 */
-
 /* Special styling */
 
 body>main>header{
@@ -271,7 +259,7 @@ body>main>footer{
 	margin-top:0;}
 .tabular>*:last-child{
 	margin-bottom:0;}
-@media all and (min-width:51rem){
+@media all and (min-width:86ch){
 	.horizontal{
 		display:flex;
 		flex-wrap:wrap;
@@ -298,7 +286,7 @@ body>main>footer{
 	
 /* Desktop */
 
-@media screen and (min-width:86ch){
+@media all and (min-width:86ch){
 	html{
 		margin-left:calc(100vw - 100%);}
 	body{
