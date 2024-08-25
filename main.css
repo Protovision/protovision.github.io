@@ -174,11 +174,15 @@ u{
 
 a{
 	text-decoration:underline solid 0.125rem;
-	text-decoration-skip-ink:none;}
+	-webkit-text-decoration:underline solid 0.125rem;
+	text-decoration-skip-ink:none;
+	-webkit-text-decoration-skip-ink:none;}
 a:hover,a:focus{
-	text-decoration-thickness:0.25rem;}
+	text-decoration-thickness:0.25rem;
+	-webkit-text-decoration-thickness:0.25rem;}
 a:active{
-	text-decoration:overline solid 0.25rem;}
+	text-decoration:overline solid 0.25rem;
+	-webkit-text-decoration:overline solid 0.25rem;}
 
 /* Backgrounds and colors */
 
