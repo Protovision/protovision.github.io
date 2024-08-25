@@ -190,15 +190,15 @@ hr{
 a{
 	color:#000;
 	background-color:#fff;
-	text-decoration-color:#00f;
-	-webkit-text-decoration-color:#00f;}
+	text-decoration-color:#00f!important;
+	-webkit-text-decoration-color:#00f!important;}
 a:active{
-	text-decoration-color:#0f0;
-	-webkit-text-decoration-color:#0f0;}
+	text-decoration-color:#0f0!important;
+	-webkit-text-decoration-color:#0f0!important;}
 ::selection,
 mark{
-	background-color:#ff0;
-	color:#000;}
+	background-color:#ff0!important;
+	color:#000!important;}
 @media (prefers-color-scheme:dark){
 	body{
 		background-color:#000;
@@ -208,15 +208,15 @@ mark{
 	a{
 		color:#fff;
 		background-color:#000;
-		text-decoration-color:#07f;
-		-webkit-text-decoration-color:#07f;}
+		text-decoration-color:#07f!important;
+		-webkit-text-decoration-color:#07f!important;}
 	a:active{
-		text-decoration-color:#0f7;
-		-webkit-text-decoration-color:#0f7;}
+		text-decoration-color:#0f7!important;
+		-webkit-text-decoration-color:#0f7!important;}
 	::selection,
 	mark{
-		background-color:#ff0;
-		color:#000;}}
+		background-color:#ff0!important;
+		color:#000!important;}}
 /*		
 @supports (color-scheme:light dark) and
 	(background-color:Canvas) and
