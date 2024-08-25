@@ -106,7 +106,7 @@ blockquote{
 /* Padding */
 
 body{
-	padding:1.5rem;}
+	padding:1rem;}
 blockquote,
 pre{
 	padding:0 1rem;}
@@ -183,54 +183,41 @@ a:active{
 /* Backgrounds and colors */
 
 body{
-	background-color:#eee;
-	color:#111;}
+	background-color:#fff;
+	color:#000;}
 hr{
-	background-color:#111;}
+	background-color:#000;}
 a{
-	color:#111;
-	background-color:#eee;
-	text-decoration-color:#07b;}
+	color:#000;
+	background-color:#fff;
+	text-decoration-color:#00f;
+	-webkit-text-decoration-color:#00f;}
 a:active{
-	text-decoration-color:#0b7;}
+	text-decoration-color:#0f0;
+	-webkit-text-decoration-color:#0f0;}
 ::selection,
 mark{
 	background-color:#ff0;
-	color:#111;}
+	color:#000;}
 @media (prefers-color-scheme:dark){
 	body{
-		background-color:#111;
-		color:#eee;}
+		background-color:#000;
+		color:#fff;}
 	hr{
-		background-color:#eee;}
+		background-color:#fff;}
 	a{
-		color:#eee;
-		background-color:#111;
-		text-decoration-color:#09d;}
+		color:#fff;
+		background-color:#000;
+		text-decoration-color:#07f;
+		-webkit-text-decoration-color:#07f;}
 	a:active{
-		text-decoration-color:#0d9;}
-	/*
-	a,
-	input,
-	select,
-	a:hover,
-	input:hover,
-	select:hover,
-	a:focus,
-	input:focus,
-	select:focus{
-		border-color:#09d;
-		color:#eee;
-		background-color:#111;}
-	a:active,
-	input:active,
-	select:active{
-		border-color:#0d9;}*/
+		text-decoration-color:#0f7;
+		-webkit-text-decoration-color:#0f7;}
 	::selection,
 	mark{
 		background-color:#ff0;
-		color:#111;}}
-		
+		color:#000;}}
+/*		
 @supports (color-scheme:light dark) and
 	(background-color:Canvas) and
 	(color:CanvasText) and
@@ -254,6 +241,7 @@ mark{
 	mark{
 		background-color:Mark;
 		color:MarkText;}}
+*/
 
 /* Special styling */
 
@@ -303,27 +291,19 @@ body>main>footer{
 		padding-left:0;}
 	.tabular>*>*:last-child{
 		padding-right:0;}}
-.loading{
-	opacity:0;
-	visibility:hidden;
-	/*transition:visibility 0s linear 0.2s,opacity 0.2s linear;*/}
-.loaded{
-	opacity:1;
-	visibility:visible;
-	/*transition:visibility 0s linear 0s,opacity 0.2s linear;*/}
 	
 /* Desktop */
 
-@media screen and (min-width:81ch){
+@media screen and (min-width:86ch){
 	html{
 		margin-left:calc(100vw - 100%);}
 	body{
 		padding:0;}
 	main{
-		margin:0.5ch auto;
+		margin:0 auto;
 		padding:3ch;
-		max-width:77ch;
-		min-height:calc(100vh - 2ch);}}
+		max-width:80ch;
+		min-height:100vh;}}
 
 /* Print */
 

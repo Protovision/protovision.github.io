@@ -15,17 +15,13 @@
 			return(fragment);};
 		const clearContent = async () => {
 			scrollTo(0 , 0);
-			mainFooter . style . visibility = 'hidden';
-			(mainSection . classList . add)('loading');
-			(mainSection . classList . remove)('loaded');};
+			mainFooter . style . visibility = 'hidden';};
 		const displayContent = async (content , hash) => {
 			if(mainSection . lastChild){
 				(mainSection . replaceChild)(
 					content , mainSection . lastChild);}
 			else{
 				(mainSection . appendChild)(content);};
-			(mainSection . classList . add)('loaded');
-			(mainSection . classList . remove)('loading');
 			mainFooter . style . visibility = 'visible';
 			if(hash){
 				((document . getElementById)(hash) . 
