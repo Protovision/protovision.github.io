@@ -205,10 +205,10 @@ mark{
 	hr{
 		background-color:#fff;}
 	a{
-		color:#37f;
+		color:#0ff;
 		background-color:inherit;}
 	a:active{
-		color:#3f7;}
+		color:#ff0;}
 	::selection,
 	mark{
 		background-color:#ff0;
