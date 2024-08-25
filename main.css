@@ -164,16 +164,24 @@ var{
 	font-style:italic;}
 del,
 s{
-	text-decoration:line-through solid 0.125rem;}
+	text-decoration-line:line-through;
+	text-decoration-style:solid;
+	text-decoration-thickness:0.125rem;}
 ins{
-	text-decoration:overline solid 0.125rem;}
+	text-decoration-line:overline;
+	text-decoration-style:solid;
+	text-decoration-thickness:0.125rem;}
 u{
-	text-decoration:underline wavy 0.125rem;}
+	text-decoration-line:underline;
+	text-decoration-style:wavy;
+	text-decoration-thickness:0.125rem;}
 
 /* Links */
 
 a{
-	text-decoration:underline solid 0.125rem;
+	text-decoration-line:underline;
+	text-decoration-style:solid;
+	text-decoration-thickness:0.125rem;
 	text-decoration-skip-ink:none;}
 a:hover,
 a:focus,
