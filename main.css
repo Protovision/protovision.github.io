@@ -1,3 +1,17 @@
+:root{
+	--text-font:ui-serif,serif;
+	--heading-font:ui-serif,serif;
+	--light-background-color:#fdfff5;
+	--light-text-color:#3b2f2f;
+	--light-link-color:#c62b27;
+	--light-highlight-background-color:#e2dcab;
+	--light-highlight-color:#3b2f2f;
+	--dark-background-color:#3b2f2f;
+	--dark-text-color:#fdfff5;
+	--dark-link-color:#39d4d8;
+	--dark-highlight-background-color:#e2dcab;
+	--dark-highlight-color:#3b2f2f;}
+
 /* Reset */
 
 *,
@@ -24,14 +38,14 @@ table{
 /* Font families */
 
 body{
-	font-family:system-ui,ui-sans-serif,sans-serif;}
+	font-family:var(--text-font);}
 h1,
 h2,
 h3,
 h4,
 h5,
 h6{
-	font-family:ui-serif,serif;}
+	font-family:var(--heading-font);}
 pre,
 code,
 kbd,
@@ -193,34 +207,29 @@ a:active{
 /* Backgrounds and colors */
 
 body{
-	background-color:#fff;
-	color:#000;}
+	background-color:var(--light-background-color);
+	color:var(--light-text-color);}
 hr{
-	background-color:#000;}
+	background-color:var(--light-background-color);}
 a{
-	color:#00f;
+	color:var(--light-link-color);
 	background-color:inherit;}
-a:active{
-	color:#0f0;}
 ::selection,
 mark{
-	background-color:#ff0;
-	color:#000;}
+	background-color:var(--light-highlight-background-color);
+	color:var(--light-highlight-color);}
 @media (prefers-color-scheme:dark){
 	body{
-		background-color:#000;
-		color:#fff;}
+		background-color:var(--dark-background-color);
+		color:var(--dark-text-color);}
 	hr{
-		background-color:#fff;}
+		background-color:var(--dark-background-color);}
 	a{
-		color:#0ff;
-		background-color:inherit;}
-	a:active{
-		color:#ff0;}
+		color:var(--dark-link-color);}
 	::selection,
 	mark{
-		background-color:#ff0;
-		color:#000;}}
+		background-color:var(--dark-highlight-background-color);
+		color:var(--dark-highlight-color);}}
 /*
 @supports (color-scheme:light dark) and
 	(background-color:Canvas) and
