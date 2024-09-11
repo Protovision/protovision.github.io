@@ -1,16 +1,16 @@
 :root{
-	--text-font:ui-serif,serif;
-	--heading-font:ui-serif,serif;
-	--light-background-color:#fdfff5;
-	--light-text-color:#3b2f2f;
-	--light-link-color:#c62b27;
-	--light-highlight-background-color:#e2dcab;
-	--light-highlight-color:#3b2f2f;
-	--dark-background-color:#3b2f2f;
-	--dark-text-color:#fdfff5;
-	--dark-link-color:#39d4d8;
-	--dark-highlight-background-color:#e2dcab;
-	--dark-highlight-color:#3b2f2f;}
+	--text-font:ui-monospace,monospace;
+	--heading-font:ui-monospace,monospace;
+	--light-background-color:#fff;
+	--light-text-color:#000;
+	--light-link-color:#073;
+	--light-highlight-background-color:#0f7;
+	--light-highlight-color:#000;
+	--dark-background-color:#000;
+	--dark-text-color:#fff;
+	--dark-link-color:#0f7;
+	--dark-highlight-background-color:#073;
+	--dark-highlight-color:#fff;}
 
 /* Reset */
 
@@ -77,7 +77,7 @@ sup{top:-0.5em;}
 /* Line heights */
 
 body{
-	line-height:1.5rem;}
+	line-height:1.25rem;}
 pre{
 	line-height:1.25rem;}
 
