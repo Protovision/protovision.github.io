@@ -2,11 +2,13 @@
 	--text-font:ui-monospace,monospace;
 	--heading-font:ui-monospace,monospace;
 	--light-background-color:#fff;
+	--shaded-color:#eee;
 	--light-text-color:#000;
 	--light-link-color:#073;
 	--light-highlight-background-color:#0f7;
 	--light-highlight-color:#000;
 	--dark-background-color:#000;
+	--dark-shaded-color:#111;
 	--dark-text-color:#fff;
 	--dark-link-color:#0f7;
 	--dark-highlight-background-color:#073;
@@ -54,6 +56,8 @@ samp{
 
 /* Font sizes */
 
+h1,h2,h3,h4,h5,h6{
+	text-transform:uppercase;}
 h1{
 	font-size:2rem;}
 h2{
@@ -115,7 +119,11 @@ table{
 /* Borders */
 
 blockquote{
-	border-left:1px dashed;}
+	border-left:1px solid;}
+pre{
+	border:1px solid;}
+th,td{
+	border:1px solid;}
 
 /* Padding */
 
@@ -123,7 +131,7 @@ body{
 	padding:1rem;}
 blockquote,
 pre{
-	padding:0 1rem;}
+	padding:1rem;}
 dd,
 dl{
 	padding-left:1rem;}
@@ -218,6 +226,14 @@ a{
 mark{
 	background-color:var(--light-highlight-background-color);
 	color:var(--light-highlight-color);}
+pre,
+code,
+kbd,
+samp,
+blockquote,
+th{
+	background-color:var(--shaded-color);}
+	
 @media (prefers-color-scheme:dark){
 	body{
 		background-color:var(--dark-background-color);
@@ -229,7 +245,9 @@ mark{
 	::selection,
 	mark{
 		background-color:var(--dark-highlight-background-color);
-		color:var(--dark-highlight-color);}}
+		color:var(--dark-highlight-color);}
+	pre,code,kbd,samp,blockquote,th{
+		background-color:var(--dark-shaded-color);}}
 /*
 @supports (color-scheme:light dark) and
 	(background-color:Canvas) and
@@ -255,9 +273,9 @@ mark{
 /* Special styling */
 
 body>main>header{
-	border-bottom:1px dashed;}
+	border-bottom:1px solid;}
 body>main>footer{
-	border-top:1px dashed;}
+	border-top:1px solid;}
 .math{
 	font-family:math,sans-serif;}
 .no-margins{
