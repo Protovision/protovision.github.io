@@ -1,0 +1,227 @@
+<article>
+	<header>
+		<h2>How to C in the Current Year</h2>
+		<p>
+			by Mark Swoope
+			<br>
+			<time datetime="2024-09-16">2024-09-16</time>
+		</p>
+	</header>
+	<section>
+		<p>I found these articles:</p>
+		<ul>
+			<li>
+				<a rel="external noreferrer noopener" href="https://matt.sh/howto-c">How to C in 2016</a>, by Matt
+			</li>
+			<li>
+				<a rel="external noreferrer noopener" href="https://github.com/Keith-S-Thompson/how-to-c-response/blob/master/README.md">A crtique of "How to C in 2016" by Matt</a>, by Keith Thompson
+			</li>
+		</ul>
+		<p>The first article is a coding style guide for C and the second article is a crtique of the first article.</p>
+		<p>It is very common for people like the writer in the first article to not have precise knowledge of the basic types in C. Thompson does a good job of correcting Matt on this matter.</p>
+		<p>Here I would like to compactly explain these basic types.</p>
+	</section>
+	<section>
+		<header>
+			<h3>Ranges</h3>
+		</header>
+		<p>Before going into detail, this table shows the minimum widths and ranges of all the unsigned and signed integer types:</p>
+		<figure>
+			<table>
+				<tr>
+					<th>Type</th>
+					<th>Width</th>
+					<th>Minimum</th>
+					<th>Maximum</th>
+				</tr>
+				<tr>
+					<td><code>unsigned char</code></td>
+					<td>8</td>
+					<td><code>0</code></td>
+					<td><code>0xff</code></td>
+				</tr>
+				<tr>
+					<td><code>unsigned short</code></td>
+					<td>16</td>
+					<td><code>0</code></td>
+					<td><code>0xffff</code></td>
+				</tr>
+				<tr>
+					<td><code>unsigned int</code></td>
+					<td>16</td>
+					<td><code>0</code></td>
+					<td><code>0xffff</code></td>
+				</tr>
+				<tr>
+					<td><code>size_t</code></td>
+					<td>16</td>
+					<td><code>0</code></td>
+					<td><code>0xffff</code></td>
+				</tr>
+				<tr>
+					<td><code>unsigned long</code></td>
+					<td>32</td>
+					<td><code>0</code></td>
+					<td><code>0xffffffff</code></td>
+				</tr>
+				<tr>
+					<td><code>unsigned long long</code></td>
+					<td>64</td>
+					<td><code>0</code></td>
+					<td><code>0xffffffffffffffff</code></td>
+				</tr>
+				<tr>
+					<td><code>signed char</code></td>
+					<td>8</td>
+					<td><code>-0x7f</code></td>
+					<td><code>+0x7f</code></td>
+				</tr>
+				<tr>
+					<td><code>short</code></td>
+					<td>16</td>
+					<td><code>-0x7fff</code></td>
+					<td><code>+0x7fff</code></td>
+				</tr>
+				<tr>
+					<td><code>int</code></td>
+					<td>16</td>
+					<td><code>-0x7fff</code></td>
+					<td><code>+0x7fff</code></td>
+				</tr>
+				<tr>
+					<td><code>ptrdiff_t</code></td>
+					<td>16</td>
+					<td><code>-0x7fff</code></td>
+					<td><code>+0x7fff</code></td>
+				</tr>
+				<tr>
+					<td><code>long</code></td>
+					<td>32</td>
+					<td><code>-0x7fffffff</code></td>
+					<td><code>+0x7fffffff</code></td>
+				</tr>
+				<tr>
+					<td><code>long long</code></td>
+					<td>64</td>
+					<td><code>-0x7fffffffffffffff</code></td>
+					<td><code>+0x7fffffffffffffff</code></td>
+				</tr>
+			</table>
+		</figure>
+	</section>
+	<section>
+		<header>
+			<h3>Signed representation</h3>
+		</header>
+		<p>Before C23, there were 3 signed integer representations allowed:</p>
+		<figure>
+			<figcaption><a rel="external noreferrer noopener" href="https://www.open-std.org/jtc1/sc22/wg14/www/docs/n1256.pdf#page=51">WG14/N1256 6.2.6.2:</a></figcaption>
+			<blockquote>
+				If the sign bit is one, the value shall be modified in one of the following ways:
+				<ul>
+					<li>the corresponding value with sign bit 0 is negated (<em>sign and magnitude</em>);</li>
+					<li>the sign bit has the value -(2<sup><em>N</em></sup>) (<em>two's complement</em>);</li>
+					<li>the sign bit has the value -(2<sup><em>N</em></sup> - 1) (<em>one's complement</em>).</li>
+				</ul>
+			</blockquote>
+			<p>Because of this, a lot of arithmetic operators do not have well-defined behavior in cases dealing with overflow on signed integers.</p>
+			<p>We also have to be careful on possibly having negative zero be a normal value or a trap value for systems not using two's complement.</p>
+		</figure>
+	</section>
+	<section>
+		<header>
+			<h3>Characters and strings</h3>
+		</header>
+		<p>I did not include the range of <code>char</code> in the table as a special case.</p>
+		<p>The type <code>char</code> has the same structure as <code>unsigned char</code> or <code>signed char</code> depending on the implementation. By taking the intersection of these types, we can conclude that the values 0 to 0x7f can safely be used with <code>char</code>.</p>
+		<p>It is still possible to store a byte value outside the ASCII range into a <code>char</code> by writing to it indirectly via a casted <code>unsigned char</code> pointer. The value can later be retrieved by casting <code>char</code> to <code>unsigned char</code>. This cast cannot safely be performed the other way around.</p>
+		<p>The type of a string literal is <code>const char[<em>N</em>]</code> where <em>N</em> is the size of the character array, including the terminating null byte.</p>
+		<p>The type of a string literal often decays into <code>const char *</code> due to implicit conversions.</p>
+	</section>
+	<section>
+		<header>
+			<h3>Floating-point types</h3>
+		</header>
+		<p>All floating point types in C have a radix, a sign bit, exponent bits, and mantissa bits.</p>
+		<p>There is no guarantee that they adhere to IEEE-754 binary floating-point formats.</p>
+		<p>You may use these macros to statically check for particular floating-point formats:</p>
+		<figure>
+			<pre><code>#&nbsp;include&lt;float.h&gt;<br>/*&nbsp;float&nbsp;is&nbsp;IEEE&nbsp;single&nbsp;precision&nbsp;binary&nbsp;format&nbsp;*/<br>#&nbsp;define&nbsp;SUPPORTS_FLOAT_32&nbsp;\<br>&nbsp;&nbsp;(&nbsp;\<br>&nbsp;&nbsp;&nbsp;&nbsp;FLT_RADIX&nbsp;==&nbsp;2&nbsp;\<br>&nbsp;&nbsp;&nbsp;&nbsp;&amp;&nbsp;FLT_MANT_DIG&nbsp;==&nbsp;24&nbsp;\<br>&nbsp;&nbsp;&nbsp;&nbsp;&amp;&nbsp;FLT_MIN_EXP&nbsp;==&nbsp;-125&nbsp;\<br>&nbsp;&nbsp;&nbsp;&nbsp;&amp;&nbsp;FLT_MAX_EXP&nbsp;==&nbsp;+128&nbsp;\<br>&nbsp;&nbsp;)<br>/*&nbsp;double&nbsp;is&nbsp;IEEE&nbsp;double&nbsp;precision&nbsp;binary&nbsp;format&nbsp;*/<br>#&nbsp;define&nbsp;SUPPORTS_DOUBLE_64&nbsp;\<br>&nbsp;&nbsp;(&nbsp;\<br>&nbsp;&nbsp;&nbsp;&nbsp;FLT_RADIX&nbsp;==&nbsp;2&nbsp;\<br>&nbsp;&nbsp;&nbsp;&nbsp;&amp;&nbsp;DBL_MANT_DIG&nbsp;==&nbsp;53&nbsp;\<br>&nbsp;&nbsp;&nbsp;&nbsp;&amp;&nbsp;DBL_MIN_EXP&nbsp;==&nbsp;-1021&nbsp;\<br>&nbsp;&nbsp;&nbsp;&nbsp;&amp;&nbsp;DBL_MAX_EXP&nbsp;==&nbsp;+1024&nbsp;\<br>&nbsp;&nbsp;)<br>/*&nbsp;long&nbsp;double&nbsp;is&nbsp;x86&nbsp;extended&nbsp;precision&nbsp;binary&nbsp;format&nbsp;*/<br>#&nbsp;define&nbsp;SUPPORTS_LONG_DOUBLE_80&nbsp;\<br>&nbsp;&nbsp;(&nbsp;\<br>&nbsp;&nbsp;&nbsp;&nbsp;FLT_RADIX&nbsp;==&nbsp;2&nbsp;\<br>&nbsp;&nbsp;&nbsp;&nbsp;&amp;&nbsp;LDBL_MANT_DIG&nbsp;==&nbsp;64&nbsp;\<br>&nbsp;&nbsp;&nbsp;&nbsp;&amp;&nbsp;LDBL_MIN_EXP&nbsp;==&nbsp;-16381&nbsp;\<br>&nbsp;&nbsp;&nbsp;&nbsp;&amp;&nbsp;LDBL_MAX_EXP&nbsp;==&nbsp;+16384&nbsp;\<br>&nbsp;&nbsp;)<br>/*&nbsp;long&nbsp;double&nbsp;is&nbsp;IEEE&nbsp;quadruple&nbsp;precision&nbsp;binary&nbsp;format&nbsp;*/<br>#&nbsp;define&nbsp;SUPPORTS_LONG_DOUBLE_128&nbsp;\<br>&nbsp;&nbsp;(&nbsp;\<br>&nbsp;&nbsp;&nbsp;&nbsp;FLT_RADIX&nbsp;==&nbsp;2&nbsp;\<br>&nbsp;&nbsp;&nbsp;&nbsp;&amp;&nbsp;LDBL_MANT_DIG&nbsp;==&nbsp;113&nbsp;\<br>&nbsp;&nbsp;&nbsp;&nbsp;&amp;&nbsp;LDBL_MIN_EXP&nbsp;==&nbsp;-16381&nbsp;\<br>&nbsp;&nbsp;&nbsp;&nbsp;&amp;&nbsp;LDBL_MAX_EXP&nbsp;==&nbsp;+16384&nbsp;\<br>&nbsp;&nbsp;)<br><br></code></pre>
+		</figure>
+	</section>
+<!--
+	<section>
+		<header>
+			<h3>Terminology</h3>
+		</header>
+		<p>First we have to adopt standard terminology:</p>
+		<figure>
+			<figcaption><a rel="external noreferrer noopener" href="https://www.open-std.org/jtc1/sc22/wg14/www/docs/n1256.pdf#page=51">WG14/N1256, 6.2.6.2:</a></figcaption>
+			<blockquote>
+				The <em>precision</em> of an integer type is the number of bits it uses to represent values, excluding any sign and padding bits. The <em>width</em> of an integer type is the same but including any sign bit; thus for unsigned integer types the two values are the same, while for signed integer types the width is one greater than the precision.
+			</blockquote>
+		</figure>
+		<p>Additionally, the <em>size</em> of an object shall be in bytes where a byte can stored as <code>char</code>, <code>signed char</code>, or <code>unsigned char</code>. The precision of a byte is <code>CHAR_BIT</code> which is defined to be a minimum of 8.</p>
+	</section>
+
+		<p>I agree with Thompson that it is fine to use the basic data types rather than exclusively using their aliases found in <code>&lt;stdint.h&gt;</code>.</p>
+		<p><code>float</code> and <code>double</code> are indeed not necessarily in IEEE format.</p>
+		<p>The minimum and recommended ranges of the floating point types in C99 can be found at <a rel="external noreferrer noopener" href="https://www.open-std.org/jtc1/sc22/wg14/www/docs/n1256.pdf#page=39">WG14/N1256, page 27.</a></p>
+		<p>You may statically check the formats of your floating-point types with these macros:</p>
+		<figure>
+			<pre><code>#&nbsp;include&lt;float.h&gt;<br>/*&nbsp;float&nbsp;is&nbsp;IEEE&nbsp;single&nbsp;precision&nbsp;binary&nbsp;format&nbsp;*/<br>#&nbsp;define&nbsp;SUPPORTS_FLOAT_32&nbsp;\<br>&nbsp;&nbsp;(&nbsp;\<br>&nbsp;&nbsp;&nbsp;&nbsp;FLT_RADIX&nbsp;==&nbsp;2&nbsp;\<br>&nbsp;&nbsp;&nbsp;&nbsp;&amp;&nbsp;FLT_MANT_DIG&nbsp;==&nbsp;24&nbsp;\<br>&nbsp;&nbsp;&nbsp;&nbsp;&amp;&nbsp;FLT_MIN_EXP&nbsp;==&nbsp;-125&nbsp;\<br>&nbsp;&nbsp;&nbsp;&nbsp;&amp;&nbsp;FLT_MAX_EXP&nbsp;==&nbsp;+128&nbsp;\<br>&nbsp;&nbsp;)<br>/*&nbsp;double&nbsp;is&nbsp;IEEE&nbsp;double&nbsp;precision&nbsp;binary&nbsp;format&nbsp;*/<br>#&nbsp;define&nbsp;SUPPORTS_DOUBLE_64&nbsp;\<br>&nbsp;&nbsp;(&nbsp;\<br>&nbsp;&nbsp;&nbsp;&nbsp;FLT_RADIX&nbsp;==&nbsp;2&nbsp;\<br>&nbsp;&nbsp;&nbsp;&nbsp;&amp;&nbsp;DBL_MANT_DIG&nbsp;==&nbsp;53&nbsp;\<br>&nbsp;&nbsp;&nbsp;&nbsp;&amp;&nbsp;DBL_MIN_EXP&nbsp;==&nbsp;-1021&nbsp;\<br>&nbsp;&nbsp;&nbsp;&nbsp;&amp;&nbsp;DBL_MAX_EXP&nbsp;==&nbsp;+1024&nbsp;\<br>&nbsp;&nbsp;)<br>/*&nbsp;long&nbsp;double&nbsp;is&nbsp;x86&nbsp;extended&nbsp;precision&nbsp;binary&nbsp;format&nbsp;*/<br>#&nbsp;define&nbsp;SUPPORTS_LONG_DOUBLE_80&nbsp;\<br>&nbsp;&nbsp;(&nbsp;\<br>&nbsp;&nbsp;&nbsp;&nbsp;FLT_RADIX&nbsp;==&nbsp;2&nbsp;\<br>&nbsp;&nbsp;&nbsp;&nbsp;&amp;&nbsp;LDBL_MANT_DIG&nbsp;==&nbsp;64&nbsp;\<br>&nbsp;&nbsp;&nbsp;&nbsp;&amp;&nbsp;LDBL_MIN_EXP&nbsp;==&nbsp;-16381&nbsp;\<br>&nbsp;&nbsp;&nbsp;&nbsp;&amp;&nbsp;LDBL_MAX_EXP&nbsp;==&nbsp;+16384&nbsp;\<br>&nbsp;&nbsp;)<br>/*&nbsp;long&nbsp;double&nbsp;is&nbsp;IEEE&nbsp;quadruple&nbsp;precision&nbsp;binary&nbsp;format&nbsp;*/<br>#&nbsp;define&nbsp;SUPPORTS_LONG_DOUBLE_128&nbsp;\<br>&nbsp;&nbsp;(&nbsp;\<br>&nbsp;&nbsp;&nbsp;&nbsp;FLT_RADIX&nbsp;==&nbsp;2&nbsp;\<br>&nbsp;&nbsp;&nbsp;&nbsp;&amp;&nbsp;LDBL_MANT_DIG&nbsp;==&nbsp;113&nbsp;\<br>&nbsp;&nbsp;&nbsp;&nbsp;&amp;&nbsp;LDBL_MIN_EXP&nbsp;==&nbsp;-16381&nbsp;\<br>&nbsp;&nbsp;&nbsp;&nbsp;&amp;&nbsp;LDBL_MAX_EXP&nbsp;==&nbsp;+16384&nbsp;\<br>&nbsp;&nbsp;)<br><br></code></pre>
+		</figure>
+		<p>As for <code>char</code>, prudent users of C are aware that it holds at least 8-bits and it's portable value range is 0 to 127 (the range of the basic execution character set). Checking the value of a <code>char</code> beyond this range is implementation defined since it's signedness is platform specific.</p>
+		<p><code>char</code> can be used to store an arbitrary byte (via a string literal, <code>memcpy</code>, or <code>fread</code>), but to read that byte's value requires a cast to <code>unsigned char</code> (Note that casting in the other direction is not portable).</p>
+		<!--
+		<p>Relevant quotes from the C99 standard on <code>char</code>:</p>
+		<figure>
+		<figcaption><a rel="external noreferrer noopener" href="https://www.open-std.org/jtc1/sc22/wg14/www/docs/n1256.pdf#page=34">WG14/N1256, 5.2.4.2.1:</a></figcaption>
+		<blockquote>
+			&mdash; number of bits for smallest object that is not a bit-field (byte)
+			<br>
+			<code>CHAR_BIT</code>&emsp;<code>8</code>
+		</blockquote>
+		</figure>
+		<figure>
+			<figcaption><a rel="external noreferrer noopener" href="https://www.open-std.org/jtc1/sc22/wg14/www/docs/n1256.pdf#page=35">WG14/N1256, 5.2.4.2.2:</a></figcaption>
+			<blockquote>
+				If the value of an object of type <code>char</code> is treated as a signed integer when used in an expression, the value of <code>CHAR_MIN</code> shall be the same as that of <code>SCHAR_MIN</code> and the value of <code>CHAR_MAX</code> shall be the same as that of <code>SCHAR_MAX</code>. Otherwise, the value of <code>CHAR_MIN</code> shall be 0 and the value of <code>CHAR_MAX</code> shall be the same as that of <code>UCHAR_MAX</code>. The value <code>UCHAR_MAX</code> shall equal 2<sup><code>CHAR_BIT</CODE></sup>-1.
+			</blockquote>
+		</figure>
+		<figure>
+			<figcaption><a rel="external noreferrer noopener" href="https://www.open-std.org/jtc1/sc22/wg14/www/docs/n1256.pdf#page=45">WG14/N1256, 6.2.5.3:</a></figcaption>
+
+			<blockquote>
+An object declared as type char is large enough to store any member of the basic
+execution character set. If a member of the basic execution character set is stored in a
+char object, its value is guaranteed to be nonnegative. If any other character is stored in
+a char object, the resulting value is implementation-defined but shall be within the range
+of values that can be represented in that type.
+			</blockquote>
+		</figure>
+		<figure>
+			<figcaption><a rel="external noreferrer noopener" href="https://www.open-std.org/jtc1/sc22/wg14/www/docs/n1256.pdf#page=47">WG14/N1256, 6.2.5.15:</a></figcaption>
+			<blockquote>
+				The three types char, signed char, and unsigned char are collectively called
+the character types. The implementation shall define char to have the same range,
+representation, and behavior as either signed char or unsigned char.
+			</blockquote>
+		</figure>
+		<figure>
+			<figcaption><a rel="external noreferrer noopener" href="https://www.open-std.org/jtc1/sc22/wg14/www/docs/n1256.pdf#page=49">WG14/N1256, 6.2.6.1:</a></figcaption>
+			<blockquote>
+				Values stored in non-bit-field objects of any other object type consist of <i>n</i> &times; <code>CHAR_BIT</code> bits, where <i>n</i> is the size of an object of that type, in bytes. The value may be copied into an object of type <code>unsigned char [<i>n</i>]</code> (e.g. by <code>memcpy</code>); the resulting set of bytes is called the <i>object representation</i> of the value...
+			</blockquote>
+		</figure>
+		<p>When it comes to the minimum, exact, and fastest width integer types; their use-cases are:</p>
+		<ul>
+			<li>Minimum-width: Optimized for size</li>
+			<li>Exact-width: Required for binary data transmission</li>
+			<li>Fastest-width: Optimized for speed</li>
+		</ul>
+		<p>The standard integers defined in the language are similar to the minimum-width types in that they have a minimum standard widths, but the compiler may choose to provide a larger width for speed.</p>
+		<p>People often reach for exact width-types because the certainty of an exact width gives them comfort, but this often unnecessarily limits the platforms they can target.</p>
+	</section>
+	-->
+</article>

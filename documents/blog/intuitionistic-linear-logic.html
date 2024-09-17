@@ -1,0 +1,28 @@
+<article>
+	<header>
+		<h2>Intuitionistic Linear Logic</h2>
+		by Mark Swoope
+		<br>
+		<time datetime="2024-09-09">2024-09-09</time>
+	</header>
+	<p>Much of this blog is part of my independent research in logic, type theory, and category theory; I may get facts wrong. Here I cover my understanding of <abbr><a rel="external noreferrer noopener" href="https://ncatlab.org/nlab/files/Bierman-LinearLogic.pdf">intuitionistic linear logic</a> (ILL)</abbr> which is a fragment of <abbr><a rel="external noreferrer noopener" href="https://ncatlab.org/nlab/show/linear+logic">linear logic</a> (LL)</abbr> that includes these symbols: &top;, 1 , 0, !, &#8888;, &amp;, &bigotimes;, &bigoplus;. ILL does not include: &bot;, ?, &#8523;.</p>
+	<p>There is a style of proofs called <a rel="external noreferrer noopener" href="https://ncatlab.org/nlab/show/natural+deduction">natural deduction</a> which <abbr><a rel="external noreferrer noopener" href="https://ncatlab.org/nlab/show/intuitionistic+logic">intuitionistic logic</a> (IL)</abbr> is based on. In this style, every judgement can have multiple premises but only one conclusion.</p>
+	<p>In LL, &bigotimes; performs conjunction for premises and &#8523; performs conjunction for conclusions. Therefore, ILL removes &#8523;, it's unit &bot;, and ? (which allows contraction for conclusions).</p>
+	<p>ILL also removes direct linear negation but provides &#8888;.</p>
+	<p>To casually explain these connectives:</p>
+	<ul>
+		<li>A &#8888; B - <em>Lollipop</em>: Consume A to produce B</li>
+		<li>A &amp; B - <em>With</em>: Choose to produce A or B</li>
+		<li>A &bigotimes; B - <em>Times</em>: Production of both A and B</li>
+		<li>A &bigoplus; B - <em>Plus</em>: Production of either A or B</li>
+	</ul>
+	<p>&top; is the unit for &amp;, 1 is the unit for &bigotimes;, and 0 is the unit for &bigoplus;.</p>
+	<p>! is the non-linear modality, enabling it's resource to be reused or unused.</p>
+	<p>It can be said that &bigotimes; and &bigoplus; are eager because they do not require consumer interaction in order to be constructed and fully evaluated.</p>
+	<p>&amp; and &#8888; are lazy because &amp; delays evaluation of either component until the consumer chooses and &#8888; delays the evaluation of it's result until it's demanded argument is provided.</p>
+	<p>&amp; and &bigotimes; are two ways to perform conjunction. They are both eliminated by one context in one timeline. They differ in construction:
+	<ul>
+		<li>&amp; is constructed from one context in disjoint timelines. 
+		<li>&bigotimes; is constructed from disjoint contexts in one timeline.</li>
+	</ul>
+</article>
