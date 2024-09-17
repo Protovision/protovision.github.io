@@ -126,6 +126,34 @@
 			</blockquote>
 			<p>Because of this, a lot of arithmetic operators do not have well-defined behavior in cases dealing with overflow on signed integers.</p>
 			<p>We also have to be careful on possibly having negative zero be a normal value or a trap value for systems not using two's complement.</p>
+			<p>Here are the cases where arithmetic causes undefined behavior:</p>
+			<figure>
+				<table>
+					<caption>Undefined behavior</caption>
+					<thead>
+						<tr>
+							<th>Expression</th>
+							<th>Reason</th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr>
+							<td><code>-INT_MIN</code></td>
+							<td>2's complement overflow</td>
+						</tr>
+						<tr>
+							<td><code>-LONG_MIN</code></td>
+							<td>2's complement overflow</td>
+						</tr>
+						<tr>
+							<td><code>-LLONG_MIN</code></td>
+							<td>2's complement overflow</td>
+						</tr>
+						<tr>
+							<td><code>
+					</tbody>
+				</table>
+			</figure>
 		</figure>
 	</section>
 	<section>
