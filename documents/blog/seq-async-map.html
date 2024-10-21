@@ -1,0 +1,28 @@
+<article>
+	<header>
+		<h2>Sequential Async Map in JavaScript</h2>
+		<p>
+			by Mark Swoope
+			<br>
+			<time datetime="2024-10-20">2024-10-20</time>
+		</p>
+	</header>
+	<p>This is a short post showing this common routine I use in vanilla JavaScript. This is my first post about JavaScript, I am not as familiar with it as I am with C, but I have been using it heavily recently for practical purposes.</p>
+	<p>Mapping an array with an asynchronous function can already be achieved with <code>Promise . all</code>, but it cannot execute the effects of the mapping sequentially which is desirable to avoid being blacklisted for fetch flooding.</p>
+	<p>I desire the solution to be <em>functional</em> and so it should avoid using imperative for-loops or <a rel="external noreferrer noopener" href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array#copying_methods_and_mutating_methods">mutating methods</a>.</p>
+	<p>I also want to avoid using <code>async</code> and <code>await</code> for their infectious nature.</p>
+	<p>I independently crafted this first solution:</p>
+	<figure>
+		<pre><code>const&nbsp;seqAsyncMap<br>=&nbsp;(asyncFunc&nbsp;,&nbsp;array)&nbsp;=&gt;&nbsp;(<br>&nbsp;&nbsp;array&nbsp;.&nbsp;length&nbsp;==&nbsp;0<br>&nbsp;&nbsp;?&nbsp;Promise&nbsp;.&nbsp;resolve([])<br>&nbsp;&nbsp;:&nbsp;asyncFunc(array[0])<br>&nbsp;&nbsp;.&nbsp;then(<br>&nbsp;&nbsp;&nbsp;&nbsp;(first)&nbsp;=&gt;&nbsp;(<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;array&nbsp;.&nbsp;length&nbsp;==&nbsp;1<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;?&nbsp;[first]<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;:&nbsp;seqAsyncMap(asyncFunc&nbsp;,&nbsp;array&nbsp;.&nbsp;slice(1))<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;.&nbsp;then((rest)&nbsp;=&gt;&nbsp;[first]&nbsp;.&nbsp;concat(rest))<br>&nbsp;&nbsp;&nbsp;&nbsp;)<br>&nbsp;&nbsp;)<br>);</code></pre>
+	</figure>
+	<p>Given an asynchronous function and an array, <code>seqAsyncMap</code> applies that function to each array element strictly sequentially; the result is a promise that resolves to an array of the results.</p>
+	<p>It works by resolving the first application on the first element, and then resolving a recursion on the rest of the array, and finally concatenating the resolved recursive results to the resolved first result.</p>
+	<p>My only problem with this solution is that it performs direct recursion by referring to itself. The following solution uses <code>Array . reduce</code> for iteration, making it primitive recursive as well as usable as an anonymous function:</p>
+	<figure>
+		<pre><code>const&nbsp;seqAsyncMap<br>=&nbsp;(asyncFunc&nbsp;,&nbsp;array)&nbsp;=&gt;&nbsp;(<br>&nbsp;&nbsp;array<br>&nbsp;&nbsp;.&nbsp;reduce(<br>&nbsp;&nbsp;&nbsp;&nbsp;(result&nbsp;,&nbsp;value)&nbsp;=&gt;&nbsp;(<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;result<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;.&nbsp;then(<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(rest)&nbsp;=&gt;&nbsp;(<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;asyncFunc(value)&nbsp;.&nbsp;then((last)&nbsp;=&gt;&nbsp;rest&nbsp;.&nbsp;concat([last]))<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;)<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;)<br>&nbsp;&nbsp;&nbsp;&nbsp;)<br>&nbsp;&nbsp;&nbsp;&nbsp;,&nbsp;Promise&nbsp;.&nbsp;resolve([])<br>&nbsp;&nbsp;)<br>);</code></pre>
+	</figure>
+	<p>Here's some code to test either implementation of <code>seqAsyncMap</code>:</p>
+	<figure>
+<pre><code>const&nbsp;debugDelaySquare<br>=&nbsp;(delay)&nbsp;=&gt;&nbsp;(<br>&nbsp;&nbsp;(x)&nbsp;=&gt;&nbsp;(<br>&nbsp;&nbsp;&nbsp;&nbsp;new&nbsp;Promise(<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(resolve&nbsp;,&nbsp;reject)&nbsp;=&gt;&nbsp;{<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;const&nbsp;result&nbsp;=&nbsp;x&nbsp;*&nbsp;x;<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;console&nbsp;.&nbsp;log(&quot;debugDelaySquare&nbsp;&quot;&nbsp;+&nbsp;x&nbsp;+&nbsp;&quot;&nbsp;=&nbsp;&quot;&nbsp;+&nbsp;result);<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;setTimeout(<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;resolve<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;,&nbsp;delay<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;,&nbsp;result<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;);<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}<br>&nbsp;&nbsp;&nbsp;&nbsp;)<br>&nbsp;&nbsp;)<br>);<br>const&nbsp;main<br>=&nbsp;()&nbsp;=&gt;&nbsp;{<br>&nbsp;&nbsp;seqAsyncMap(<br>&nbsp;&nbsp;&nbsp;&nbsp;debugDelaySquare(1000)<br>&nbsp;&nbsp;&nbsp;&nbsp;,&nbsp;[1&nbsp;,&nbsp;2&nbsp;,&nbsp;3&nbsp;,&nbsp;4]<br>&nbsp;&nbsp;)<br>&nbsp;&nbsp;.&nbsp;then((results)&nbsp;=&gt;&nbsp;console&nbsp;.&nbsp;log(results));<br>};<br>main();</code></pre>
+	</figure>
+</article>
