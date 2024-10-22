@@ -1,0 +1,56 @@
+<article>
+	<header>
+		<h2>Code Conventions</h2>
+		<p>
+			by Mark Swoope
+			<br>
+			<time datetime="2024-10-22">2024-10-22</time>
+		</p>
+	</header>
+	<p>Opinions on how I should schematize my C code.</p>
+	<section>
+		<header>
+			<h3>Purity</h3>
+		</header>
+		<p>The primary duality in code is between computation and effects. Expressions represent the former and statements represent the latter.</p>
+		<p>Every kind of expression terminates and is a constant mapping, regardless of context: this is what I call <em>pure</em> for my purposes. Purity enables expressions to participate in properties of binary operations and to be substituted into different contexts.</p>
+		<p>For this reason, a pure function shall accept parameters by copy or by immutable reference and any free variables it uses shall have already been declared immutable. The pure function should provide it's result through the <code>return</code> statement. And finally, a pure function shall never call an impure function or evaluate impure data.</p>
+		<p>A statement potentially consumes and always produces an effect. Every statement in a sequence is synchronized with the context. The result of the sequence is determined by the initial context, the effect of each statement, and the ordering of the sequence.</p>
+		<p>A call to an impure function shall not be used in an expression, it shall instead be a statement on it's own line. Therefore, it's return type shall always be <code>void</code> and it's output shall be provided via out-parameters.</p>
+		<p>A pure function only has in-parameters; it's parameter and return types must not be <code>void</code>. An impure function has in-parameters, in-out-parameters, and out-parameters strictly in that order.</p>
+		<p>Because I require termination from purity, I also forbid self-reference as a good habit even if the self-reference halts in the cases of simple definitions, therefore a pure function does not perform direct recursion and a pure type cannot be any kind of linked-list.</p>
+		<p>A pure function may perform iteration if the number of iterations is clearly bounded by an integer constant while not increasing stack space on each iteration. And a pure type is any non-variably-modified complete type that does not contain a reference to itself.</p>
+		<p>An impure function may not terminate therefore it may go into infinite loops or indefinite recursion and it may use linked-lists which may or may not be circular.</p>
+	</section>
+	<section>
+		<header>
+			<h3>Polymorphic Functions</h3>
+		</header>
+		<p>A polymorphic function generates valid code for any type. It cannot assume any specific operation or value set from any of it's type variables.</p>
+		<p>In C, a polymorphic function is represented as a function macro that accepts a type name in it's parameter list. For any type <code>T</code>, the polymorphic function may:</p>
+		<ul>
+			<li>Query the size or alignment of <code>T</code></li>
+			<li>Construct a type that contains <code>T</code></li>
+			<li>Declare a function parameter of <code>T</code></li>
+			<li>Declare a variable of <code>T</code> without an initializer or with the empty initializer (or an initializer that produces the same result as empty initialization)</li>
+		</ul>
+		<p>A polymorphic function cannot use any operator with a value of type <code>T</code> except for: address-of (for lvalues), cast to <code>void</code>, comma, an operand for a result of the conditional operator, <code>sizeof</code>, and <code>alignof</code>.</p>
+		<p>Yes, even simple assignment cannot be used since <code>T</code> can be an array type which disallows direct assignment in C.</p>
+		<p><code>memcpy</code> or <code>memmove</code> can be used for the effect of assignment, or more specifically a <em>destructive move</em>, but even this would be invalid if you do not assume your type variables are <a rel="external noreferrer noopener" href="https://quuxplusone.github.io/blog/2018/07/18/announcing-trivially-relocatable/">trivially relocatable</a>.</p>
+		<p>It is a current trend in many languages to designate type classes or "traits" to type variables, imposing requirements them. The apparent benefits are to allow more expressive and run-time optimal polymorphic functions. A type class always has a name created by a declaration that does not cross module boundaries and has no first-class representation in any type system; I therefore choose to avoid them.</p>
+		<p>In C, every instantiation of a polymorphic function should be placed in it's own header file to be included by other files that require the same instantiation in order to obey the one-definition rule.</p>
+		<p>If a polymorphic function depends on an instantiation that itself depends on one of the polymorphic function's type variables, then any header file that instantiates that polymorphic function should first include the other header files that are required for it prior to the instantiation.</p>
+		<p>The names of these header files should correspond to the specific instantiation by containing the name of the polymorphic function followed by the names of the types and any integer constants being provided, all of which are separated by a sensible delimiter such as double-underscore.</p>
+	</section>
+	<section>
+		<header>
+			<h3>Polymorphic Pairs</h3>
+		</header>
+		<p>A polymorphic pair is an opaque type together with a type that depends on the opaque type. In C, the polymorphic pair can be implemented with pointers to <code>void</code> and pointers to functions that accept pointer to <code>void</code>.</p>
+		<p>Both polymorphic functions and polymorphic pairs are independent of the structure of their type variables. But when specific behavior, that is an interface, is required, then polymorphic pairs should be used over polymorphic functions.</p>
+		<p>I have decided that I prefer <em>fat pointers</em> over <em>thin pointers</em> for implementing polymorphic pairs for the fact that the former does not require dynamic allocation in the common case where the opaque state is a pointer or plain integer.</p>
+		<p>Any impure function that consumes or produces an effect that could be performed at the system level should do it through a polymorphic pair, thus decoupling it from any library (standard or non-standard). These kinds of effects include but are not limited to: file system access, network access, date/time access, thread and process management, input/output, and even and especially dynamic allocation.</p>
+		<p>Every polymorphic pair should have an operation for destroying itself. This is known as a destructor. I prefer that client code always call the destructor on a polymorphic pair rather than perform conditional branching. Polymorphic pairs that are actually stateless or require no destruction can provide an empty-definition function for it's destructor.</p>
+		<p>This simplicity is opposed to the time-wasting temptation to wrap client code that uses polymorphic pairs into a polymorphic function that produces mostly the same code where one instantiation calls destructors and the other does not. Such over-optimization increases compiler and developer time by requiring more instantiation header files and creates tighter coupling of project components.</p>
+	</section>
+</article>
