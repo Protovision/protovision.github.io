@@ -336,7 +336,9 @@ body>main>footer{
 
 @media print{
 	@page{
-		margin:0.5in;}
+		margin:3ch;}
+	html{
+		margin:0;}
 	table,
 	pre{
 		white-space:wrap;}
